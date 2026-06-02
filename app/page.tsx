@@ -6,7 +6,8 @@ import { ServiceCard } from "@/components/site/ServiceCard";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { Button } from "@/components/ui/Button";
-import { blogPosts, newsItems, services } from "@/lib/mockData";
+import { Card } from "@/components/ui/Card";
+import { blogPosts, newsItems, services, trustFeatures } from "@/lib/mockData";
 
 export const metadata: Metadata = {
   title: "صفحه اصلی",
@@ -17,29 +18,29 @@ export default function Home() {
     <main>
       <SiteHeader />
       <HeroSection />
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
-          <div className="min-h-80 rounded-lg border border-gold/20 bg-[linear-gradient(145deg,rgba(199,151,65,0.22),rgba(8,15,24,0.94)),url('/window.svg')] bg-[length:auto,180px] bg-center bg-no-repeat shadow-soft" />
-          <div>
-            <p className="text-sm font-bold text-gold">معرفی موسسه</p>
-            <h2 className="mt-3 text-3xl font-black leading-10 text-foreground">رویکرد تخصصی برای تصمیم های حقوقی حساس</h2>
-            <p className="mt-5 leading-9 text-muted">
-              موسسه حقوقی عدالت گستر با ترکیب تجربه عملی، پژوهش حقوقی و پیگیری منظم، خدمات مشاوره و وکالت را در حوزه های خانواده، قراردادها، شرکت ها و دعاوی ملکی ارائه می کند.
-            </p>
-            <Button className="mt-7" href="/about" variant="outline">
-              اطلاعات بیشتر
-            </Button>
-          </div>
+
+      <section className="container-shell py-16">
+        <div className="grid gap-4 md:grid-cols-4">
+          {trustFeatures.map((feature) => (
+            <Card className="p-6" key={feature.title}>
+              <p className="text-lg font-black text-foreground">{feature.title}</p>
+              <p className="mt-3 leading-7 text-muted">{feature.excerpt}</p>
+            </Card>
+          ))}
         </div>
       </section>
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+
+      <section className="container-shell py-16">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-bold text-gold">خدمات موسسه</p>
-            <h2 className="mt-3 text-3xl font-black text-foreground">حوزه های تخصصی حقوقی</h2>
+            <p className="text-sm font-bold text-gold">خدمات ما</p>
+            <h2 className="mt-3 text-3xl font-black text-foreground sm:text-4xl">حوزه های تخصصی حقوقی</h2>
+            <p className="mt-4 max-w-2xl leading-8 text-muted">
+              در زمینه های مختلف حقوقی، در کنار شما هستیم.
+            </p>
           </div>
-          <Button href="/contact" variant="ghost">
-            تماس با مشاور
+          <Button href="/services" variant="outline">
+            مشاهده همه خدمات
           </Button>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -48,25 +49,62 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+
+      <section className="border-y border-border bg-surface py-16">
+        <div className="container-shell grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+          <div className="legal-photo min-h-[360px] rounded-[2rem] border border-border shadow-soft" />
+          <div>
+            <p className="text-sm font-bold text-gold">معرفی موسسه</p>
+            <h2 className="mt-3 text-3xl font-black leading-[1.35] text-foreground sm:text-4xl">
+              ساختار حقوقی مدرن برای تصمیم های حساس
+            </h2>
+            <p className="mt-5 leading-9 text-muted">
+              عدالت گستر برای پرونده هایی طراحی شده که به تحلیل دقیق، محرمانگی، پیگیری منظم و ارتباط شفاف نیاز دارند. تیم موسسه مسیر حقوقی را به زبان قابل فهم و با برنامه اجرایی روشن ارائه می کند.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Button href="/institute">معرفی موسسه</Button>
+              <Button href="/about" variant="outline">
+                درباره ما
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="container-shell py-16">
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-bold text-gold">آخرین مطالب</p>
-            <h2 className="mt-3 text-3xl font-black text-foreground">اخبار و مقالات</h2>
+            <p className="text-sm font-bold text-gold">آخرین مقالات</p>
+            <h2 className="mt-3 text-3xl font-black text-foreground">مطالب حقوقی منتخب</h2>
           </div>
-          <Button href="/blog" variant="outline">
+          <Button href="/blog" variant="ghost">
             مشاهده همه
           </Button>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {blogPosts.slice(0, 2).map((post) => (
+        <div className="grid gap-4 md:grid-cols-3">
+          {blogPosts.slice(0, 3).map((post) => (
             <ArticleCard href={`/blog/${post.slug}`} item={post} key={post.slug} />
           ))}
-          {newsItems.slice(0, 2).map((news) => (
+        </div>
+      </section>
+
+      <section className="container-shell pb-16">
+        <div className="mb-8 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-sm font-bold text-gold">آخرین اخبار</p>
+            <h2 className="mt-3 text-3xl font-black text-foreground">رویدادها و اطلاعیه ها</h2>
+          </div>
+          <Button href="/news" variant="ghost">
+            مشاهده همه
+          </Button>
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {newsItems.map((news) => (
             <ArticleCard href={`/news/${news.slug}`} item={news} key={news.slug} type="news" />
           ))}
         </div>
       </section>
+
       <ContactCta />
       <SiteFooter />
     </main>

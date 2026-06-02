@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ThemeScript } from "@/components/site/ThemeScript";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -6,7 +7,7 @@ export const metadata: Metadata = {
     default: "موسسه حقوقی عدالت گستر",
     template: "%s | موسسه حقوقی عدالت گستر",
   },
-  description: "وب سایت و پنل مدیریت موسسه حقوقی عدالت گستر با خدمات تخصصی و مشاوره حقوقی.",
+  description: "پلتفرم حقوقی مدرن برای مشاوره، پیگیری پرونده و مدیریت محتوای موسسه عدالت گستر.",
 };
 
 export default function RootLayout({
@@ -20,7 +21,10 @@ export default function RootLayout({
       dir="rtl"
       className="h-full antialiased"
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        <ThemeScript />
+        {children}
+      </body>
     </html>
   );
 }
