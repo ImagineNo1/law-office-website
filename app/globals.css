@@ -1,18 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  --background: #07080c;
-  --foreground: #f8efe0;
-  --surface: #10131a;
-  --gold: #d7b45d;
-  --muted: #b9ad99;
+  --background: #07101a;
+  --foreground: #f6efe4;
+  --surface: #0d1824;
+  --surface-strong: #101f2d;
+  --ink: #050b12;
+  --gold: #c79741;
+  --gold-light: #e2bc72;
+  --muted: #b5aa98;
+  --line: rgba(199, 151, 65, 0.16);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-ink: var(--ink);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-muted: var(--muted);
+  --shadow-soft: 0 24px 80px rgba(0, 0, 0, 0.36);
 }
 
 * {
@@ -26,12 +35,22 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--background);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    radial-gradient(circle at 20% 0%, rgba(199, 151, 65, 0.12), transparent 30%),
+    var(--background);
+  background-size: 42px 42px, 42px 42px, auto, auto;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Tahoma, Arial, Helvetica, sans-serif;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--ink);
 }
