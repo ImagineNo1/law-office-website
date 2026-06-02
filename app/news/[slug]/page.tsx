@@ -1,0 +1,57 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { ArticleCard } from "@/components/site/ArticleCard";
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { SiteHeader } from "@/components/site/SiteHeader";
+import { newsItems } from "@/lib/mockData";
+
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const item = newsItems.find((news) => news.slug === slug);
+
+  return {
+    title: item?.title ?? "خبر",
+    description: item?.excerpt,
+  };
+}
+
+export default async function NewsDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const item = newsItems.find((news) => news.slug === slug);
+
+  if (!item) {
+    notFound();
+  }
+
+  return (
+    <main>
+      <SiteHeader />
+      <article className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
+        <p className="text-sm font-bold text-gold">{item.publishedAt}</p>
+        <h1 className="mt-4 text-4xl font-black leading-[1.35] text-foreground">{item.title}</h1>
+        <div className="mt-8 min-h-72 rounded-lg border border-gold/20 bg-[linear-gradient(135deg,rgba(199,151,65,0.18),rgba(9,17,27,0.96)),url('/window.svg')] bg-[length:auto,128px] bg-center bg-no-repeat" />
+        <div className="mt-8 space-y-6 leading-9 text-muted">
+          <p>{item.excerpt}</p>
+          <p>
+            این خبر برای اطلاع رسانی عمومی منتشر شده است. برای دریافت جزئیات بیشتر درباره رویدادها، کارگاه ها یا برنامه های مشاوره موسسه می توانید با بخش پذیرش تماس بگیرید.
+          </p>
+        </div>
+      </article>
+      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
+        <h2 className="mb-6 text-2xl font-black text-foreground">اخبار مرتبط</h2>
+        <div className="grid gap-4 md:grid-cols-3">
+          {newsItems
+            .filter((news) => news.slug !== item.slug)
+            .map((news) => (
+              <ArticleCard href={`/news/${news.slug}`} item={news} key={news.slug} type="news" />
+            ))}
+        </div>
+      </section>
+      <SiteFooter />
+    </main>
+  );
+}
