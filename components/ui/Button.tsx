@@ -3,19 +3,20 @@ import Link from "next/link";
 type ButtonProps = {
   children: React.ReactNode;
   href?: string;
-  variant?: "primary" | "outline" | "ghost";
+  variant?: "primary" | "secondary" | "outline" | "ghost";
   className?: string;
   type?: "button" | "submit";
 };
 
 const variants = {
-  primary: "bg-gold text-ink shadow-[0_10px_32px_rgba(199,151,65,0.22)] hover:bg-gold-light",
-  outline: "border border-gold/45 text-gold hover:border-gold hover:bg-gold/10",
-  ghost: "text-muted hover:bg-white/5 hover:text-foreground",
+  primary: "bg-gold text-white shadow-[0_12px_28px_rgba(200,155,60,0.24)] hover:bg-gold-light",
+  secondary: "bg-foreground text-background hover:opacity-90",
+  outline: "border border-border bg-surface-strong text-foreground hover:border-gold/50 hover:text-gold",
+  ghost: "text-muted hover:bg-surface hover:text-foreground",
 };
 
 export function Button({ children, href, variant = "primary", className = "", type = "button" }: ButtonProps) {
-  const classes = `inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-2.5 text-sm font-bold transition ${variants[variant]} ${className}`;
+  const classes = `inline-flex min-h-11 items-center justify-center rounded-xl px-5 py-2.5 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[var(--ring)] ${variants[variant]} ${className}`;
 
   if (href) {
     return (

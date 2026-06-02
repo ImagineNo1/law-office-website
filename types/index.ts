@@ -29,6 +29,25 @@ export type SiteStat = {
   value: string;
 };
 
+export type TrustFeature = {
+  title: string;
+  excerpt: string;
+};
+
+export type DashboardMetric = {
+  label: string;
+  value: string;
+  change: string;
+};
+
+export type MessagePreview = {
+  name: string;
+  email: string;
+  subject: string;
+  status: string;
+  date: string;
+};
+
 export type AdminContentRow = {
   title: string;
   category: string;
