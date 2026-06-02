@@ -1,1 +1,0 @@
-export default function AboutPage(){return <div>درباره ما</div>}
