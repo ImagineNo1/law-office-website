@@ -33,7 +33,7 @@ export default async function NewsDetailPage({ params }: Props) {
       <article className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
         <p className="text-sm font-bold text-gold">{item.publishedAt}</p>
         <h1 className="mt-4 text-4xl font-black leading-[1.35] text-foreground">{item.title}</h1>
-        <div className="mt-8 min-h-72 rounded-lg border border-gold/20 bg-[linear-gradient(135deg,rgba(199,151,65,0.18),rgba(9,17,27,0.96)),url('/window.svg')] bg-[length:auto,128px] bg-center bg-no-repeat" />
+        <div className="article-thumb mt-8 min-h-72 rounded-3xl border border-border shadow-card" />
         <div className="mt-8 space-y-6 leading-9 text-muted">
           <p>{item.excerpt}</p>
           <p>

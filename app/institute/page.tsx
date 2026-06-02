@@ -13,7 +13,7 @@ export default function InstitutePage() {
     <main>
       <SiteHeader />
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-        <div className="rounded-lg border border-gold/20 bg-surface/75 p-8 shadow-soft lg:p-10">
+        <div className="rounded-3xl border border-border bg-surface-strong p-8 shadow-soft lg:p-10">
           <p className="text-sm font-bold text-gold">معرفی موسسه</p>
           <h1 className="mt-3 text-4xl font-black leading-[1.35] text-foreground">تجربه حقوقی در کنار رویکرد مدیریتی مدرن</h1>
           <p className="mt-6 max-w-4xl leading-9 text-muted">
@@ -21,7 +21,7 @@ export default function InstitutePage() {
           </p>
           <div className="mt-8 grid gap-4 sm:grid-cols-4">
             {siteStats.map((stat) => (
-              <div className="rounded-lg border border-gold/15 bg-white/[0.04] p-4" key={stat.label}>
+              <div className="rounded-2xl border border-border bg-surface p-4" key={stat.label}>
                 <strong className="block text-2xl text-gold">{stat.value}</strong>
                 <span className="text-sm text-muted">{stat.label}</span>
               </div>

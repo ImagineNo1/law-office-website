@@ -3,7 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #0f172a;
-  --surface: #f8f8f8;
+  --surface: #f7f8fa;
   --surface-strong: #ffffff;
   --muted: #64748b;
   --gold: #c89b3c;
@@ -11,6 +11,7 @@
   --border: #e5e7eb;
   --admin-nav: #0f172a;
   --ring: rgba(200, 155, 60, 0.26);
+  --shadow-card-rgb: 15, 23, 42;
 }
 
 .dark {
@@ -24,6 +25,7 @@
   --border: rgba(255, 255, 255, 0.08);
   --admin-nav: #08111f;
   --ring: rgba(200, 155, 60, 0.34);
+  --shadow-card-rgb: 0, 0, 0;
 }
 
 @theme inline {
@@ -36,8 +38,8 @@
   --color-gold-light: var(--gold-light);
   --color-border: var(--border);
   --color-admin-nav: var(--admin-nav);
-  --shadow-soft: 0 18px 60px rgba(15, 23, 42, 0.08);
-  --shadow-card: 0 12px 34px rgba(15, 23, 42, 0.06);
+  --shadow-soft: 0 24px 70px rgba(var(--shadow-card-rgb), 0.1);
+  --shadow-card: 0 12px 34px rgba(var(--shadow-card-rgb), 0.07);
 }
 
 * {
@@ -51,10 +53,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top right, rgba(200, 155, 60, 0.08), transparent 28rem),
-    radial-gradient(circle at top left, rgba(15, 23, 42, 0.05), transparent 24rem),
-    var(--background);
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-iransans, Tahoma, Arial, Helvetica, sans-serif);
   transition: background-color 260ms ease, color 260ms ease;
@@ -79,14 +78,14 @@ a {
 }
 
 .container-shell {
-  width: min(1180px, calc(100% - 32px));
+  width: min(1160px, calc(100% - 32px));
   margin-inline: auto;
 }
 
 .legal-photo {
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.2) 42%, transparent 72%),
-    linear-gradient(135deg, rgba(200, 155, 60, 0.16), rgba(15, 23, 42, 0.03)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.46) 38%, rgba(255, 255, 255, 0.08) 70%),
+    radial-gradient(circle at 68% 28%, rgba(200, 155, 60, 0.28), transparent 30%),
     url("/legal-hero.svg");
   background-position: center;
   background-size: cover;
@@ -97,6 +96,24 @@ a {
     linear-gradient(90deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.45) 42%, rgba(15, 23, 42, 0.16) 72%),
     linear-gradient(135deg, rgba(200, 155, 60, 0.18), rgba(15, 23, 42, 0.72)),
     url("/legal-hero.svg");
+  background-position: center;
+  background-size: cover;
+}
+
+.article-thumb {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.18)),
+    radial-gradient(circle at 68% 30%, rgba(200, 155, 60, 0.2), transparent 34%),
+    url("/legal-article.svg");
+  background-position: center;
+  background-size: cover;
+}
+
+.dark .article-thumb {
+  background:
+    linear-gradient(135deg, rgba(17, 24, 39, 0.5), rgba(17, 24, 39, 0.85)),
+    radial-gradient(circle at 68% 30%, rgba(200, 155, 60, 0.2), transparent 34%),
+    url("/legal-article.svg");
   background-position: center;
   background-size: cover;
 }

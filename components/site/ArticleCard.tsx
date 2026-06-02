@@ -14,10 +14,10 @@ export function ArticleCard({ item, href, type = "blog" }: ArticleCardProps) {
 
   return (
     <Card className="overflow-hidden transition duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-soft">
-      <div className="h-44 bg-[linear-gradient(135deg,rgba(200,155,60,0.18),rgba(248,248,248,0.72)),url('/legal-hero.svg')] bg-cover bg-center dark:bg-[linear-gradient(135deg,rgba(200,155,60,0.16),rgba(17,24,39,0.88)),url('/legal-hero.svg')]" />
+      <div className="article-thumb h-44" />
       <div className="p-5">
         <div className="mb-4 flex items-center justify-between gap-3 text-xs text-muted">
-          <Badge tone="muted">{category}</Badge>
+          <Badge tone="gold">{category}</Badge>
           <span>{item.publishedAt}</span>
         </div>
         <h3 className="text-lg font-black leading-8 text-foreground">{item.title}</h3>
