@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { blogPosts, newsItems, services, trustFeatures } from "@/lib/mockData";
+import { blogPosts, newsItems, services } from "@/lib/mockData";
 
 export const metadata: Metadata = {
   title: "صفحه اصلی",
@@ -18,17 +18,6 @@ export default function Home() {
     <main>
       <SiteHeader />
       <HeroSection />
-
-      <section className="container-shell py-16">
-        <div className="grid gap-4 md:grid-cols-4">
-          {trustFeatures.map((feature) => (
-            <Card className="p-6" key={feature.title}>
-              <p className="text-lg font-black text-foreground">{feature.title}</p>
-              <p className="mt-3 leading-7 text-muted">{feature.excerpt}</p>
-            </Card>
-          ))}
-        </div>
-      </section>
 
       <section className="container-shell py-16">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
@@ -50,9 +39,47 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="container-shell py-16">
+        <div className="mb-8 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-sm font-bold text-gold">آخرین مقالات</p>
+            <h2 className="mt-3 text-3xl font-black text-foreground">مطالب حقوقی منتخب</h2>
+          </div>
+          <Button href="/blog" variant="ghost">
+            مشاهده همه
+          </Button>
+        </div>
+        <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+          <div className="grid gap-4 md:grid-cols-3">
+            {blogPosts.slice(0, 3).map((post) => (
+              <ArticleCard href={`/blog/${post.slug}`} item={post} key={post.slug} />
+            ))}
+          </div>
+          <Card className="p-5">
+            <div className="mb-5 flex items-center justify-between">
+              <h3 className="text-lg font-black text-foreground">آخرین اخبار</h3>
+              <Button href="/news" variant="ghost">
+                همه
+              </Button>
+            </div>
+            <div className="grid gap-4">
+              {newsItems.map((news) => (
+                <a className="grid grid-cols-[72px_1fr] gap-3 border-b border-border pb-4 last:border-b-0 last:pb-0" href={`/news/${news.slug}`} key={news.slug}>
+                  <span className="article-thumb h-16 rounded-xl border border-border" />
+                  <span>
+                    <span className="block text-sm font-black leading-6 text-foreground">{news.title}</span>
+                    <span className="mt-1 block text-xs text-muted">{news.publishedAt}</span>
+                  </span>
+                </a>
+              ))}
+            </div>
+          </Card>
+        </div>
+      </section>
+
       <section className="border-y border-border bg-surface py-16">
         <div className="container-shell grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <div className="legal-photo min-h-[360px] rounded-[2rem] border border-border shadow-soft" />
+          <div className="legal-photo min-h-[340px] rounded-[2rem] border border-border shadow-soft" />
           <div>
             <p className="text-sm font-bold text-gold">معرفی موسسه</p>
             <h2 className="mt-3 text-3xl font-black leading-[1.35] text-foreground sm:text-4xl">
@@ -68,40 +95,6 @@ export default function Home() {
               </Button>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="container-shell py-16">
-        <div className="mb-8 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-sm font-bold text-gold">آخرین مقالات</p>
-            <h2 className="mt-3 text-3xl font-black text-foreground">مطالب حقوقی منتخب</h2>
-          </div>
-          <Button href="/blog" variant="ghost">
-            مشاهده همه
-          </Button>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {blogPosts.slice(0, 3).map((post) => (
-            <ArticleCard href={`/blog/${post.slug}`} item={post} key={post.slug} />
-          ))}
-        </div>
-      </section>
-
-      <section className="container-shell pb-16">
-        <div className="mb-8 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-sm font-bold text-gold">آخرین اخبار</p>
-            <h2 className="mt-3 text-3xl font-black text-foreground">رویدادها و اطلاعیه ها</h2>
-          </div>
-          <Button href="/news" variant="ghost">
-            مشاهده همه
-          </Button>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {newsItems.map((news) => (
-            <ArticleCard href={`/news/${news.slug}`} item={news} key={news.slug} type="news" />
-          ))}
         </div>
       </section>
 

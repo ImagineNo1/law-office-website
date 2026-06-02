@@ -15,7 +15,7 @@ export default function ContactPage() {
   return (
     <main>
       <SiteHeader />
-      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-16 sm:px-6 lg:grid-cols-[0.9fr_1.1fr]">
+      <section className="container-shell grid gap-6 py-16 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
           <p className="text-sm font-bold text-gold">ارتباط با ما</p>
           <h1 className="mt-3 text-4xl font-black text-foreground">ثبت درخواست مشاوره</h1>
@@ -26,7 +26,7 @@ export default function ContactPage() {
                 <p className="mt-2 text-foreground">{value}</p>
               </Card>
             ))}
-            <div className="min-h-56 rounded-lg border border-gold/15 bg-[linear-gradient(135deg,rgba(199,151,65,0.16),rgba(13,24,36,0.92))] p-5 text-muted">محدوده نقشه دفتر موسسه</div>
+            <div className="min-h-56 rounded-2xl border border-border bg-[linear-gradient(135deg,rgba(200,155,60,0.12),rgba(247,248,250,0.9))] p-5 text-muted dark:bg-[linear-gradient(135deg,rgba(200,155,60,0.12),rgba(17,24,39,0.9))]">محدوده نقشه دفتر موسسه</div>
           </div>
         </div>
         <Card className="p-6">

@@ -41,7 +41,7 @@ export default async function BlogDetailPage({ params }: Props) {
           <span>{post.readTime}</span>
           <span>نویسنده: تیم حقوقی موسسه</span>
         </div>
-        <div className="mt-8 min-h-80 rounded-lg border border-gold/20 bg-[linear-gradient(135deg,rgba(199,151,65,0.2),rgba(9,17,27,0.96)),url('/file.svg')] bg-[length:auto,128px] bg-center bg-no-repeat" />
+        <div className="article-thumb mt-8 min-h-80 rounded-3xl border border-border shadow-card" />
         <div className="mt-8 space-y-6 text-base leading-9 text-muted">
           <p>{post.excerpt}</p>
           <p>

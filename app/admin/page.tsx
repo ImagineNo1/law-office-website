@@ -25,13 +25,31 @@ export default function AdminDashboardPage() {
               <h2 className="text-xl font-black text-foreground">بازدید سایت</h2>
               <span className="text-sm font-bold text-muted">۷ روز اخیر</span>
             </div>
-            <div className="flex h-72 items-end gap-3 rounded-2xl bg-surface p-5">
-              {[42, 64, 52, 78, 61, 88, 82].map((height, index) => (
-                <div className="flex flex-1 flex-col items-center gap-3" key={height}>
-                  <div className="w-full rounded-t-xl bg-gold/85" style={{ height: `${height}%` }} />
-                  <span className="text-xs text-muted">{index + 1}</span>
-                </div>
-              ))}
+            <div className="relative h-72 overflow-hidden rounded-2xl bg-surface p-5">
+              <div className="absolute inset-5 grid grid-rows-4">
+                {[0, 1, 2, 3].map((line) => (
+                  <span className="border-t border-border" key={line} />
+                ))}
+              </div>
+              <svg className="relative h-full w-full" viewBox="0 0 640 250" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="visitsFill" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#C89B3C" stopOpacity="0.26" />
+                    <stop offset="100%" stopColor="#C89B3C" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <path d="M20 170 C80 90 120 74 178 126 C232 176 280 82 328 116 C382 156 418 92 470 76 C528 60 572 108 620 84 L620 235 L20 235 Z" fill="url(#visitsFill)" />
+                <path d="M20 170 C80 90 120 74 178 126 C232 176 280 82 328 116 C382 156 418 92 470 76 C528 60 572 108 620 84" fill="none" stroke="#2563EB" strokeWidth="5" strokeLinecap="round" />
+                {[20, 178, 328, 470, 620].map((x, index) => (
+                  <circle cx={x} cy={[170, 126, 116, 76, 84][index]} fill="#ffffff" key={x} r="7" stroke="#2563EB" strokeWidth="4" />
+                ))}
+              </svg>
+              <div className="relative mt-2 flex justify-between text-xs text-muted">
+                <span>۱۴۰۳/۳/۱۶</span>
+                <span>۱۴۰۳/۳/۱۸</span>
+                <span>۱۴۰۳/۳/۲۰</span>
+                <span>۱۴۰۳/۳/۲۲</span>
+              </div>
             </div>
           </Card>
 
