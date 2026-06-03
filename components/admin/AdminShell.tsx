@@ -14,11 +14,11 @@ export async function AdminShell({
   const user = await requireAdmin();
 
   return (
-    <div className="min-h-screen bg-surface text-foreground lg:flex lg:flex-row">
+    <div className="min-h-screen bg-background text-foreground lg:flex lg:flex-row">
       <AdminSidebar />
       <div className="min-w-0 flex-1">
         <AdminHeader title={title} description={description} userName={user.fullName} />
-        <main className="p-4 sm:p-6">{children}</main>
+        <main className="p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );

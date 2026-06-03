@@ -47,6 +47,24 @@ function ShieldIcon() {
   );
 }
 
+function renderHighlightedTitle(title: string) {
+  const target = "موفقیت شما";
+
+  if (!title.includes(target)) {
+    return title;
+  }
+
+  const [before, after] = title.split(target);
+
+  return (
+    <>
+      {before}
+      <span className="text-gold">{target}</span>
+      {after}
+    </>
+  );
+}
+
 export function HeroSection({
   hero,
   stats,
@@ -58,20 +76,20 @@ export function HeroSection({
 }) {
   return (
     <section className="soft-page-bg relative overflow-hidden text-foreground">
-      <div className="hero-dot-pattern absolute inset-x-0 top-0 h-[520px] opacity-35 [mask-image:linear-gradient(180deg,black,transparent)]" />
-      <div className="absolute right-[8%] top-16 size-72 rounded-full bg-gold/12 blur-3xl" />
-      <div className="absolute left-[10%] top-28 size-80 rounded-full bg-white/70 blur-3xl dark:bg-white/5" />
+      <div className="hero-dot-pattern absolute inset-x-0 top-0 h-[560px] opacity-25 [mask-image:linear-gradient(180deg,black,transparent)]" />
+      <div className="absolute right-[5%] top-20 size-80 rounded-full bg-gold/14 blur-3xl" />
+      <div className="absolute left-[10%] top-24 size-96 rounded-full bg-white/70 blur-3xl dark:bg-white/5" />
 
-      <div className="container-shell relative grid items-center gap-10 pt-12 pb-12 lg:grid-cols-[1fr_0.95fr] lg:pt-16">
-        <div className="relative order-2 lg:order-1">
-          <div className="absolute -inset-5 -z-10 rounded-[2.75rem] bg-gold/12 blur-3xl" />
-          <div className="legal-photo min-h-[300px] rounded-[2rem] border border-white/80 shadow-soft ring-1 ring-gold/10 sm:min-h-[390px] lg:min-h-[465px] dark:border-white/10" />
+      <div className="container-shell relative grid items-center gap-12 pb-24 pt-24 lg:grid-cols-[0.95fr_1.05fr] lg:pb-[120px] lg:pt-[120px]">
+        <div className="relative order-2 fade-up lg:order-1">
+          <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-gold/14 blur-3xl" />
+          <div className="legal-photo min-h-[330px] rounded-[32px] border border-white/80 shadow-soft ring-1 ring-gold/10 sm:min-h-[440px] lg:min-h-[560px] dark:border-white/10" />
 
-          <div className="absolute bottom-5 right-5 max-w-[300px] rounded-3xl border border-border bg-white/94 p-5 shadow-soft backdrop-blur dark:bg-surface-strong/92">
-            <div className="mb-3 grid size-11 place-items-center rounded-2xl bg-gold/12 text-gold">
+          <div className="premium-panel absolute bottom-5 right-5 max-w-[325px] rounded-[24px] p-5">
+            <div className="mb-3 grid size-12 place-items-center rounded-2xl bg-gold/12 text-gold">
               <ShieldIcon />
             </div>
-            <p className="text-sm font-black text-foreground">
+            <p className="font-heading text-base font-black text-foreground">
               {hero.consultationTitle}
             </p>
             <p className="mt-2 text-sm leading-7 text-muted">
@@ -80,25 +98,25 @@ export function HeroSection({
           </div>
         </div>
 
-        <div className="relative z-10 order-1 text-center lg:order-2 lg:text-right">
-          <p className="mb-4 text-sm font-black text-gold">
+        <div className="relative z-10 order-1 text-center fade-up lg:order-2 lg:text-right">
+          <p className="gold-divider mb-5 justify-center text-sm font-black text-gold lg:justify-start">
             {hero.eyebrow}
           </p>
 
-          <h1 className="mx-auto max-w-3xl text-4xl font-black leading-[1.28] text-[#0f172a] sm:text-5xl lg:mx-0 lg:text-[56px] dark:text-foreground">
-            {hero.title}
+          <h1 className="font-heading mx-auto max-w-4xl whitespace-pre-line text-5xl font-black leading-[1.18] text-[#0f172a] sm:text-6xl lg:mx-0 lg:text-[72px] dark:text-foreground">
+            {renderHighlightedTitle(hero.title)}
           </h1>
 
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-9 text-[#475569] sm:text-lg lg:mx-0 dark:text-muted">
+          <p className="mx-auto mt-6 max-w-[650px] text-lg leading-9 text-[#475569] lg:mx-0 dark:text-muted">
             {hero.description}
           </p>
 
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
-            <Button className="gap-2 px-6" href={hero.primaryCtaHref}>
+          <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+            <Button className="min-h-14 gap-2 px-8" href={hero.primaryCtaHref}>
               <ShieldIcon />
               {hero.primaryCtaLabel}
             </Button>
-            <Button className="px-6" href={hero.secondaryCtaHref} variant="outline">
+            <Button className="min-h-14 px-8" href={hero.secondaryCtaHref} variant="outline">
               {hero.secondaryCtaLabel}
             </Button>
           </div>
@@ -106,18 +124,18 @@ export function HeroSection({
       </div>
 
       <div className="container-shell relative z-10">
-        <div className="grid overflow-hidden rounded-[1.75rem] border border-[#e5e7eb] bg-white/95 shadow-soft backdrop-blur dark:border-border dark:bg-surface-strong/94 md:grid-cols-4">
-          {trustFeatures.map((item) => (
+        <div className="premium-panel -mt-12 grid overflow-hidden rounded-[24px] md:grid-cols-4">
+          {trustFeatures.map((item, index) => (
             <div
-              className="flex gap-4 border-b border-border p-5 text-right md:border-b-0 md:border-l last:md:border-l-0"
+              className="flex gap-4 border-b border-border p-6 text-right md:border-b-0 md:border-l last:md:border-l-0"
               key={item.title}
             >
               <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-gold/10 text-gold">
-                <ShieldIcon />
+                <StatIcon index={index} />
               </div>
 
               <div>
-                <p className="font-black text-foreground">{item.title}</p>
+                <p className="font-heading font-black text-foreground">{item.title}</p>
                 <p className="mt-2 text-sm leading-7 text-muted">
                   {item.excerpt}
                 </p>
@@ -128,14 +146,14 @@ export function HeroSection({
       </div>
 
       <div className="container-shell relative z-10 mt-4 pb-14">
-        <div className="grid gap-4 rounded-[1.5rem] bg-[#0f172a] px-6 py-6 text-white shadow-soft sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+        <div className="grid gap-4 rounded-[24px] bg-[#071225] px-6 py-7 text-white shadow-soft ring-1 ring-white/10 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
           {stats.map((stat, index) => (
             <div
               className="flex items-center justify-between gap-4 border-white/10 py-3 lg:border-l lg:pl-8 last:lg:border-l-0"
               key={stat.label}
             >
               <div>
-                <strong className="block text-3xl text-gold">
+                <strong className="font-heading block text-4xl text-gold">
                   {stat.value}
                 </strong>
                 <span className="mt-1 block text-sm text-slate-300">

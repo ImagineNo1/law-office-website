@@ -7,7 +7,7 @@ export function LegalLogo({
 }) {
   return (
     <span className="inline-flex items-center gap-3">
-      <span className="grid size-11 place-items-center rounded-2xl border border-gold/30 bg-gold/10 text-gold shadow-[0_10px_24px_rgba(200,155,60,0.16)]">
+      <span className="grid size-[52px] place-items-center rounded-2xl border border-gold/35 bg-gold/10 text-gold shadow-[0_12px_28px_rgba(201,162,74,0.18)]">
         <svg
           aria-hidden="true"
           className="size-7"
@@ -30,7 +30,7 @@ export function LegalLogo({
       </span>
       {!compact ? (
         <span>
-          <span className="block text-sm font-black text-foreground sm:text-base">
+          <span className="font-heading block text-base font-black text-foreground sm:text-lg">
             {text}
           </span>
           <span className="hidden text-xs font-medium text-muted sm:block">

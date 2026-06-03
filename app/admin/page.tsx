@@ -27,7 +27,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-          <Card className="p-5">
+          <Card className="rounded-[18px] p-6">
             <div className="mb-6 flex items-center justify-between">
               <h2 className="text-xl font-black text-foreground">وضعیت محتوا</h2>
               <span className="text-sm font-bold text-muted">داده های واقعی CMS</span>
@@ -43,7 +43,7 @@ export default async function AdminDashboardPage() {
             </div>
           </Card>
 
-          <Card className="p-5">
+          <Card className="rounded-[18px] p-6">
             <h2 className="mb-5 text-xl font-black text-foreground">آخرین مطالب</h2>
             <div className="grid gap-4">
               {dashboard.recentContent.slice(0, 4).map((row) => (
@@ -59,7 +59,7 @@ export default async function AdminDashboardPage() {
           </Card>
         </div>
 
-        <Card className="p-5">
+        <Card className="rounded-[18px] p-6">
           <h2 className="mb-5 text-xl font-black text-foreground">آخرین پیام ها</h2>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-sm">
@@ -85,7 +85,7 @@ export default async function AdminDashboardPage() {
           </div>
         </Card>
 
-        <Card className="p-5">
+        <Card className="rounded-[18px] p-6">
           <h2 className="mb-5 text-xl font-black text-foreground">محتوای اخیر</h2>
           <AdminTable rows={dashboard.recentContent} />
         </Card>

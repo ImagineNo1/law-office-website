@@ -27,8 +27,8 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="bg-admin-nav p-4 text-white lg:sticky lg:top-0 lg:min-h-screen lg:w-72">
-      <Link className="mb-8 flex items-center gap-3 [&_*]:text-white" href="/admin">
+    <aside className="bg-admin-nav p-4 text-white shadow-[24px_0_70px_rgba(0,0,0,0.18)] lg:sticky lg:top-0 lg:min-h-screen lg:w-[304px]">
+      <Link className="mb-10 flex items-center gap-3 [&_*]:text-white" href="/admin">
         <LegalLogo compact />
         <span>
           <span className="block font-black">موسسه حقوقی</span>
@@ -43,8 +43,8 @@ export function AdminSidebar() {
             <Link
               className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition ${
                 active
-                  ? "bg-gold text-white shadow-[0_12px_28px_rgba(200,155,60,0.28)]"
-                  : "text-slate-300 hover:bg-white/10 hover:text-white"
+                  ? "bg-gold text-[#1b1305] shadow-[0_12px_28px_rgba(212,168,79,0.28)]"
+                  : "text-slate-300 hover:bg-white/8 hover:text-white"
               }`}
               href={link.href}
               key={link.href}
@@ -64,7 +64,7 @@ export function AdminSidebar() {
         })}
       </nav>
       <Link
-        className="mt-12 flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold text-slate-300 transition hover:bg-white/10 hover:text-white"
+        className="mt-12 flex items-center gap-3 rounded-xl border border-white/10 px-4 py-3 text-sm font-bold text-slate-300 transition hover:bg-white/8 hover:text-white"
         href="/"
       >
         <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">

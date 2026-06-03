@@ -40,12 +40,12 @@ export default async function Home() {
         trustFeatures={homeContent.trustFeatures}
       />
 
-      <section className="bg-background pb-10 pt-8">
+      <section className="bg-background pb-20 pt-[72px]">
         <div className="container-shell">
-          <div className="mb-9 flex flex-wrap items-end justify-between gap-4">
+          <div className="mb-12 flex flex-wrap items-end justify-between gap-5">
             <div>
               <p className="text-sm font-black text-gold">خدمات ما</p>
-              <h2 className="mt-3 text-3xl font-black text-foreground sm:text-4xl">
+              <h2 className="font-heading mt-3 text-4xl font-black text-foreground sm:text-5xl">
                 حوزه های تخصصی حقوقی
               </h2>
               <p className="mt-4 max-w-2xl leading-8 text-muted">
@@ -59,7 +59,7 @@ export default async function Home() {
             </Button>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {services.map((service) => (
               <ServiceCard key={service.slug} service={service} />
             ))}
@@ -67,12 +67,12 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-[#fffaf0] py-16 dark:bg-surface">
+      <section className="bg-surface py-20 dark:bg-surface">
         <div className="container-shell">
-          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+          <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="text-sm font-black text-gold">مقالات و اخبار</p>
-              <h2 className="mt-3 text-3xl font-black text-foreground sm:text-4xl">
+              <h2 className="font-heading mt-3 text-4xl font-black text-foreground sm:text-5xl">
                 تازه ترین محتوای حقوقی
               </h2>
             </div>
@@ -82,7 +82,7 @@ export default async function Home() {
             </Button>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+          <div className="grid gap-7 lg:grid-cols-[1fr_380px]">
             <div className="grid gap-5 md:grid-cols-3">
               {latestPosts.map((post) => (
                 <ArticleCard
@@ -93,9 +93,9 @@ export default async function Home() {
               ))}
             </div>
 
-            <Card className="rounded-[1.5rem] bg-white p-5 dark:bg-surface-strong">
+            <Card className="rounded-[18px] bg-white p-6 dark:bg-surface-strong/92">
               <div className="mb-5 flex items-center justify-between">
-                <h3 className="text-lg font-black text-foreground">
+                <h3 className="font-heading text-2xl font-black text-foreground">
                   آخرین اخبار
                 </h3>
                 <Button href="/news" variant="ghost">
@@ -127,14 +127,14 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-background py-16">
-        <div className="container-shell grid gap-10 rounded-[2rem] border border-border bg-white/76 p-6 shadow-card dark:bg-surface-strong/70 md:p-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <div className="legal-photo min-h-[320px] rounded-[1.75rem] border border-border shadow-soft" />
+      <section className="bg-background py-20">
+        <div className="container-shell grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+          <div className="legal-photo min-h-[430px] rounded-[28px] border border-border shadow-soft" />
 
           <div>
             <p className="text-sm font-black text-gold">معرفی موسسه</p>
 
-            <h2 className="mt-3 text-3xl font-black leading-[1.35] text-foreground sm:text-4xl">
+            <h2 className="font-heading mt-3 text-4xl font-black leading-[1.3] text-foreground sm:text-5xl">
               ساختار حقوقی مدرن برای تصمیم های حساس
             </h2>
 

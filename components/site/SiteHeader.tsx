@@ -22,8 +22,8 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-white/92 shadow-[0_1px_22px_rgba(15,23,42,0.045)] backdrop-blur-xl transition dark:bg-background/86">
-      <div className="container-shell grid h-20 grid-cols-[1fr_auto] items-center gap-4 lg:grid-cols-[1fr_auto_1fr]">
+    <header className="sticky top-0 z-40 border-b border-border bg-white/80 shadow-[0_1px_30px_rgba(15,23,42,0.045)] backdrop-blur-2xl transition dark:bg-[#071225]/82">
+      <div className="container-shell grid h-24 grid-cols-[1fr_auto] items-center gap-4 lg:grid-cols-[1fr_auto_1fr]">
         <Link
           className="justify-self-start lg:justify-self-start"
           href="/"
@@ -33,7 +33,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
           <LegalLogo text={settings.logoText || settings.siteTitle} />
         </Link>
 
-        <nav className="hidden items-center justify-center rounded-full border border-border bg-white/88 px-2 py-1 text-sm font-bold text-muted shadow-[0_14px_34px_rgba(15,23,42,0.055)] dark:bg-surface-strong/78 lg:flex">
+        <nav className="hidden items-center justify-center gap-1 text-sm font-bold text-muted lg:flex">
           {navItems.map((item) => {
             const active =
               item.href === "/"
@@ -42,10 +42,10 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
 
             return (
               <Link
-                className={`rounded-full px-4 py-2 transition ${
+                className={`relative px-4 py-2 transition after:absolute after:inset-x-4 after:-bottom-1 after:h-px after:origin-center after:scale-x-0 after:bg-gold after:transition ${
                   active
-                    ? "bg-surface text-foreground"
-                    : "hover:bg-surface hover:text-foreground"
+                    ? "text-gold after:scale-x-100"
+                    : "hover:text-foreground"
                 }`}
                 href={item.href}
                 key={item.href}
@@ -60,14 +60,14 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
           <ThemeToggle />
 
           <Button
-            className="hidden rounded-xl px-4 shadow-[0_10px_24px_rgba(200,155,60,0.25)] sm:inline-flex"
+            className="hidden min-h-14 rounded-xl px-6 shadow-[0_10px_24px_rgba(201,162,74,0.25)] sm:inline-flex"
             href="/contact"
           >
             مشاوره حقوقی
           </Button>
 
           <button
-            className="grid size-10 place-items-center rounded-xl border border-border bg-white text-foreground transition hover:border-gold/40 hover:text-gold dark:bg-surface-strong lg:hidden"
+            className="grid size-12 place-items-center rounded-xl border border-border bg-white/80 text-foreground transition hover:border-gold/40 hover:text-gold dark:bg-surface-strong lg:hidden"
             type="button"
             aria-label="منوی سایت"
             aria-expanded={open}

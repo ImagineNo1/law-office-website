@@ -3,8 +3,8 @@ import type { ContactCtaContent } from "@/types";
 
 export function ContactCta({ cta }: { cta: ContactCtaContent }) {
   return (
-    <section className="container-shell py-16">
-      <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0f172a] p-8 text-white shadow-soft sm:p-10 lg:p-12">
+    <section className="container-shell py-20">
+      <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-[#071225] p-8 text-white shadow-soft sm:p-10 lg:p-14">
         <div className="absolute -left-16 -top-16 size-56 rounded-full bg-gold/24 blur-3xl" />
         <div className="absolute -right-20 bottom-0 size-60 rounded-full bg-white/8 blur-3xl" />
         <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-l from-transparent via-gold/45 to-transparent" />
@@ -15,7 +15,7 @@ export function ContactCta({ cta }: { cta: ContactCtaContent }) {
               {cta.eyebrow}
             </p>
 
-            <h2 className="mt-3 max-w-3xl text-3xl font-black leading-[1.35] sm:text-4xl">
+            <h2 className="font-heading mt-3 max-w-3xl text-4xl font-black leading-[1.3] sm:text-5xl">
               {cta.title}
             </h2>
 

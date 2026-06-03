@@ -13,22 +13,22 @@ export function ArticleCard({ item, href, type = "blog" }: ArticleCardProps) {
   const category = "category" in item ? item.category : "خبر موسسه";
 
   return (
-    <Card className="group overflow-hidden rounded-[1.5rem] bg-white transition duration-300 hover:-translate-y-1 hover:border-gold/45 hover:shadow-soft dark:bg-surface-strong">
+    <Card className="group overflow-hidden rounded-[18px] bg-white transition duration-300 hover:-translate-y-1 hover:border-gold/45 hover:shadow-soft dark:bg-surface-strong/92">
       <Link href={href} className="block">
-        <div className="article-thumb relative h-48 overflow-hidden">
+        <div className="article-thumb relative h-60 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/18 via-transparent to-white/8 opacity-75 transition group-hover:opacity-55 dark:from-black/42" />
           <div className="absolute right-4 top-4">
             <Badge tone="gold">{category}</Badge>
           </div>
         </div>
 
-        <div className="p-5">
+        <div className="p-6">
           <div className="mb-3 flex items-center justify-between gap-3 text-xs text-muted">
             <span>{type === "blog" ? "مقاله حقوقی" : "خبر موسسه"}</span>
             <span>{item.publishedAt}</span>
           </div>
 
-          <h3 className="text-lg font-black leading-8 text-foreground transition group-hover:text-gold">
+          <h3 className="font-heading text-2xl font-black leading-9 text-foreground transition group-hover:text-gold">
             {item.title}
           </h3>
 

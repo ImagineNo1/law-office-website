@@ -10,8 +10,8 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
   ].filter(([, href]) => href);
 
   return (
-    <footer className="bg-[#0f172a] text-white">
-      <div className="container-shell grid gap-10 border-t border-white/10 py-14 text-sm text-slate-300 lg:grid-cols-[1.35fr_0.8fr_0.8fr_1fr]">
+    <footer className="bg-[#071225] text-white">
+      <div className="container-shell grid gap-12 border-t border-white/10 py-20 text-sm text-slate-300 lg:grid-cols-[1.35fr_0.8fr_0.8fr_1fr]">
         <div>
           <div className="[&_*]:text-white">
             <LegalLogo text={settings.logoText || settings.siteTitle} />
