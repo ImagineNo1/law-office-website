@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #fffdf8;
   --foreground: #0f172a;
-  --surface: #f7f8fa;
+  --surface: #f8f4ec;
   --surface-strong: #ffffff;
   --muted: #64748b;
   --gold: #c89b3c;
@@ -82,10 +82,28 @@ a {
   margin-inline: auto;
 }
 
+.soft-page-bg {
+  background:
+    radial-gradient(circle at 16% 8%, rgba(215, 173, 85, 0.13), transparent 26rem),
+    radial-gradient(circle at 84% 14%, rgba(15, 23, 42, 0.045), transparent 28rem),
+    linear-gradient(180deg, #fffdf8 0%, #fffaf0 48%, #fffdf8 100%);
+}
+
+.dark .soft-page-bg {
+  background:
+    radial-gradient(circle at 16% 8%, rgba(215, 173, 85, 0.16), transparent 26rem),
+    radial-gradient(circle at 86% 20%, rgba(255, 255, 255, 0.045), transparent 26rem),
+    linear-gradient(180deg, #0f172a 0%, #111827 55%, #0f172a 100%);
+}
+
+.hero-dot-pattern {
+  background-image: radial-gradient(rgba(200, 155, 60, 0.18) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
 .legal-photo {
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.46) 38%, rgba(255, 255, 255, 0.08) 70%),
-    radial-gradient(circle at 68% 28%, rgba(200, 155, 60, 0.28), transparent 30%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
     url("/legal-hero.svg");
   background-position: center;
   background-size: cover;
@@ -93,8 +111,7 @@ a {
 
 .dark .legal-photo {
   background:
-    linear-gradient(90deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.45) 42%, rgba(15, 23, 42, 0.16) 72%),
-    linear-gradient(135deg, rgba(200, 155, 60, 0.18), rgba(15, 23, 42, 0.72)),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.28), rgba(15, 23, 42, 0.58)),
     url("/legal-hero.svg");
   background-position: center;
   background-size: cover;
@@ -102,8 +119,7 @@ a {
 
 .article-thumb {
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.18)),
-    radial-gradient(circle at 68% 30%, rgba(200, 155, 60, 0.2), transparent 34%),
+    linear-gradient(135deg, rgba(255, 253, 248, 0.18), rgba(255, 253, 248, 0.04)),
     url("/legal-article.svg");
   background-position: center;
   background-size: cover;

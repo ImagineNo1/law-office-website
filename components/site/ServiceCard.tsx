@@ -1,5 +1,5 @@
-import type { Service } from "@/types";
 import { Card } from "@/components/ui/Card";
+import type { Service } from "@/types";
 
 function ServiceIcon() {
   return (
@@ -17,10 +17,10 @@ function ServiceIcon() {
 
 export function ServiceCard({ service }: { service: Service }) {
   return (
-    <Card className="group relative flex min-h-[220px] flex-col overflow-hidden p-6 transition duration-300 hover:-translate-y-1 hover:border-gold/45 hover:shadow-soft">
-      <div className="absolute -left-10 -top-10 size-32 rounded-full bg-gold/10 blur-3xl transition group-hover:bg-gold/20" />
+    <Card className="group relative flex min-h-[230px] flex-col overflow-hidden rounded-[1.5rem] bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-gold/45 hover:shadow-soft dark:bg-surface-strong">
+      <div className="absolute -left-10 -top-10 size-32 rounded-full bg-gold/8 blur-3xl transition group-hover:bg-gold/16" />
 
-      <div className="relative mb-5 grid size-12 place-items-center rounded-2xl border border-gold/15 bg-gold/10 text-gold transition group-hover:bg-gold group-hover:text-white">
+      <div className="relative mb-5 grid size-[52px] place-items-center self-start rounded-2xl border border-gold/15 bg-[#fbf1dc] text-gold transition group-hover:bg-gold group-hover:text-white dark:bg-gold/10">
         <ServiceIcon />
       </div>
 
