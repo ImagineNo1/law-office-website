@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
 type CachedConnection = {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
@@ -25,11 +23,15 @@ export async function connectDb() {
     return cached.conn;
   }
 
-  if (!MONGODB_URI) {
-    throw new Error("MONGODB_URI is not defined.");
+  const mongodbUri = process.env.MONGODB_URI;
+
+  if (!mongodbUri) {
+    throw new Error(
+      "MONGODB_URI is not defined. Add it to .env.local or .env in the project root and restart the dev server.",
+    );
   }
 
-  cached.promise ??= mongoose.connect(MONGODB_URI, {
+  cached.promise ??= mongoose.connect(mongodbUri, {
     bufferCommands: false,
   });
 
