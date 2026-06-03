@@ -12,7 +12,7 @@
   --admin-nav: #071225;
   --ring: rgba(201, 162, 74, 0.28);
   --shadow-card-rgb: 15, 23, 42;
-  --font-heading: Morabba, var(--font-vazirmatn), Tahoma, Arial, sans-serif;
+  --font-heading: var(--font-vazirmatn), Tahoma, Arial, sans-serif;
   --font-body: var(--font-vazirmatn), Tahoma, Arial, sans-serif;
 }
 
@@ -104,17 +104,25 @@ a {
 }
 
 .hero-reference-visual {
+  background: none;
+}
+
+.dark .hero-reference-visual {
+  background: none;
+}
+
+.hero-visual {
   background:
-    linear-gradient(90deg, rgba(247, 244, 238, 0.82) 0%, rgba(247, 244, 238, 0.35) 28%, rgba(247, 244, 238, 0) 58%),
-    url("/legal-scene-light.png");
+    linear-gradient(90deg, rgba(247, 244, 238, 0.04), rgba(247, 244, 238, 0)),
+    url("/legal-scene-light-final.png");
   background-position: center;
   background-size: cover;
 }
 
-.dark .hero-reference-visual {
+.dark .hero-visual {
   background:
-    linear-gradient(90deg, rgba(3, 6, 9, 0.95) 0%, rgba(5, 11, 18, 0.7) 32%, rgba(5, 11, 18, 0.12) 68%),
-    url("/legal-scene-dark.png");
+    linear-gradient(90deg, rgba(3, 6, 9, 0.1), rgba(3, 6, 9, 0.02)),
+    url("/legal-scene-dark-final.png");
   background-position: center;
   background-size: cover;
 }

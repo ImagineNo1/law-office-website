@@ -26,9 +26,9 @@ function ArrowIcon() {
       <path
         d="M19 12H5m0 0 6-6m-6 6 6 6"
         stroke="currentColor"
-        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeWidth="1.8"
       />
     </svg>
   );
@@ -42,45 +42,46 @@ export function HeroSection({
   trustFeatures: TrustFeature[];
 }) {
   return (
-    <section className="relative overflow-hidden bg-[#f7f3ea] px-2 pb-8 pt-3 text-foreground dark:bg-[#030609]">
-      <div
-        className="hero-reference-visual relative mx-auto grid min-h-[620px] w-full max-w-[1768px] overflow-hidden rounded-[26px] border border-[#e7dec9] shadow-[0_18px_70px_rgba(15,23,42,0.08)] dark:border-[rgba(212,168,79,0.22)] dark:shadow-[0_18px_80px_rgba(0,0,0,0.35)] lg:grid-cols-[0.52fr_0.48fr]"
-        dir="ltr"
-      >
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,#f7f3ea_0%,rgba(247,243,234,0.96)_28%,rgba(247,243,234,0.54)_47%,rgba(247,243,234,0.08)_69%,rgba(247,243,234,0)_100%)] dark:bg-[linear-gradient(90deg,#030609_0%,rgba(5,11,18,0.96)_31%,rgba(5,11,18,0.58)_50%,rgba(5,11,18,0.12)_73%,rgba(5,11,18,0)_100%)]" />
+    <section className="relative overflow-hidden bg-[#f8f5ef] text-foreground dark:bg-[#020617]">
+      <div className="mx-auto w-full max-w-[1600px] px-4 py-8 lg:py-10">
+        <div className="overflow-hidden rounded-[32px] border border-[#e7dec9] bg-[#f8f5ef] shadow-[0_24px_80px_rgba(15,23,42,0.08)] dark:border-[rgba(212,168,79,0.18)] dark:bg-[#020617] dark:shadow-[0_24px_90px_rgba(0,0,0,0.42)]">
+          <div className="grid min-h-[700px] lg:grid-cols-[52fr_48fr]" dir="ltr">
+            <div className="relative z-10 flex items-center bg-[linear-gradient(90deg,#f8f5ef_0%,#fbf7ef_100%)] px-8 py-16 text-center sm:px-12 lg:px-24 lg:text-right dark:bg-[linear-gradient(90deg,#020617_0%,#050b12_100%)]" dir="rtl">
+              <div className="mx-auto w-full max-w-[680px] lg:mx-0">
+                <p className="gold-divider mb-7 justify-center text-sm font-extrabold tracking-[-0.01em] text-gold lg:justify-start">
+                  {hero.eyebrow}
+                </p>
 
-        <div className="relative z-10 flex items-center px-6 py-14 text-center sm:px-10 lg:px-24 lg:text-right" dir="rtl">
-          <div className="mx-auto w-full max-w-[650px] lg:mx-0">
-            <p className="gold-divider mb-7 justify-center text-sm font-black text-gold lg:justify-start">
-              {hero.eyebrow}
-            </p>
+                <h1 className="font-heading max-w-[680px] whitespace-pre-line text-5xl font-extrabold leading-[1.18] tracking-[-0.015em] text-[#0f172a] sm:text-6xl lg:text-[72px] dark:text-white">
+                  {renderHighlightedTitle(hero.title)}
+                </h1>
 
-            <h1 className="font-heading whitespace-pre-line text-5xl font-black leading-[1.17] text-[#0f172a] sm:text-6xl lg:text-[70px] dark:text-white">
-              {renderHighlightedTitle(hero.title)}
-            </h1>
+                <p className="mx-auto mt-7 max-w-[610px] text-base font-medium leading-9 tracking-[-0.01em] text-[#64748b] sm:text-lg lg:mx-0 dark:text-white/72">
+                  {hero.description}
+                </p>
 
-            <p className="mx-auto mt-7 max-w-[610px] text-base leading-9 text-[#64748b] sm:text-lg lg:mx-0 dark:text-white/72">
-              {hero.description}
-            </p>
+                <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+                  <Button className="min-h-[52px] gap-3 rounded-2xl bg-[#d4a84f] px-9 text-[#1b1305] shadow-[0_12px_30px_rgba(212,168,79,0.25)] hover:bg-[#e0b85d]" href={hero.primaryCtaHref}>
+                    {hero.primaryCtaLabel}
+                    <ArrowIcon />
+                  </Button>
+                  <Button
+                    className="min-h-[52px] gap-3 rounded-2xl border-gold/35 bg-white/72 px-9 dark:bg-transparent dark:text-white"
+                    href={hero.secondaryCtaHref}
+                    variant="outline"
+                  >
+                    {hero.secondaryCtaLabel}
+                    <ArrowIcon />
+                  </Button>
+                </div>
+              </div>
+            </div>
 
-            <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
-              <Button className="min-h-14 gap-3 px-9" href={hero.primaryCtaHref}>
-                {hero.primaryCtaLabel}
-                <ArrowIcon />
-              </Button>
-              <Button
-                className="min-h-14 gap-3 border-gold/35 bg-white/72 px-9 dark:bg-transparent dark:text-white"
-                href={hero.secondaryCtaHref}
-                variant="outline"
-              >
-                {hero.secondaryCtaLabel}
-                <ArrowIcon />
-              </Button>
+            <div className="relative min-h-[360px] border-t border-[rgba(15,23,42,0.08)] lg:min-h-full lg:border-r lg:border-t-0 dark:border-[rgba(212,168,79,0.16)]" aria-hidden="true">
+              <div className="hero-visual absolute inset-0" />
             </div>
           </div>
         </div>
-
-        <div className="relative min-h-[320px] lg:min-h-full" aria-hidden="true" />
       </div>
     </section>
   );
