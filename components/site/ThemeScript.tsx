@@ -1,5 +1,3 @@
-import Script from "next/script";
-
 export function ThemeScript() {
   const script = `
     (function() {
@@ -12,9 +10,9 @@ export function ThemeScript() {
   `;
 
   return (
-    <Script
+    <script
       id="theme-script"
-      strategy="beforeInteractive"
+      suppressHydrationWarning
       dangerouslySetInnerHTML={{ __html: script }}
     />
   );

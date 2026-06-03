@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { clearAdminCookie, requireAdmin, setAdminCookie, signJwt } from "@/lib/auth";
 import { connectDb } from "@/lib/db";
+import { ensureDefaultAdmin } from "@/lib/ensure-default-admin";
 import { slugFromTitle } from "@/lib/slug";
 import { HomeContent } from "@/models/HomeContent";
 import { Message } from "@/models/Message";
@@ -77,6 +78,8 @@ function revalidatePublicContent() {
 }
 
 export async function loginAction(formData: FormData) {
+  await ensureDefaultAdmin();
+
   const email = text(formData, "email").toLowerCase();
   const password = text(formData, "password");
 

@@ -24,6 +24,17 @@ ADMIN_PASSWORD=
 ADMIN_NAME=
 ```
 
+## Default Local Admin
+
+In development, if no admin user exists, opening `/admin/login` automatically creates:
+
+- Email: `admin@gmail.com`
+- Password: `admin`
+
+Change this password after first login.
+
+Automatic default admin creation is disabled in production. In production, use `npm run seed:admin` or create an admin user manually.
+
 ## Commands
 
 ```bash

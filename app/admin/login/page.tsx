@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { loginAction } from "@/lib/admin-actions";
+import { ensureDefaultAdmin } from "@/lib/ensure-default-admin";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,8 @@ export default async function AdminLoginPage({
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
+  await ensureDefaultAdmin();
+
   const { error } = await searchParams;
 
   return (
