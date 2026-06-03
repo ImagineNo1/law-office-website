@@ -2,10 +2,15 @@ export function ThemeScript() {
   const script = `
     (function() {
       try {
-        var saved = localStorage.getItem('theme');
-        var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.classList.toggle('dark', theme === 'dark');
-      } catch (error) {}
+        var saved = window.localStorage.getItem('theme');
+        if (saved === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (error) {
+        document.documentElement.classList.remove('dark');
+      }
     })();
   `;
 

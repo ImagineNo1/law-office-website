@@ -27,6 +27,7 @@ export default function RootLayout({
       lang="fa"
       dir="rtl"
       className={`${vazirmatn.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full">
         <ThemeScript />

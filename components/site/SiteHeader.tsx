@@ -21,16 +21,13 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 h-[88px] border-b border-[#e6ddcc] bg-[#fbf8f1] shadow-[0_8px_28px_rgba(22,32,51,0.045)] transition dark:border-[rgba(212,168,79,0.12)] dark:bg-[#030812] dark:shadow-none">
-      <div
-        className="container-shell grid h-[88px] grid-cols-[1fr_auto] items-center gap-4 lg:grid-cols-[240px_minmax(0,1fr)_240px]"
-        dir="ltr"
-      >
+    <header className="sticky top-0 z-40 h-[84px] border-b border-[#ece6d8] bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)] transition dark:border-[rgba(212,168,79,0.16)] dark:bg-[#05070d] dark:shadow-none">
+      <div className="container-shell grid h-[84px] grid-cols-[1fr_auto] items-center gap-4 lg:grid-cols-[240px_minmax(0,1fr)_240px]" dir="ltr">
         <div className="flex items-center gap-3 justify-self-start lg:col-start-1">
           <ThemeToggle />
 
           <Link
-            className="hidden min-h-[52px] items-center justify-center rounded-2xl bg-[#d4a84f] px-6 text-sm font-extrabold text-[#1b1305] shadow-[0_12px_30px_rgba(212,168,79,0.22)] transition hover:bg-[#e0b85d] sm:inline-flex"
+            className="hidden min-h-[52px] items-center justify-center rounded-2xl bg-[#c9a24a] px-6 text-sm font-extrabold text-[#111827] shadow-[0_12px_30px_rgba(201,162,74,0.24)] transition hover:bg-[#d8b45c] dark:bg-[#d4a84f] dark:hover:bg-[#e0b85d] sm:inline-flex"
             href="/contact"
           >
             مشاوره حقوقی
@@ -39,7 +36,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
           <button
             aria-expanded={open}
             aria-label="منوی سایت"
-            className="grid size-12 place-items-center rounded-2xl border border-[#e4dac7] bg-[#fffdf8] text-[#162033] transition hover:border-gold/50 hover:text-gold dark:border-[rgba(212,168,79,0.16)] dark:bg-white/[0.04] dark:text-white lg:hidden"
+            className="grid size-12 place-items-center rounded-2xl border border-[#ece6d8] bg-white text-[#0f172a] transition hover:border-[#c9a24a] hover:text-[#c9a24a] dark:border-white/12 dark:bg-transparent dark:text-white lg:hidden"
             onClick={() => setOpen((value) => !value)}
             type="button"
           >
@@ -53,10 +50,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
           </button>
         </div>
 
-        <nav
-          className="hidden justify-self-center rounded-full border border-[#e4dac7] bg-[#fffdf8] px-2 py-2 text-sm font-bold text-[#5b6474] shadow-[0_10px_30px_rgba(22,32,51,0.055)] dark:border-[rgba(212,168,79,0.1)] dark:bg-white/[0.04] dark:text-white/68 lg:flex"
-          dir="rtl"
-        >
+        <nav className="hidden justify-self-center text-sm font-bold text-[#0f172a] dark:text-white/78 lg:flex" dir="rtl">
           {navItems.map((item) => {
             const active =
               item.href === "/"
@@ -65,10 +59,10 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
 
             return (
               <Link
-                className={`relative rounded-full px-4 py-2 transition ${
+                className={`relative px-5 py-3 transition after:absolute after:inset-x-5 after:bottom-1 after:h-px after:origin-center after:bg-[#c9a24a] after:transition-transform ${
                   active
-                    ? "bg-[#f2eadc] text-[#162033] dark:bg-white/[0.08] dark:text-gold"
-                    : "hover:bg-[#f6f0e6] hover:text-[#162033] dark:hover:bg-white/[0.06] dark:hover:text-white"
+                    ? "text-[#c9a24a] after:scale-x-100"
+                    : "after:scale-x-0 hover:text-[#c9a24a] dark:hover:text-white"
                 }`}
                 href={item.href}
                 key={item.href}
@@ -81,7 +75,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
 
         <Link
           aria-label="موسسه حقوقی عدالت گستر"
-          className="w-[170px] justify-self-end text-[#162033] dark:text-white sm:w-[240px] lg:col-start-3"
+          className="w-[170px] justify-self-end text-[#0f172a] dark:text-white sm:w-[240px] lg:col-start-3"
           dir="rtl"
           href="/"
           onClick={() => setOpen(false)}
@@ -92,11 +86,8 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
 
       {open ? (
         <div className="container-shell pb-4 lg:hidden">
-          <div className="rounded-3xl border border-[#e4dac7] bg-[#fbf8f1] p-3 shadow-soft dark:border-[rgba(212,168,79,0.12)] dark:bg-[#050b12]">
-            <nav
-              className="grid gap-1 text-sm font-bold text-[#5b6474] dark:text-white/68"
-              dir="rtl"
-            >
+          <div className="rounded-3xl border border-[#ece6d8] bg-white p-3 shadow-soft dark:border-[rgba(212,168,79,0.16)] dark:bg-[#05070d]">
+            <nav className="grid gap-1 text-sm font-bold text-[#0f172a] dark:text-white/78" dir="rtl">
               {navItems.map((item) => {
                 const active =
                   item.href === "/"
@@ -107,8 +98,8 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
                   <Link
                     className={`rounded-2xl px-4 py-3 transition ${
                       active
-                        ? "bg-[#f2eadc] text-[#162033] dark:bg-white/[0.08] dark:text-gold"
-                        : "hover:bg-[#f6f0e6] hover:text-[#162033] dark:hover:bg-white/[0.06] dark:hover:text-white"
+                        ? "text-[#c9a24a]"
+                        : "hover:text-[#c9a24a] dark:hover:text-white"
                     }`}
                     href={item.href}
                     key={item.href}
@@ -120,9 +111,9 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
               })}
             </nav>
 
-            <div className="mt-3 border-t border-[#e4dac7] pt-3 dark:border-[rgba(212,168,79,0.12)]">
+            <div className="mt-3 border-t border-[#ece6d8] pt-3 dark:border-[rgba(212,168,79,0.16)]">
               <Link
-                className="flex min-h-[52px] w-full items-center justify-center rounded-2xl bg-[#d4a84f] px-6 text-sm font-extrabold text-[#1b1305] shadow-[0_12px_30px_rgba(212,168,79,0.22)] transition hover:bg-[#e0b85d]"
+                className="flex min-h-[52px] w-full items-center justify-center rounded-2xl bg-[#c9a24a] px-6 text-sm font-extrabold text-[#111827] shadow-[0_12px_30px_rgba(201,162,74,0.24)] transition hover:bg-[#d8b45c] dark:bg-[#d4a84f]"
                 href="/contact"
               >
                 دریافت مشاوره حقوقی

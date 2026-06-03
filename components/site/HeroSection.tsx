@@ -1,9 +1,11 @@
+import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import type { HeroContent, SiteStat, TrustFeature } from "@/types";
 
-function renderHighlightedTitle(title: string) {
+function renderHighlightedTitle(title: string, mode: "light" | "dark") {
   const target = "موفقیت شما";
   const normalizedTitle = title.replace(" برای آرامش", "\nبرای آرامش");
+  const highlightClass = mode === "dark" ? "text-[#d4a84f]" : "text-[#c9a24a]";
 
   if (!normalizedTitle.includes(target)) {
     return normalizedTitle;
@@ -14,7 +16,7 @@ function renderHighlightedTitle(title: string) {
   return (
     <>
       {before}
-      <span className="text-gold">{target}</span>
+      <span className={highlightClass}>{target}</span>
       {after}
     </>
   );
@@ -22,7 +24,7 @@ function renderHighlightedTitle(title: string) {
 
 function ArrowIcon() {
   return (
-    <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none">
+    <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24">
       <path
         d="M19 12H5m0 0 6-6m-6 6 6 6"
         stroke="currentColor"
@@ -34,6 +36,45 @@ function ArrowIcon() {
   );
 }
 
+function HeroCopy({ hero, mode }: { hero: HeroContent; mode: "light" | "dark" }) {
+  const isDark = mode === "dark";
+
+  return (
+    <div className="relative z-10 mx-auto w-full max-w-[640px] text-center lg:mx-0 lg:text-right">
+      <p className={`gold-divider mb-5 justify-center text-sm font-extrabold tracking-[-0.01em] lg:justify-start ${isDark ? "text-[#d4a84f]" : "text-[#c9a24a]"}`}>
+        {hero.eyebrow}
+      </p>
+
+      <h1 className={`font-heading whitespace-pre-line text-[clamp(44px,4.2vw,72px)] font-black leading-[1.18] tracking-[-0.015em] ${isDark ? "text-white" : "text-[#0f172a]"}`}>
+        {renderHighlightedTitle(hero.title, mode)}
+      </h1>
+
+      <p className={`mx-auto mt-6 max-w-[600px] text-base font-medium leading-8 tracking-[-0.01em] lg:mx-0 ${isDark ? "text-white/72" : "text-[#64748b]"}`}>
+        {hero.description}
+      </p>
+
+      <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+        <Button
+          className={`min-h-[52px] gap-3 rounded-2xl px-8 shadow-[0_12px_30px_rgba(201,162,74,0.24)] ${isDark ? "bg-[#d4a84f] text-[#111827] hover:bg-[#e0b85d]" : "bg-[#c9a24a] text-[#111827] hover:bg-[#d8b45c]"}`}
+          href={hero.primaryCtaHref}
+        >
+          {hero.primaryCtaLabel}
+          <ArrowIcon />
+        </Button>
+
+        <Button
+          className={`min-h-[52px] gap-3 rounded-2xl px-8 shadow-none ${isDark ? "border-[#d4a84f]/45 bg-transparent text-white hover:border-[#d4a84f]" : "border-[#d6c8a2] bg-transparent text-[#0f172a] hover:border-[#c9a24a]"}`}
+          href={hero.secondaryCtaHref}
+          variant="outline"
+        >
+          {hero.secondaryCtaLabel}
+          <ArrowIcon />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 export function HeroSection({
   hero,
 }: {
@@ -42,64 +83,40 @@ export function HeroSection({
   trustFeatures: TrustFeature[];
 }) {
   return (
-    <section className="relative overflow-hidden bg-[#f6f2ea] text-foreground dark:bg-[#020617]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(212,168,79,0.12),transparent_28rem),radial-gradient(circle_at_72%_8%,rgba(255,255,255,0.82),transparent_34rem)] dark:bg-[radial-gradient(circle_at_22%_18%,rgba(212,168,79,0.12),transparent_28rem)]" />
-
-      <div className="relative mx-auto w-full max-w-[1600px] px-4 py-8 lg:py-12">
-        <div className="overflow-hidden rounded-[34px] border border-[#e4dac7] bg-[#fbf8f1] shadow-[0_26px_90px_rgba(22,32,51,0.08)] dark:border-[rgba(212,168,79,0.18)] dark:bg-[#020617] dark:shadow-[0_24px_90px_rgba(0,0,0,0.42)]">
-          <div
-            className="grid min-h-[660px] lg:grid-cols-[52fr_48fr]"
-            dir="ltr"
-          >
-            <div
-              className="relative z-10 flex items-center bg-[#fbf8f1] px-8 py-16 text-center sm:px-12 lg:px-24 lg:text-right dark:bg-[linear-gradient(90deg,#020617_0%,#050b12_100%)]"
-              dir="rtl"
-            >
-              <div className="absolute inset-0 hidden bg-[radial-gradient(circle_at_18%_18%,rgba(212,168,79,0.10),transparent_24rem)] dark:block" />
-
-              <div className="relative mx-auto w-full max-w-[680px] lg:mx-0">
-                <p className="gold-divider mb-7 justify-center text-sm font-extrabold tracking-[-0.01em] text-gold lg:justify-start">
-                  {hero.eyebrow}
-                </p>
-
-                <h1 className="font-heading max-w-[680px] whitespace-pre-line text-5xl font-extrabold leading-[1.18] tracking-[-0.015em] text-[#162033] sm:text-6xl lg:text-[72px] dark:text-white">
-                  {renderHighlightedTitle(hero.title)}
-                </h1>
-
-                <p className="mx-auto mt-7 max-w-[610px] text-base font-medium leading-9 tracking-[-0.01em] text-[#5b6474] sm:text-lg lg:mx-0 dark:text-white/72">
-                  {hero.description}
-                </p>
-
-                <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
-                  <Button
-                    className="min-h-[52px] gap-3 rounded-2xl bg-[#d4a84f] px-9 text-[#1b1305] shadow-[0_12px_30px_rgba(212,168,79,0.25)] hover:bg-[#e0b85d]"
-                    href={hero.primaryCtaHref}
-                  >
-                    {hero.primaryCtaLabel}
-                    <ArrowIcon />
-                  </Button>
-
-                  <Button
-                    className="min-h-[52px] gap-3 rounded-2xl border-[#d9cfbc] bg-[#fffdf8] px-9 text-[#162033] shadow-[0_10px_28px_rgba(22,32,51,0.04)] dark:border-gold/35 dark:bg-transparent dark:text-white"
-                    href={hero.secondaryCtaHref}
-                    variant="outline"
-                  >
-                    {hero.secondaryCtaLabel}
-                    <ArrowIcon />
-                  </Button>
-                </div>
-              </div>
+    <>
+      <section className="block bg-[#f8f5ef] dark:hidden">
+        <div className="mx-auto max-w-[1720px] px-4 py-4">
+          <div className="grid min-h-[460px] overflow-hidden rounded-[32px] border border-[#ece6d8] bg-[#fbf7ef] shadow-[0_30px_80px_rgba(15,23,42,0.06)] lg:grid-cols-[50fr_50fr]" dir="ltr">
+            <div className="relative flex items-center overflow-hidden bg-[#fbf7ef] px-8 py-12 text-center sm:px-10 lg:px-20 lg:text-right" dir="rtl">
+              <div className="absolute left-[-80px] top-8 size-64 rounded-full border border-[#c9a24a]/15" aria-hidden="true" />
+              <div className="absolute bottom-8 left-8 h-20 w-28 bg-[radial-gradient(#c9a24a_1.3px,transparent_1.3px)] bg-[length:18px_18px] opacity-50" aria-hidden="true" />
+              <HeroCopy hero={hero} mode="light" />
             </div>
 
-            <div
-              className="relative min-h-[360px] border-t border-[#e4dac7] bg-[#fbf8f1] lg:min-h-full lg:border-r lg:border-t-0 dark:border-[rgba(212,168,79,0.16)] dark:bg-[#020617]"
-              aria-hidden="true"
-            >
-              <div className="hero-visual absolute inset-0" />
+            <div className="relative min-h-[360px] overflow-hidden border-t border-[#ece6d8] lg:border-r lg:border-t-0" aria-hidden="true">
+              <Image
+                alt=""
+                className="object-cover"
+                fill
+                priority
+                sizes="(min-width: 1024px) 860px, 100vw"
+                src="/legal-scene-light-final.png"
+              />
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section className="hidden bg-[#030609] dark:block">
+        <div className="mx-auto max-w-[1720px] px-1 py-1">
+          <div className="hero-dark-banner relative min-h-[460px] overflow-hidden rounded-[32px] bg-cover bg-center">
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,6,9,0.96),rgba(3,6,9,0.72),rgba(3,6,9,0.08))]" />
+            <div className="relative z-10 flex min-h-[460px] items-center px-8 py-12 text-center sm:px-10 lg:px-24 lg:text-right" dir="rtl">
+              <HeroCopy hero={hero} mode="dark" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
