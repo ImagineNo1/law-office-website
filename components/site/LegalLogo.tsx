@@ -1,4 +1,10 @@
-export function LegalLogo({ compact = false }: { compact?: boolean }) {
+export function LegalLogo({
+  compact = false,
+  text = "موسسه حقوقی عدالت گستر",
+}: {
+  compact?: boolean;
+  text?: string;
+}) {
   return (
     <span className="inline-flex items-center gap-3">
       <span className="grid size-11 place-items-center rounded-2xl border border-gold/30 bg-gold/10 text-gold shadow-[0_10px_24px_rgba(200,155,60,0.16)]">
@@ -25,7 +31,7 @@ export function LegalLogo({ compact = false }: { compact?: boolean }) {
       {!compact ? (
         <span>
           <span className="block text-sm font-black text-foreground sm:text-base">
-            موسسه حقوقی عدالت گستر
+            {text}
           </span>
           <span className="hidden text-xs font-medium text-muted sm:block">
             خدمات حقوقی تخصصی

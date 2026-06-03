@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/Button";
-import { siteStats, trustFeatures } from "@/lib/mockData";
+import type { HeroContent, SiteStat, TrustFeature } from "@/types";
 
 function StatIcon({ index }: { index: number }) {
   const paths = [
@@ -47,7 +47,15 @@ function ShieldIcon() {
   );
 }
 
-export function HeroSection() {
+export function HeroSection({
+  hero,
+  stats,
+  trustFeatures,
+}: {
+  hero: HeroContent;
+  stats: SiteStat[];
+  trustFeatures: TrustFeature[];
+}) {
   return (
     <section className="soft-page-bg relative overflow-hidden text-foreground">
       <div className="hero-dot-pattern absolute inset-x-0 top-0 h-[520px] opacity-35 [mask-image:linear-gradient(180deg,black,transparent)]" />
@@ -63,34 +71,35 @@ export function HeroSection() {
             <div className="mb-3 grid size-11 place-items-center rounded-2xl bg-gold/12 text-gold">
               <ShieldIcon />
             </div>
-            <p className="text-sm font-black text-foreground">مشاوره محرمانه</p>
+            <p className="text-sm font-black text-foreground">
+              {hero.consultationTitle}
+            </p>
             <p className="mt-2 text-sm leading-7 text-muted">
-              بررسی اولیه مدارک، تشخیص مسیر حقوقی و اعلام مراحل اجرایی پرونده.
+              {hero.consultationText}
             </p>
           </div>
         </div>
 
         <div className="relative z-10 order-1 text-center lg:order-2 lg:text-right">
           <p className="mb-4 text-sm font-black text-gold">
-            تخصص، تجربه، تعهد
+            {hero.eyebrow}
           </p>
 
           <h1 className="mx-auto max-w-3xl text-4xl font-black leading-[1.28] text-[#0f172a] sm:text-5xl lg:mx-0 lg:text-[56px] dark:text-foreground">
-            راهکارهای حقوقی هوشمند برای آرامش و موفقیت شما
+            {hero.title}
           </h1>
 
           <p className="mx-auto mt-5 max-w-2xl text-base leading-9 text-[#475569] sm:text-lg lg:mx-0 dark:text-muted">
-            ما در موسسه عدالت گستر با تکیه بر تجربه و دانش تخصصی، بهترین
-            راهکارهای حقوقی را برای افراد و کسب و کارها ارائه می دهیم.
+            {hero.description}
           </p>
 
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
-            <Button className="gap-2 px-6" href="/contact">
+            <Button className="gap-2 px-6" href={hero.primaryCtaHref}>
               <ShieldIcon />
-              درخواست مشاوره
+              {hero.primaryCtaLabel}
             </Button>
-            <Button className="px-6" href="/institute" variant="outline">
-              درباره موسسه
+            <Button className="px-6" href={hero.secondaryCtaHref} variant="outline">
+              {hero.secondaryCtaLabel}
             </Button>
           </div>
         </div>
@@ -120,7 +129,7 @@ export function HeroSection() {
 
       <div className="container-shell relative z-10 mt-4 pb-14">
         <div className="grid gap-4 rounded-[1.5rem] bg-[#0f172a] px-6 py-6 text-white shadow-soft sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
-          {siteStats.map((stat, index) => (
+          {stats.map((stat, index) => (
             <div
               className="flex items-center justify-between gap-4 border-white/10 py-3 lg:border-l lg:pl-8 last:lg:border-l-0"
               key={stat.label}

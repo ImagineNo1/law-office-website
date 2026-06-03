@@ -1,29 +1,35 @@
 import Link from "next/link";
 import { LegalLogo } from "@/components/site/LegalLogo";
-import { contactInfo } from "@/lib/mockData";
+import type { SiteSettings } from "@/types";
 
-export function SiteFooter() {
+export function SiteFooter({ settings }: { settings: SiteSettings }) {
+  const socialLinks = [
+    ["لینکدین", settings.socialLinks.linkedin],
+    ["اینستاگرام", settings.socialLinks.instagram],
+    ["تلگرام", settings.socialLinks.telegram],
+  ].filter(([, href]) => href);
+
   return (
     <footer className="bg-[#0f172a] text-white">
       <div className="container-shell grid gap-10 border-t border-white/10 py-14 text-sm text-slate-300 lg:grid-cols-[1.35fr_0.8fr_0.8fr_1fr]">
         <div>
           <div className="[&_*]:text-white">
-            <LegalLogo />
+            <LegalLogo text={settings.logoText || settings.siteTitle} />
           </div>
 
           <p className="mt-5 max-w-xl leading-8 text-slate-300">
-            ارائه خدمات حقوقی تخصصی با تجربه، محرمانگی و ساختار پیگیری شفاف
-            برای اشخاص، شرکت ها و سازمان ها.
+            {settings.siteDescription}
           </p>
 
           <div className="mt-6 flex flex-wrap gap-2">
-            {["لینکدین", "اینستاگرام", "تلگرام"].map((item) => (
-              <span
+            {socialLinks.map(([item, href]) => (
+              <a
                 className="rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-xs font-bold text-slate-300 transition hover:border-gold/40 hover:text-gold"
                 key={item}
+                href={href}
               >
                 {item}
-              </span>
+              </a>
             ))}
           </div>
         </div>
@@ -61,15 +67,15 @@ export function SiteFooter() {
         <div>
           <p className="font-black text-white">اطلاعات تماس</p>
           <div className="mt-4 grid gap-3 leading-7">
-            <span>{contactInfo.phone}</span>
-            <span>{contactInfo.email}</span>
-            <span>{contactInfo.address}</span>
+            <span>{settings.phone}</span>
+            <span>{settings.email}</span>
+            <span>{settings.address}</span>
           </div>
         </div>
       </div>
 
       <div className="border-t border-white/10 py-5 text-center text-xs text-slate-500">
-        تمام حقوق برای موسسه حقوقی عدالت گستر محفوظ است.
+        تمام حقوق برای {settings.siteTitle} محفوظ است.
       </div>
     </footer>
   );

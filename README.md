@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Law Office Website
 
-## Getting Started
+Persian RTL law office website built with Next.js App Router, TypeScript, Tailwind CSS v4, MongoDB/Mongoose, and JWT-protected admin CMS.
 
-First, run the development server:
+## Environment Variables
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Create `.env.local`:
+
+```env
+MONGODB_URI=
+JWT_SECRET=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Runtime app requirements:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `MONGODB_URI`
+- `JWT_SECRET`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Optional seed-only variables for creating the first admin:
 
-## Learn More
+```env
+ADMIN_EMAIL=
+ADMIN_PASSWORD=
+ADMIN_NAME=
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Commands
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run seed
+npm run dev
+npm run lint
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Seed Content
 
-## Deploy on Vercel
+Run:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run seed
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This upserts:
+
+- Site settings and contact info
+- Homepage hero, trust strip, stats, and contact CTA
+- Published services
+- Blog posts
+- News items
+- About, institute, and contact page content
+
+If `ADMIN_EMAIL` and `ADMIN_PASSWORD` are present, `npm run seed` also creates or updates the first admin user.
+
+To create only the first admin:
+
+```bash
+npm run seed:admin
+```
+
+Then open:
+
+```text
+http://localhost:3000/admin/login
+```
+
+## Admin CMS
+
+Admin routes are protected by the `admin_token` httpOnly JWT cookie.
+
+CMS areas:
+
+- Dashboard: real counts and recent content/messages
+- Blog: create, edit, delete, publish/draft posts
+- News: create, edit, delete, publish/draft news
+- Services: create, edit, delete, reorder services
+- Pages: edit homepage content and static page content
+- Messages: read/archive/delete contact submissions
+- Users: create users, update role/status, reset password
+- Settings: site title, logo text, contact info, social links, SEO defaults

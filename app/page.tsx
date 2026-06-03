@@ -7,17 +7,38 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { blogPosts, newsItems, services } from "@/lib/mockData";
+import {
+  getHomeContent,
+  getLatestNews,
+  getLatestPosts,
+  getPublishedServices,
+  getSiteSettings,
+} from "@/lib/cms";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "صفحه اصلی",
 };
 
-export default function Home() {
+export default async function Home() {
+  const [settings, homeContent, services, latestPosts, latestNews] =
+    await Promise.all([
+      getSiteSettings(),
+      getHomeContent(),
+      getPublishedServices(6),
+      getLatestPosts(3),
+      getLatestNews(3),
+    ]);
+
   return (
     <main className="bg-background">
-      <SiteHeader />
-      <HeroSection />
+      <SiteHeader settings={settings} />
+      <HeroSection
+        hero={homeContent.hero}
+        stats={homeContent.stats}
+        trustFeatures={homeContent.trustFeatures}
+      />
 
       <section className="bg-background pb-10 pt-8">
         <div className="container-shell">
@@ -40,7 +61,7 @@ export default function Home() {
 
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {services.map((service) => (
-              <ServiceCard key={service.title} service={service} />
+              <ServiceCard key={service.slug} service={service} />
             ))}
           </div>
         </div>
@@ -63,7 +84,7 @@ export default function Home() {
 
           <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
             <div className="grid gap-5 md:grid-cols-3">
-              {blogPosts.slice(0, 3).map((post) => (
+              {latestPosts.map((post) => (
                 <ArticleCard
                   href={`/blog/${post.slug}`}
                   item={post}
@@ -83,7 +104,7 @@ export default function Home() {
               </div>
 
               <div className="grid gap-4">
-                {newsItems.map((news) => (
+                {latestNews.map((news) => (
                   <a
                     className="group grid grid-cols-[72px_1fr] gap-3 border-b border-border pb-4 last:border-b-0 last:pb-0"
                     href={`/news/${news.slug}`}
@@ -133,8 +154,8 @@ export default function Home() {
         </div>
       </section>
 
-      <ContactCta />
-      <SiteFooter />
+      <ContactCta cta={homeContent.contactCta} />
+      <SiteFooter settings={settings} />
     </main>
   );
 }

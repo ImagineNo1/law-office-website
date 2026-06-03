@@ -2,8 +2,10 @@ import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
 
 const siteSettingsSchema = new Schema(
   {
+    key: { type: String, default: "site", unique: true },
     siteTitle: { type: String, required: true },
     siteDescription: { type: String },
+    logoText: { type: String },
     phone: { type: String },
     email: { type: String },
     address: { type: String },
@@ -13,10 +15,8 @@ const siteSettingsSchema = new Schema(
       linkedin: { type: String },
       telegram: { type: String },
     },
-    seo: {
-      title: { type: String },
-      description: { type: String },
-    },
+    seoTitle: { type: String },
+    seoDescription: { type: String },
   },
   { timestamps: true },
 );

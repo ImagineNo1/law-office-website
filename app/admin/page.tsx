@@ -3,18 +3,25 @@ import { AdminShell } from "@/components/admin/AdminShell";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { StatCard } from "@/components/admin/StatCard";
 import { Card } from "@/components/ui/Card";
-import { adminRows, dashboardMetrics, messagePreviews } from "@/lib/mockData";
+import { getDashboardData } from "@/lib/cms";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "داشبورد مدیریت",
 };
 
-export default function AdminDashboardPage() {
+export default async function AdminDashboardPage() {
+  const dashboard = await getDashboardData();
+
   return (
-    <AdminShell title="داشبورد" description="نمای کلی عملکرد سایت، محتوا و پیام های دریافتی">
+    <AdminShell
+      title="داشبورد"
+      description="نمای کلی محتوای سایت و پیام های دریافتی"
+    >
       <div className="grid gap-6">
         <div className="grid gap-4 md:grid-cols-4">
-          {dashboardMetrics.map((metric) => (
+          {dashboard.metrics.map((metric) => (
             <StatCard key={metric.label} {...metric} />
           ))}
         </div>
@@ -22,42 +29,25 @@ export default function AdminDashboardPage() {
         <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
           <Card className="p-5">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-black text-foreground">بازدید سایت</h2>
-              <span className="text-sm font-bold text-muted">۷ روز اخیر</span>
+              <h2 className="text-xl font-black text-foreground">وضعیت محتوا</h2>
+              <span className="text-sm font-bold text-muted">داده های واقعی CMS</span>
             </div>
-            <div className="relative h-72 overflow-hidden rounded-2xl bg-surface p-5">
-              <div className="absolute inset-5 grid grid-rows-4">
-                {[0, 1, 2, 3].map((line) => (
-                  <span className="border-t border-border" key={line} />
-                ))}
-              </div>
-              <svg className="relative h-full w-full" viewBox="0 0 640 250" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="visitsFill" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor="#C89B3C" stopOpacity="0.26" />
-                    <stop offset="100%" stopColor="#C89B3C" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <path d="M20 170 C80 90 120 74 178 126 C232 176 280 82 328 116 C382 156 418 92 470 76 C528 60 572 108 620 84 L620 235 L20 235 Z" fill="url(#visitsFill)" />
-                <path d="M20 170 C80 90 120 74 178 126 C232 176 280 82 328 116 C382 156 418 92 470 76 C528 60 572 108 620 84" fill="none" stroke="#2563EB" strokeWidth="5" strokeLinecap="round" />
-                {[20, 178, 328, 470, 620].map((x, index) => (
-                  <circle cx={x} cy={[170, 126, 116, 76, 84][index]} fill="#ffffff" key={x} r="7" stroke="#2563EB" strokeWidth="4" />
-                ))}
-              </svg>
-              <div className="relative mt-2 flex justify-between text-xs text-muted">
-                <span>۱۴۰۳/۳/۱۶</span>
-                <span>۱۴۰۳/۳/۱۸</span>
-                <span>۱۴۰۳/۳/۲۰</span>
-                <span>۱۴۰۳/۳/۲۲</span>
-              </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {dashboard.metrics.map((metric) => (
+                <div className="rounded-2xl border border-border bg-surface p-5" key={metric.label}>
+                  <strong className="text-3xl text-gold">{metric.value}</strong>
+                  <p className="mt-2 font-bold text-foreground">{metric.label}</p>
+                  <p className="mt-1 text-sm text-muted">{metric.change}</p>
+                </div>
+              ))}
             </div>
           </Card>
 
           <Card className="p-5">
             <h2 className="mb-5 text-xl font-black text-foreground">آخرین مطالب</h2>
             <div className="grid gap-4">
-              {adminRows.slice(0, 4).map((row) => (
-                <div className="flex items-center justify-between gap-4 border-b border-border pb-4 last:border-b-0 last:pb-0" key={row.title}>
+              {dashboard.recentContent.slice(0, 4).map((row) => (
+                <div className="flex items-center justify-between gap-4 border-b border-border pb-4 last:border-b-0 last:pb-0" key={`${row.title}-${row.date}`}>
                   <div>
                     <p className="font-bold text-foreground">{row.title}</p>
                     <p className="mt-1 text-sm text-muted">{row.category}</p>
@@ -82,8 +72,8 @@ export default function AdminDashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {messagePreviews.map((message) => (
-                  <tr className="border-t border-border" key={message.email}>
+                {dashboard.recentMessages.map((message) => (
+                  <tr className="border-t border-border" key={`${message.email}-${message.subject}`}>
                     <td className="px-4 py-4 font-bold">{message.name}</td>
                     <td className="px-4 py-4 text-muted">{message.email}</td>
                     <td className="px-4 py-4 text-muted">{message.subject}</td>
@@ -97,7 +87,7 @@ export default function AdminDashboardPage() {
 
         <Card className="p-5">
           <h2 className="mb-5 text-xl font-black text-foreground">محتوای اخیر</h2>
-          <AdminTable rows={adminRows} />
+          <AdminTable rows={dashboard.recentContent} />
         </Card>
       </div>
     </AdminShell>

@@ -4,58 +4,76 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
+import { saveUserAction } from "@/lib/admin-actions";
+import { getUsers } from "@/lib/cms";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "مدیریت کاربران",
 };
 
-export default function AdminUsersPage() {
-  const users = [
-    { name: "مدیر سیستم", email: "admin@deladgostar.com", role: "admin", status: "فعال" },
-    { name: "ویرایشگر محتوا", email: "editor@deladgostar.com", role: "editor", status: "فعال" },
-    { name: "مشاور حقوقی", email: "advisor@deladgostar.com", role: "advisor", status: "در انتظار" },
-  ];
+export default async function AdminUsersPage() {
+  const users = await getUsers();
 
   return (
-    <AdminShell title="کاربران" description="مدیریت دسترسی مدیران، نویسندگان و مشاوران">
-      <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
+    <AdminShell title="کاربران" description="مدیریت دسترسی مدیران و نویسندگان">
+      <div className="grid gap-6 xl:grid-cols-[1fr_380px]">
         <Card className="p-5">
-          <div className="mb-5 flex items-center justify-between gap-4">
-            <h1 className="text-xl font-black text-foreground">فهرست کاربران</h1>
-            <Button>افزودن کاربر</Button>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px] text-sm">
-              <thead className="text-muted">
-                <tr>
-                  <th className="px-4 py-3 text-right">نام</th>
-                  <th className="px-4 py-3 text-right">ایمیل</th>
-                  <th className="px-4 py-3 text-right">نقش</th>
-                  <th className="px-4 py-3 text-right">وضعیت</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr className="border-t border-border" key={user.email}>
-                    <td className="px-4 py-4 font-bold">{user.name}</td>
-                    <td className="px-4 py-4 text-muted">{user.email}</td>
-                    <td className="px-4 py-4 text-muted">{user.role}</td>
-                    <td className="px-4 py-4">
-                      <Badge tone={user.status === "فعال" ? "green" : "muted"}>{user.status}</Badge>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <h1 className="mb-5 text-xl font-black text-foreground">فهرست کاربران</h1>
+          <div className="grid gap-4">
+            {users.map((user) => (
+              <details className="rounded-2xl border border-border bg-surface p-4" key={user.id}>
+                <summary className="cursor-pointer font-black text-foreground">
+                  {user.fullName} <span className="text-sm text-muted">({user.email})</span>
+                </summary>
+                <form action={saveUserAction} className="mt-4 grid gap-4">
+                  <input name="id" type="hidden" value={user.id} />
+                  <Input defaultValue={user.fullName} label="نام" name="fullName" required />
+                  <Input defaultValue={user.email} label="ایمیل" name="email" required type="email" />
+                  <Input label="رمز جدید (اختیاری)" name="password" type="password" />
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <label className="grid gap-2 text-sm font-medium text-foreground">
+                      <span>نقش</span>
+                      <select className="h-11 rounded-xl border border-border bg-background px-3" defaultValue={user.role} name="role">
+                        <option value="admin">admin</option>
+                        <option value="editor">editor</option>
+                      </select>
+                    </label>
+                    <label className="grid gap-2 text-sm font-medium text-foreground">
+                      <span>وضعیت</span>
+                      <select className="h-11 rounded-xl border border-border bg-background px-3" defaultValue={user.status} name="status">
+                        <option value="active">فعال</option>
+                        <option value="disabled">غیرفعال</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Badge tone={user.status === "active" ? "green" : "muted"}>
+                      {user.status === "active" ? "فعال" : "غیرفعال"}
+                    </Badge>
+                    <Button type="submit">ذخیره کاربر</Button>
+                  </div>
+                </form>
+              </details>
+            ))}
           </div>
         </Card>
         <Card className="p-5">
-          <h2 className="mb-5 text-xl font-black text-foreground">دعوت کاربر</h2>
-          <form className="grid gap-4">
-            <Input label="نام" />
-            <Input label="ایمیل" type="email" />
-            <Input label="نقش" placeholder="admin / editor / advisor" />
-            <Button type="submit">ارسال دعوت نامه</Button>
+          <h2 className="mb-5 text-xl font-black text-foreground">ایجاد کاربر</h2>
+          <form action={saveUserAction} className="grid gap-4">
+            <Input label="نام" name="fullName" required />
+            <Input label="ایمیل" name="email" required type="email" />
+            <Input label="رمز عبور" name="password" required type="password" />
+            <label className="grid gap-2 text-sm font-medium text-foreground">
+              <span>نقش</span>
+              <select className="h-11 rounded-xl border border-border bg-background px-3" name="role">
+                <option value="editor">editor</option>
+                <option value="admin">admin</option>
+              </select>
+            </label>
+            <input name="status" type="hidden" value="active" />
+            <Button type="submit">ایجاد کاربر</Button>
           </form>
         </Card>
       </div>

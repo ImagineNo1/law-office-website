@@ -6,6 +6,7 @@ import { useState } from "react";
 import { LegalLogo } from "@/components/site/LegalLogo";
 import { ThemeToggle } from "@/components/site/ThemeToggle";
 import { Button } from "@/components/ui/Button";
+import type { SiteSettings } from "@/types";
 
 const navItems = [
   { label: "صفحه اصلی", href: "/" },
@@ -16,7 +17,7 @@ const navItems = [
   { label: "تماس با ما", href: "/contact" },
 ];
 
-export function SiteHeader() {
+export function SiteHeader({ settings }: { settings: SiteSettings }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -29,7 +30,7 @@ export function SiteHeader() {
           aria-label="موسسه حقوقی عدالت گستر"
           onClick={() => setOpen(false)}
         >
-          <LegalLogo />
+          <LegalLogo text={settings.logoText || settings.siteTitle} />
         </Link>
 
         <nav className="hidden items-center justify-center rounded-full border border-border bg-white/88 px-2 py-1 text-sm font-bold text-muted shadow-[0_14px_34px_rgba(15,23,42,0.055)] dark:bg-surface-strong/78 lg:flex">
