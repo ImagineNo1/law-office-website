@@ -1,60 +1,15 @@
 import { Button } from "@/components/ui/Button";
 import type { HeroContent, SiteStat, TrustFeature } from "@/types";
 
-function StatIcon({ index }: { index: number }) {
-  const paths = [
-    "M12 3v18M6 8h12M7.5 8 5 15h5L7.5 8Zm9 0L14 15h5l-2.5-7Z",
-    "M12 6v6l4 2M12 22a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z",
-    "M6 20V7a2 2 0 0 1 2-2h8l4 4v11H6Zm8-15v5h5",
-    "M7 11l3 3 7-7M12 22a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z",
-  ];
-
-  return (
-    <svg
-      aria-hidden="true"
-      className="size-7 text-white/24"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
-      <path
-        d={paths[index] ?? paths[0]}
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ShieldIcon() {
-  return (
-    <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M12 3 20 7v5c0 5-3.2 8.5-8 10-4.8-1.5-8-5-8-10V7l8-4Z"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinejoin="round"
-      />
-      <path
-        d="m8.5 12 2.4 2.4L15.8 9"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 function renderHighlightedTitle(title: string) {
   const target = "موفقیت شما";
+  const normalizedTitle = title.replace(" برای آرامش", "\nبرای آرامش");
 
-  if (!title.includes(target)) {
-    return title;
+  if (!normalizedTitle.includes(target)) {
+    return normalizedTitle;
   }
 
-  const [before, after] = title.split(target);
+  const [before, after] = normalizedTitle.split(target);
 
   return (
     <>
@@ -65,107 +20,67 @@ function renderHighlightedTitle(title: string) {
   );
 }
 
+function ArrowIcon() {
+  return (
+    <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M19 12H5m0 0 6-6m-6 6 6 6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function HeroSection({
   hero,
-  stats,
-  trustFeatures,
 }: {
   hero: HeroContent;
   stats: SiteStat[];
   trustFeatures: TrustFeature[];
 }) {
   return (
-    <section className="soft-page-bg relative overflow-hidden text-foreground">
-      <div className="hero-dot-pattern absolute inset-x-0 top-0 h-[560px] opacity-25 [mask-image:linear-gradient(180deg,black,transparent)]" />
-      <div className="absolute right-[5%] top-20 size-80 rounded-full bg-gold/14 blur-3xl" />
-      <div className="absolute left-[10%] top-24 size-96 rounded-full bg-white/70 blur-3xl dark:bg-white/5" />
+    <section className="relative overflow-hidden bg-[#f7f3ea] px-2 pb-8 pt-3 text-foreground dark:bg-[#030609]">
+      <div
+        className="hero-reference-visual relative mx-auto grid min-h-[620px] w-full max-w-[1768px] overflow-hidden rounded-[26px] border border-[#e7dec9] shadow-[0_18px_70px_rgba(15,23,42,0.08)] dark:border-[rgba(212,168,79,0.22)] dark:shadow-[0_18px_80px_rgba(0,0,0,0.35)] lg:grid-cols-[0.52fr_0.48fr]"
+        dir="ltr"
+      >
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,#f7f3ea_0%,rgba(247,243,234,0.96)_28%,rgba(247,243,234,0.54)_47%,rgba(247,243,234,0.08)_69%,rgba(247,243,234,0)_100%)] dark:bg-[linear-gradient(90deg,#030609_0%,rgba(5,11,18,0.96)_31%,rgba(5,11,18,0.58)_50%,rgba(5,11,18,0.12)_73%,rgba(5,11,18,0)_100%)]" />
 
-      <div className="container-shell relative grid items-center gap-12 pb-24 pt-24 lg:grid-cols-[0.95fr_1.05fr] lg:pb-[120px] lg:pt-[120px]">
-        <div className="relative order-2 fade-up lg:order-1">
-          <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-gold/14 blur-3xl" />
-          <div className="legal-photo min-h-[330px] rounded-[32px] border border-white/80 shadow-soft ring-1 ring-gold/10 sm:min-h-[440px] lg:min-h-[560px] dark:border-white/10" />
+        <div className="relative z-10 flex items-center px-6 py-14 text-center sm:px-10 lg:px-24 lg:text-right" dir="rtl">
+          <div className="mx-auto w-full max-w-[650px] lg:mx-0">
+            <p className="gold-divider mb-7 justify-center text-sm font-black text-gold lg:justify-start">
+              {hero.eyebrow}
+            </p>
 
-          <div className="premium-panel absolute bottom-5 right-5 max-w-[325px] rounded-[24px] p-5">
-            <div className="mb-3 grid size-12 place-items-center rounded-2xl bg-gold/12 text-gold">
-              <ShieldIcon />
+            <h1 className="font-heading whitespace-pre-line text-5xl font-black leading-[1.17] text-[#0f172a] sm:text-6xl lg:text-[70px] dark:text-white">
+              {renderHighlightedTitle(hero.title)}
+            </h1>
+
+            <p className="mx-auto mt-7 max-w-[610px] text-base leading-9 text-[#64748b] sm:text-lg lg:mx-0 dark:text-white/72">
+              {hero.description}
+            </p>
+
+            <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+              <Button className="min-h-14 gap-3 px-9" href={hero.primaryCtaHref}>
+                {hero.primaryCtaLabel}
+                <ArrowIcon />
+              </Button>
+              <Button
+                className="min-h-14 gap-3 border-gold/35 bg-white/72 px-9 dark:bg-transparent dark:text-white"
+                href={hero.secondaryCtaHref}
+                variant="outline"
+              >
+                {hero.secondaryCtaLabel}
+                <ArrowIcon />
+              </Button>
             </div>
-            <p className="font-heading text-base font-black text-foreground">
-              {hero.consultationTitle}
-            </p>
-            <p className="mt-2 text-sm leading-7 text-muted">
-              {hero.consultationText}
-            </p>
           </div>
         </div>
 
-        <div className="relative z-10 order-1 text-center fade-up lg:order-2 lg:text-right">
-          <p className="gold-divider mb-5 justify-center text-sm font-black text-gold lg:justify-start">
-            {hero.eyebrow}
-          </p>
-
-          <h1 className="font-heading mx-auto max-w-4xl whitespace-pre-line text-5xl font-black leading-[1.18] text-[#0f172a] sm:text-6xl lg:mx-0 lg:text-[72px] dark:text-foreground">
-            {renderHighlightedTitle(hero.title)}
-          </h1>
-
-          <p className="mx-auto mt-6 max-w-[650px] text-lg leading-9 text-[#475569] lg:mx-0 dark:text-muted">
-            {hero.description}
-          </p>
-
-          <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
-            <Button className="min-h-14 gap-2 px-8" href={hero.primaryCtaHref}>
-              <ShieldIcon />
-              {hero.primaryCtaLabel}
-            </Button>
-            <Button className="min-h-14 px-8" href={hero.secondaryCtaHref} variant="outline">
-              {hero.secondaryCtaLabel}
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="container-shell relative z-10">
-        <div className="premium-panel -mt-12 grid overflow-hidden rounded-[24px] md:grid-cols-4">
-          {trustFeatures.map((item, index) => (
-            <div
-              className="flex gap-4 border-b border-border p-6 text-right md:border-b-0 md:border-l last:md:border-l-0"
-              key={item.title}
-            >
-              <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-gold/10 text-gold">
-                <StatIcon index={index} />
-              </div>
-
-              <div>
-                <p className="font-heading font-black text-foreground">{item.title}</p>
-                <p className="mt-2 text-sm leading-7 text-muted">
-                  {item.excerpt}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="container-shell relative z-10 mt-4 pb-14">
-        <div className="grid gap-4 rounded-[24px] bg-[#071225] px-6 py-7 text-white shadow-soft ring-1 ring-white/10 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
-          {stats.map((stat, index) => (
-            <div
-              className="flex items-center justify-between gap-4 border-white/10 py-3 lg:border-l lg:pl-8 last:lg:border-l-0"
-              key={stat.label}
-            >
-              <div>
-                <strong className="font-heading block text-4xl text-gold">
-                  {stat.value}
-                </strong>
-                <span className="mt-1 block text-sm text-slate-300">
-                  {stat.label}
-                </span>
-              </div>
-              <div className="grid size-12 place-items-center rounded-2xl bg-white/7">
-                <StatIcon index={index} />
-              </div>
-            </div>
-          ))}
-        </div>
+        <div className="relative min-h-[320px] lg:min-h-full" aria-hidden="true" />
       </div>
     </section>
   );

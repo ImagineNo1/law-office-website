@@ -103,6 +103,22 @@ a {
   background-size: 26px 26px;
 }
 
+.hero-reference-visual {
+  background:
+    linear-gradient(90deg, rgba(247, 244, 238, 0.82) 0%, rgba(247, 244, 238, 0.35) 28%, rgba(247, 244, 238, 0) 58%),
+    url("/legal-scene-light.png");
+  background-position: center;
+  background-size: cover;
+}
+
+.dark .hero-reference-visual {
+  background:
+    linear-gradient(90deg, rgba(3, 6, 9, 0.95) 0%, rgba(5, 11, 18, 0.7) 32%, rgba(5, 11, 18, 0.12) 68%),
+    url("/legal-scene-dark.png");
+  background-position: center;
+  background-size: cover;
+}
+
 .legal-photo {
   background:
     linear-gradient(90deg, rgba(247, 244, 238, 0.12), rgba(247, 244, 238, 0.02)),
