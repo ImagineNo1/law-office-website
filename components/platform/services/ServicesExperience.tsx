@@ -1,7 +1,7 @@
 import { PageShell, Container } from "@/components/platform/layout/PageShell";
 import { PublicHeader } from "@/components/platform/layout/PublicHeader";
 import { PublicFooter } from "@/components/platform/layout/PublicFooter";
-import { recoveryServices } from "@/lib/platform-recovery-data";
+import { fallbackServices, type PlatformFaq, type PlatformService } from "@/lib/platform-db";
 import { ServiceHero } from "@/components/platform/services/ServiceHero";
 import { ServiceFilters } from "@/components/platform/services/ServiceFilters";
 import { ServiceCard } from "@/components/platform/services/ServiceCard";
@@ -9,8 +9,18 @@ import { ServiceDetailPanels } from "@/components/platform/services/ServiceDetai
 import { ServiceRequestPanel } from "@/components/platform/services/ServiceRequestPanel";
 import { ServiceFaq } from "@/components/platform/services/ServiceFaq";
 
-export function ServicesExperience({ detailSlug }: { detailSlug?: string }) {
-  const service = recoveryServices.find((item) => item[1] === detailSlug) ?? recoveryServices[0];
+export function ServicesExperience({
+  detailSlug,
+  faqs,
+  service: selectedService,
+  services = fallbackServices,
+}: {
+  detailSlug?: string;
+  faqs?: PlatformFaq[];
+  service?: PlatformService | null;
+  services?: PlatformService[];
+}) {
+  const service = selectedService ?? services.find((item) => item.slug === detailSlug) ?? services[0];
   const isDetail = Boolean(detailSlug);
 
   return (
@@ -18,11 +28,11 @@ export function ServicesExperience({ detailSlug }: { detailSlug?: string }) {
       <PublicHeader />
       <ServiceHero
         detail={isDetail}
-        title={isDetail ? service[0] : "خدمات حقوقی تخصصی"}
+        title={isDetail ? service.title : "خدمات حقوقی تخصصی"}
         description={
           isDetail
-            ? service[2]
-            : "انتخاب، ثبت درخواست، بارگذاری مدارک و پیگیری مرحله‌ای خدمات حقوقی در یک تجربه SaaS فارسی."
+            ? service.heroDescription || service.description
+            : "انتخاب، ثبت درخواست، بارگذاری مدارک و پیگیری مرحله ای خدمات حقوقی در یک تجربه SaaS فارسی."
         }
       />
       <section className="py-8">
@@ -31,16 +41,39 @@ export function ServicesExperience({ detailSlug }: { detailSlug?: string }) {
             <>
               <ServiceRequestPanel />
               <div className="grid gap-6">
-                <ServiceDetailPanels title={service[0]} />
-                <ServiceFaq />
+                <ServiceDetailPanels
+                  benefits={service.benefits}
+                  requiredDocuments={service.requiredDocuments}
+                  steps={service.processSteps}
+                  title={service.title}
+                />
+                <ServiceFaq
+                  faqs={
+                    faqs ??
+                    service.faqItems.map((item, index) => ({
+                      id: `service-faq-${index}`,
+                      category: service.category,
+                      pageType: "service",
+                      pageSlug: service.slug,
+                      ...item,
+                    }))
+                  }
+                />
               </div>
             </>
           ) : (
             <>
               <ServiceFilters />
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {recoveryServices.map(([title, slug, desc, tag, sla]) => (
-                  <ServiceCard desc={desc} key={slug} sla={sla} slug={slug} tag={tag} title={title} />
+                {services.map((item) => (
+                  <ServiceCard
+                    desc={item.description}
+                    key={item.slug}
+                    sla={item.sla}
+                    slug={item.slug}
+                    tag={item.tag}
+                    title={item.title}
+                  />
                 ))}
               </div>
             </>

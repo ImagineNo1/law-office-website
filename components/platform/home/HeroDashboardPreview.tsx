@@ -1,4 +1,4 @@
-import { fa } from "@/lib/platform-recovery-data";
+import { fa } from "@/lib/platform-db";
 
 export function HeroDashboardPreview() {
   return (

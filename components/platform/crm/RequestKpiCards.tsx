@@ -1,12 +1,13 @@
-import { fa } from "@/lib/platform-recovery-data";
+import { fa } from "@/lib/platform-db";
+import type { ServiceRequestData } from "@/types";
 
-export function RequestKpiCards() {
+export function RequestKpiCards({ requests = [] }: { requests?: ServiceRequestData[] }) {
   const items = [
-    ["کل درخواست‌ها", 50],
-    ["در بررسی", 11],
-    ["در انجام", 14],
-    ["در انتظار موکل", 9],
-    ["تکمیل شده", 16],
+    ["کل درخواست ها", requests.length],
+    ["در بررسی", requests.filter((item) => item.status === "reviewing").length],
+    ["در انجام", requests.filter((item) => item.status === "in_progress").length],
+    ["در انتظار موکل", requests.filter((item) => item.status === "waiting_for_client").length],
+    ["تکمیل شده", requests.filter((item) => item.status === "completed").length],
   ];
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">

@@ -141,3 +141,4 @@
  GET /dashboard 200 in 88ms (next.js: 1939µs, application-code: 86ms)
  GET /dashboard/documents 200 in 64ms (next.js: 1989µs, application-code: 62ms)
  GET /dashboard/signatures 200 in 68ms (next.js: 2ms, application-code: 66ms)
+[?25h

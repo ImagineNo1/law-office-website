@@ -1,9 +1,10 @@
+import { createServiceRequestAction } from "@/app/requests/actions";
 import { PageShell } from "@/components/platform/layout/PageShell";
 import { PublicHeader } from "@/components/platform/layout/PublicHeader";
 import { PublicFooter } from "@/components/platform/layout/PublicFooter";
-import { fa, recoveryServices } from "@/lib/platform-recovery-data";
+import { fa, fallbackServices, type PlatformService } from "@/lib/platform-db";
 
-export function RequestFormExperience() {
+export function RequestFormExperience({ services = fallbackServices }: { services?: PlatformService[] }) {
   return (
     <PageShell>
       <PublicHeader />
@@ -23,30 +24,44 @@ export function RequestFormExperience() {
               ))}
             </div>
           </aside>
-          <form className="rounded-2xl bg-white p-6 shadow-[0_18px_45px_rgba(11,23,42,.06)]">
+          <form action={createServiceRequestAction} className="rounded-2xl bg-white p-6 shadow-[0_18px_45px_rgba(11,23,42,.06)]">
             <div className="grid gap-4 md:grid-cols-2">
-              {["نام و نام خانوادگی", "شماره تماس", "ایمیل", "موضوع درخواست"].map((label) => (
-                <label className="grid gap-2 text-sm font-black" key={label}>
-                  {label}
-                  <input className="h-12 rounded-xl border border-[#eadfce] px-4 outline-none focus:border-[#C9973F]" />
-                </label>
-              ))}
+              <label className="grid gap-2 text-sm font-black">
+                نام و نام خانوادگی
+                <input className="h-12 rounded-xl border border-[#eadfce] px-4 outline-none focus:border-[#C9973F]" name="fullName" required />
+              </label>
+              <label className="grid gap-2 text-sm font-black">
+                شماره تماس
+                <input className="h-12 rounded-xl border border-[#eadfce] px-4 outline-none focus:border-[#C9973F]" name="phone" required />
+              </label>
+              <label className="grid gap-2 text-sm font-black">
+                ایمیل
+                <input className="h-12 rounded-xl border border-[#eadfce] px-4 outline-none focus:border-[#C9973F]" name="email" type="email" />
+              </label>
+              <label className="grid gap-2 text-sm font-black">
+                موضوع درخواست
+                <input className="h-12 rounded-xl border border-[#eadfce] px-4 outline-none focus:border-[#C9973F]" name="subject" required />
+              </label>
               <label className="grid gap-2 text-sm font-black">
                 <span>نوع خدمت</span>
-                <select className="h-12 rounded-xl border border-[#eadfce] px-4">
-                  {recoveryServices.map(([title, slug]) => <option key={slug}>{title}</option>)}
+                <select className="h-12 rounded-xl border border-[#eadfce] px-4" name="serviceSlug">
+                  {services.map((service) => (
+                    <option key={service.slug} value={service.slug}>
+                      {service.title}
+                    </option>
+                  ))}
                 </select>
               </label>
               <label className="grid gap-2 text-sm font-black">
                 <span>فوریت</span>
-                <select className="h-12 rounded-xl border border-[#eadfce] px-4">
-                  <option>عادی</option>
-                  <option>فوری</option>
+                <select className="h-12 rounded-xl border border-[#eadfce] px-4" name="priority">
+                  <option value="medium">عادی</option>
+                  <option value="urgent">فوری</option>
                 </select>
               </label>
               <label className="grid gap-2 text-sm font-black md:col-span-2">
                 شرح درخواست
-                <textarea className="min-h-36 rounded-xl border border-[#eadfce] p-4 outline-none focus:border-[#C9973F]" />
+                <textarea className="min-h-36 rounded-xl border border-[#eadfce] p-4 outline-none focus:border-[#C9973F]" name="description" required />
               </label>
             </div>
             <button className="mt-6 h-12 rounded-xl bg-[#C9973F] px-8 text-sm font-black text-white">

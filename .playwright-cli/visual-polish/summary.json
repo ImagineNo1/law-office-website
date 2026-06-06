@@ -14,7 +14,7 @@
       "cards": 60,
       "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 66206
+      "textLength": 52158
     },
     {
       "name": "mobile-home",
@@ -28,7 +28,7 @@
       "cards": 60,
       "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 66206
+      "textLength": 52158
     },
     {
       "name": "desktop-services",
@@ -42,7 +42,7 @@
       "cards": 33,
       "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 42785
+      "textLength": 32610
     },
     {
       "name": "desktop-service-detail",
@@ -56,7 +56,7 @@
       "cards": 20,
       "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 39505
+      "textLength": 30002
     },
     {
       "name": "desktop-contracts",
@@ -70,7 +70,7 @@
       "cards": 65,
       "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 73747
+      "textLength": 57777
     },
     {
       "name": "desktop-contract-detail",
@@ -84,7 +84,7 @@
       "cards": 23,
       "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 33544
+      "textLength": 25193
     },
     {
       "name": "desktop-admin-requests",
@@ -98,7 +98,7 @@
       "cards": 6,
       "tables": 1,
       "horizontalOverflow": false,
-      "textLength": 37214
+      "textLength": 13115
     },
     {
       "name": "desktop-dashboard",
@@ -112,7 +112,7 @@
       "cards": 24,
       "tables": 1,
       "horizontalOverflow": false,
-      "textLength": 14166
+      "textLength": 8982
     },
     {
       "name": "desktop-dashboard-documents",
@@ -126,7 +126,7 @@
       "cards": 15,
       "tables": 1,
       "horizontalOverflow": false,
-      "textLength": 13839
+      "textLength": 8524
     },
     {
       "name": "desktop-dashboard-signatures",
@@ -140,7 +140,7 @@
       "cards": 12,
       "tables": 1,
       "horizontalOverflow": false,
-      "textLength": 13805
+      "textLength": 8487
     }
   ]
 }

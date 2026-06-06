@@ -5,6 +5,13 @@ const faqSchema = new Schema(
     question: { type: String, required: true, trim: true },
     answer: { type: String, required: true, trim: true },
     category: { type: String, default: "عمومی", trim: true },
+    pageType: {
+      type: String,
+      enum: ["general", "service", "contract", "legal-form"],
+      default: "general",
+      index: true,
+    },
+    pageSlug: { type: String, default: "", trim: true, index: true },
     status: { type: String, enum: ["draft", "published"], default: "published" },
     order: { type: Number, default: 0 },
   },

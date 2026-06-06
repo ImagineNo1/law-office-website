@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { fa, recoveryContracts } from "@/lib/platform-recovery-data";
+import { fa, type PlatformContract } from "@/lib/platform-db";
 import { IconBox } from "@/components/platform/layout/PageShell";
 
-export function ContractCard({ contract }: { contract: (typeof recoveryContracts)[number] }) {
+export function ContractCard({ contract }: { contract: PlatformContract }) {
   return (
     <Link className="rounded-2xl border border-[#eadfce] bg-white p-5 shadow-[0_18px_45px_rgba(11,23,42,.06)] transition hover:-translate-y-1 hover:border-[#C9973F]" href={`/contracts/${contract.category}/${contract.slug}`}>
       <div className="flex items-center justify-between">

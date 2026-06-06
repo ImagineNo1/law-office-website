@@ -1,6 +1,6 @@
-import { recoveryContracts } from "@/lib/platform-recovery-data";
+import { type PlatformContract } from "@/lib/platform-db";
 
-export function ContractDetailHero({ contract }: { contract: (typeof recoveryContracts)[number] }) {
+export function ContractDetailHero({ contract }: { contract: PlatformContract }) {
   return (
     <section className="bg-[#0B172A] py-10 text-white">
       <div className="mx-auto grid w-[min(1440px,calc(100%-32px))] gap-6 lg:grid-cols-[1fr_420px]">

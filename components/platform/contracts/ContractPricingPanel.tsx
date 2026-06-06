@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { recoveryContracts } from "@/lib/platform-recovery-data";
+import { type PlatformContract } from "@/lib/platform-db";
 
-export function ContractPricingPanel({ contract }: { contract: (typeof recoveryContracts)[number] }) {
+export function ContractPricingPanel({ contract }: { contract: PlatformContract }) {
   return (
     <aside className="rounded-2xl bg-white p-6 shadow-[0_18px_45px_rgba(11,23,42,.06)] lg:sticky lg:top-28 lg:self-start">
       <p className="text-sm font-black text-[#66758A]">قیمت قرارداد</p>

@@ -8,8 +8,15 @@ import { ContractPreview } from "@/components/platform/home/ContractPreview";
 import { KnowledgePreview } from "@/components/platform/home/KnowledgePreview";
 import { TrustStrip } from "@/components/platform/home/TrustStrip";
 import { FinalCta } from "@/components/platform/home/FinalCta";
+import { fallbackContracts, fallbackServices, type PlatformContract, type PlatformService } from "@/lib/platform-db";
 
-export function HomeExperience() {
+export function HomeExperience({
+  contracts = fallbackContracts,
+  services = fallbackServices,
+}: {
+  contracts?: PlatformContract[];
+  services?: PlatformService[];
+}) {
   return (
     <PageShell dark>
       <PublicHeader />
@@ -17,10 +24,10 @@ export function HomeExperience() {
       <section className="bg-[#F7F3EA] py-10 text-[#0B172A]">
         <Container className="grid gap-6 xl:grid-cols-[310px_1fr]">
           <PrimaryPathways />
-          <ServicesShowcase />
+          <ServicesShowcase services={services} />
         </Container>
       </section>
-      <ContractPreview />
+      <ContractPreview contracts={contracts} />
       <KnowledgePreview />
       <TrustStrip />
       <FinalCta />

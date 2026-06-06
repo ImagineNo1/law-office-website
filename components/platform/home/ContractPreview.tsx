@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { recoveryContracts } from "@/lib/platform-recovery-data";
+import { fallbackContracts, type PlatformContract } from "@/lib/platform-db";
 
-export function ContractPreview() {
+export function ContractPreview({ contracts = fallbackContracts }: { contracts?: PlatformContract[] }) {
   return (
     <section className="bg-white py-10 text-[#0B172A]">
       <div className="mx-auto w-[min(1440px,calc(100%-32px))]">
@@ -13,7 +13,7 @@ export function ContractPreview() {
           <Link className="rounded-xl bg-[#0B172A] px-5 py-3 text-sm font-black text-white" href="/contracts">مشاهده بانک</Link>
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {recoveryContracts.slice(0, 8).map((contract) => (
+          {contracts.slice(0, 8).map((contract) => (
             <Link className="rounded-2xl border border-[#eadfce] bg-[#fbf7ef] p-5 transition hover:-translate-y-1 hover:border-[#C9973F]" href={`/contracts/${contract.category}/${contract.slug}`} key={contract.id}>
               <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-[#C9973F]">{contract.category}</span>
               <h3 className="mt-4 min-h-12 font-black">{contract.title}</h3>
