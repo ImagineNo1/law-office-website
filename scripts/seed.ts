@@ -7,6 +7,7 @@ import { Post } from "../models/Post";
 import { Service } from "../models/Service";
 import { SiteSettings } from "../models/SiteSettings";
 import { User } from "../models/User";
+import { serviceSamples } from "../lib/service-data";
 
 const services = [
   {
@@ -64,6 +65,8 @@ const services = [
     order: 6,
   },
 ];
+
+void services;
 
 const posts = [
   {
@@ -192,10 +195,10 @@ async function main() {
   );
 
   await Promise.all(
-    services.map((service) =>
+    serviceSamples.map((service) =>
       Service.findOneAndUpdate(
         { slug: service.slug },
-        { ...service, icon: "scale", status: "published" },
+        { ...service, status: "published" },
         { upsert: true, runValidators: true },
       ),
     ),

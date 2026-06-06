@@ -65,6 +65,23 @@ function parseStats(value: string) {
     .filter((item) => item.value && item.label);
 }
 
+function parseLines(value: string) {
+  return value
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function parseFaqItems(value: string) {
+  return value
+    .split("\n")
+    .map((line) => {
+      const [question = "", answer = ""] = line.split("|").map((part) => part.trim());
+      return { question, answer };
+    })
+    .filter((item) => item.question && item.answer);
+}
+
 function revalidatePublicContent() {
   [
     "/",
@@ -211,6 +228,14 @@ export async function saveServiceAction(formData: FormData) {
     slug: text(formData, "slug") || slugFromTitle(title),
     excerpt: text(formData, "excerpt"),
     content: text(formData, "content"),
+    category: text(formData, "category") || "همه خدمات",
+    benefits: parseLines(text(formData, "benefits")),
+    processSteps: parseLines(text(formData, "processSteps")),
+    requiredDocuments: parseLines(text(formData, "requiredDocuments")),
+    faqItems: parseFaqItems(text(formData, "faqItems")),
+    priceLabel: text(formData, "priceLabel"),
+    heroDescription: text(formData, "heroDescription"),
+    heroFeatures: parseLines(text(formData, "heroFeatures")),
     icon: text(formData, "icon") || "scale",
     order: Number(text(formData, "order")) || 0,
     status: publishedStatus(text(formData, "status")),
@@ -228,6 +253,7 @@ export async function saveServiceAction(formData: FormData) {
 
   revalidatePath("/admin/services");
   revalidatePath("/services");
+  revalidatePath(`/services/${payload.slug}`);
   revalidatePath("/institute");
   revalidatePath("/");
 }

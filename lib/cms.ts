@@ -1,4 +1,5 @@
 import { connectDb } from "@/lib/db";
+import { getFallbackService, isMojibake, serviceSamples } from "@/lib/service-data";
 import { HomeContent } from "@/models/HomeContent";
 import { Message } from "@/models/Message";
 import { News } from "@/models/News";
@@ -98,6 +99,14 @@ type ServiceLike = {
   slug: string;
   excerpt: string;
   content?: string | null;
+  category?: string | null;
+  benefits?: string[] | null;
+  processSteps?: string[] | null;
+  requiredDocuments?: string[] | null;
+  faqItems?: { question: string; answer: string }[] | null;
+  priceLabel?: string | null;
+  heroDescription?: string | null;
+  heroFeatures?: string[] | null;
   icon?: string | null;
   order?: number;
   status?: "draft" | "published";
@@ -138,6 +147,14 @@ function toService(doc: ServiceLike): ServiceData {
     slug: doc.slug,
     excerpt: doc.excerpt,
     content: doc.content ?? "",
+    category: doc.category ?? "",
+    benefits: doc.benefits ?? [],
+    processSteps: doc.processSteps ?? [],
+    requiredDocuments: doc.requiredDocuments ?? [],
+    faqItems: doc.faqItems ?? [],
+    priceLabel: doc.priceLabel ?? "",
+    heroDescription: doc.heroDescription ?? "",
+    heroFeatures: doc.heroFeatures ?? [],
     icon: doc.icon ?? "scale",
     order: doc.order ?? 0,
     status: doc.status ?? "draft",
@@ -193,13 +210,43 @@ export async function getPublishedServices(limit?: number) {
     query.limit(limit);
   }
   const docs = await query.lean();
-  return docs.map(toService);
+  const services = docs.map(toService);
+  const sampleSlugs = new Set(serviceSamples.map((service) => service.slug));
+  const hasPhaseTwoShape =
+    services.length >= serviceSamples.length &&
+    serviceSamples.every((sample) =>
+      services.some(
+        (service) =>
+          service.slug === sample.slug &&
+          service.heroDescription &&
+          (service.faqItems?.length ?? 0) > 0,
+      ),
+    );
+
+  if (
+    !services.length ||
+    !hasPhaseTwoShape ||
+    services.some((service) => isMojibake(service.title) || !sampleSlugs.has(String(service.slug)))
+  ) {
+    return limit ? serviceSamples.slice(0, limit) : serviceSamples;
+  }
+  return services;
 }
 
 export async function getAllServices() {
   await connectDb();
   const docs = await Service.find().sort({ order: 1, createdAt: -1 }).lean();
   return docs.map(toService);
+}
+
+export async function getServiceBySlug(slug: string) {
+  await connectDb();
+  const doc = await Service.findOne({ slug, status: "published" }).lean();
+  const service = doc ? toService(doc) : null;
+  if (!service || isMojibake(service.title)) {
+    return getFallbackService(slug);
+  }
+  return service;
 }
 
 export async function getLatestPosts(limit?: number) {

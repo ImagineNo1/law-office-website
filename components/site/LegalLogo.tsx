@@ -5,9 +5,14 @@ export function LegalLogo({
   compact?: boolean;
   text?: string;
 }) {
+  const safeText =
+    /[ØÙÛ]/.test(text) || !text.includes("موسسه")
+      ? "موسسه حقوقی عدالت گستر"
+      : text;
+
   return (
     <span className="inline-flex max-w-full items-center gap-3">
-      <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-[#c9a24a]/35 bg-[#c9a24a]/10 text-[#c9a24a] shadow-[0_12px_28px_rgba(201,162,74,0.16)]">
+      <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-gold/35 bg-gold/10 text-gold shadow-[0_12px_28px_rgba(201,151,63,0.16)]">
         <svg
           aria-hidden="true"
           className="size-7"
@@ -30,10 +35,10 @@ export function LegalLogo({
       </span>
       {!compact ? (
         <span className="min-w-0">
-          <span className="font-heading block truncate text-base font-extrabold tracking-[-0.015em] text-[#0f172a] dark:text-white sm:text-lg">
-            {text}
+          <span className="block truncate text-base font-extrabold text-navy sm:text-lg">
+            {safeText}
           </span>
-          <span className="hidden truncate text-xs font-medium tracking-[-0.01em] text-[#64748b] dark:text-white/72 sm:block">
+          <span className="hidden truncate text-xs font-bold text-muted sm:block">
             خدمات حقوقی تخصصی
           </span>
         </span>

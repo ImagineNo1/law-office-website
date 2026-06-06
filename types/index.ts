@@ -33,6 +33,17 @@ export type Service = {
   slug?: string;
   excerpt: string;
   content?: string;
+  category?: string;
+  benefits?: string[];
+  processSteps?: string[];
+  requiredDocuments?: string[];
+  faqItems?: {
+    question: string;
+    answer: string;
+  }[];
+  priceLabel?: string;
+  heroDescription?: string;
+  heroFeatures?: string[];
   icon?: string;
   order?: number;
   status?: PublishStatus;

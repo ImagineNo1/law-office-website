@@ -1,0 +1,255 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "صفحه اصلی" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e6]:
+            - img [ref=e8]
+            - generic [ref=e11]:
+              - generic [ref=e12]: هاههاهاه
+              - generic [ref=e13]: خدمات حقوقی تخصصی
+        - navigation [ref=e14]:
+          - link "صفحه اصلی" [ref=e15] [cursor=pointer]:
+            - /url: /
+          - link "خدمات حقوقی" [ref=e16] [cursor=pointer]:
+            - /url: /services
+          - link "بانک قراردادها" [ref=e17] [cursor=pointer]:
+            - /url: /contracts
+          - link "فرم‌های قضایی" [ref=e18] [cursor=pointer]:
+            - /url: /legal-forms
+          - link "منابع حقوقی" [ref=e19] [cursor=pointer]:
+            - /url: /blog
+          - link "درباره ما" [ref=e20] [cursor=pointer]:
+            - /url: /about
+          - link "تماس با ما" [ref=e21] [cursor=pointer]:
+            - /url: /contact
+        - generic [ref=e22]:
+          - button "جستجو" [ref=e23]:
+            - img [ref=e24]
+          - link "۰۲۱-۱۲۳۴۵۶۷۸" [ref=e26] [cursor=pointer]:
+            - /url: /contact
+            - img [ref=e27]
+            - text: ۰۲۱-۱۲۳۴۵۶۷۸
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - link "خدمات حقوقی":
+                - /url: /services
+                - text: خدمات حقوقی
+              - generic:
+                - link "مشاوره حقوقی":
+                  - /url: /services
+                - link "تنظیم قرارداد":
+                  - /url: /services
+                - link "تنظیم دادخواست":
+                  - /url: /services
+                - link "تنظیم شکواییه":
+                  - /url: /services
+                - link "تنظیم اظهارنامه":
+                  - /url: /services
+                - link "تنظیم لایحه":
+                  - /url: /services
+                - link "پیگیری پرونده":
+                  - /url: /services
+            - generic:
+              - link "بانک قراردادها":
+                - /url: /contracts
+                - text: بانک قراردادها
+              - generic:
+                - link "قراردادهای ملکی":
+                  - /url: /contracts
+                - link "قراردادهای استخدام":
+                  - /url: /contracts
+                - link "قراردادهای شراکت":
+                  - /url: /contracts
+                - link "قراردادهای خرید و فروش":
+                  - /url: /contracts
+                - link "قراردادهای پیمانکاری":
+                  - /url: /contracts
+                - link "قراردادهای کسب‌وکار":
+                  - /url: /contracts
+            - generic:
+              - link "فرم‌های قضایی":
+                - /url: /legal-forms
+                - text: فرم‌های قضایی
+              - generic:
+                - link "دادخواست":
+                  - /url: /legal-forms
+                - link "شکواییه":
+                  - /url: /legal-forms
+                - link "اظهارنامه":
+                  - /url: /legal-forms
+                - link "استشهادیه":
+                  - /url: /legal-forms
+                - link "لایحه دفاعیه":
+                  - /url: /legal-forms
+            - generic:
+              - link "منابع حقوقی":
+                - /url: /blog
+                - text: منابع حقوقی
+              - generic:
+                - link "مجله حقوقی":
+                  - /url: /blog
+                - link "اخبار حقوقی":
+                  - /url: /news
+                - link "سوالات متداول":
+                  - /url: /faq
+                - link "آموزش تصویری":
+                  - /url: /guides
+    - generic [ref=e30]: صفحه همه خدمات
+    - generic [ref=e33]:
+      - generic [ref=e35]:
+        - navigation [ref=e36]:
+          - link "خانه" [ref=e37] [cursor=pointer]:
+            - /url: /
+          - text: ‹خدمات حقوقی
+        - heading "خدمات حقوقی تخصصی" [level=1] [ref=e38]
+        - paragraph [ref=e39]: دسته‌بندی خدمات، جستجو و انتخاب مسیر مناسب برای مشاوره، تنظیم متن حقوقی و پیگیری پرونده.
+      - generic [ref=e40]:
+        - complementary [ref=e41]:
+          - heading "دسته‌بندی خدمات" [level=2] [ref=e42]
+          - generic [ref=e43]:
+            - button "همه خدمات" [ref=e44]:
+              - generic [ref=e45]: همه خدمات
+              - img [ref=e46]
+            - button "مشاوره حقوقی" [ref=e48]:
+              - generic [ref=e49]: مشاوره حقوقی
+              - img [ref=e50]
+            - button "تنظیم قرارداد" [ref=e52]:
+              - generic [ref=e53]: تنظیم قرارداد
+              - img [ref=e54]
+            - button "تنظیم دادخواست" [ref=e56]:
+              - generic [ref=e57]: تنظیم دادخواست
+              - img [ref=e58]
+            - button "تنظیم شکواییه" [ref=e60]:
+              - generic [ref=e61]: تنظیم شکواییه
+              - img [ref=e62]
+            - button "تنظیم اظهارنامه" [ref=e64]:
+              - generic [ref=e65]: تنظیم اظهارنامه
+              - img [ref=e66]
+            - button "تنظیم لایحه" [ref=e68]:
+              - generic [ref=e69]: تنظیم لایحه
+              - img [ref=e70]
+            - button "پیگیری پرونده" [ref=e72]:
+              - generic [ref=e73]: پیگیری پرونده
+              - img [ref=e74]
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - generic [ref=e78]:
+              - generic [ref=e79]: جستجوی خدمات
+              - textbox "جستجوی خدمات" [ref=e80]:
+                - /placeholder: جستجو در خدمات...
+              - img [ref=e81]
+            - generic [ref=e83]:
+              - text: "مرتب‌سازی:"
+              - combobox "مرتب‌سازی:" [ref=e84]:
+                - option "جدیدترین" [selected]
+                - option "عنوان خدمت"
+                - option "دسته‌بندی"
+          - generic [ref=e85]:
+            - link "مشاوره حقوقی مشاوره تخصصی در زمینه‌های مختلف حقوقی و قانونی بیشتر بدانید" [ref=e86] [cursor=pointer]:
+              - /url: /services/legal-consultation
+              - img [ref=e88]
+              - heading "مشاوره حقوقی" [level=3] [ref=e90]
+              - paragraph [ref=e91]: مشاوره تخصصی در زمینه‌های مختلف حقوقی و قانونی
+              - generic [ref=e92]: بیشتر بدانید
+            - link "تنظیم قرارداد تنظیم انواع قراردادهای حقوقی و تجاری با دقت و تخصص بیشتر بدانید" [ref=e93] [cursor=pointer]:
+              - /url: /services/contract-drafting
+              - img [ref=e95]
+              - heading "تنظیم قرارداد" [level=3] [ref=e97]
+              - paragraph [ref=e98]: تنظیم انواع قراردادهای حقوقی و تجاری با دقت و تخصص
+              - generic [ref=e99]: بیشتر بدانید
+            - link "تنظیم دادخواست تنظیم انواع دادخواست‌های حقوقی در مراجع قضایی بیشتر بدانید" [ref=e100] [cursor=pointer]:
+              - /url: /services/petition-drafting
+              - img [ref=e102]
+              - heading "تنظیم دادخواست" [level=3] [ref=e104]
+              - paragraph [ref=e105]: تنظیم انواع دادخواست‌های حقوقی در مراجع قضایی
+              - generic [ref=e106]: بیشتر بدانید
+            - link "تنظیم شکواییه تنظیم شکواییه‌های کیفری با رعایت ضوابط قانونی بیشتر بدانید" [ref=e107] [cursor=pointer]:
+              - /url: /services/criminal-complaint
+              - img [ref=e109]
+              - heading "تنظیم شکواییه" [level=3] [ref=e111]
+              - paragraph [ref=e112]: تنظیم شکواییه‌های کیفری با رعایت ضوابط قانونی
+              - generic [ref=e113]: بیشتر بدانید
+            - link "تنظیم اظهارنامه تنظیم اظهارنامه‌های رسمی و قانونی برای مطالبه حقوق بیشتر بدانید" [ref=e114] [cursor=pointer]:
+              - /url: /services/legal-notice
+              - img [ref=e116]
+              - heading "تنظیم اظهارنامه" [level=3] [ref=e118]
+              - paragraph [ref=e119]: تنظیم اظهارنامه‌های رسمی و قانونی برای مطالبه حقوق
+              - generic [ref=e120]: بیشتر بدانید
+            - link "تنظیم لایحه تنظیم لوایح دفاعیه و توضیحی برای مراحل رسیدگی بیشتر بدانید" [ref=e121] [cursor=pointer]:
+              - /url: /services/defense-brief
+              - img [ref=e123]
+              - heading "تنظیم لایحه" [level=3] [ref=e125]
+              - paragraph [ref=e126]: تنظیم لوایح دفاعیه و توضیحی برای مراحل رسیدگی
+              - generic [ref=e127]: بیشتر بدانید
+            - link "پیگیری پرونده پیگیری و اطلاع‌رسانی مراحل پرونده‌های شما در مراجع قضایی بیشتر بدانید" [ref=e128] [cursor=pointer]:
+              - /url: /services/case-follow-up
+              - img [ref=e130]
+              - heading "پیگیری پرونده" [level=3] [ref=e132]
+              - paragraph [ref=e133]: پیگیری و اطلاع‌رسانی مراحل پرونده‌های شما در مراجع قضایی
+              - generic [ref=e134]: بیشتر بدانید
+          - generic [ref=e135]:
+            - button "‹" [ref=e136]
+            - generic [ref=e137]: ۱
+            - button "۲" [ref=e138]
+            - generic [ref=e139]: ...
+            - button "›" [ref=e140]
+    - generic [ref=e141]:
+      - generic [ref=e142]:
+        - generic [ref=e143]:
+          - generic [ref=e145]:
+            - img [ref=e147]
+            - generic [ref=e150]:
+              - generic [ref=e151]: هاههاهاه
+              - generic [ref=e152]: خدمات حقوقی تخصصی
+          - paragraph [ref=e153]: ارائه خدمات حقوقی تخصصی با تجربه، محرمانگی و ساختار پیگیری شفاف برای اشخاص، شرکت ها و سازمان ها.
+        - generic [ref=e155]:
+          - heading "دسترسی سریع" [level=3] [ref=e156]
+          - generic [ref=e157]:
+            - link "صفحه اصلی" [ref=e158] [cursor=pointer]:
+              - /url: /
+            - link "خدمات حقوقی" [ref=e159] [cursor=pointer]:
+              - /url: /services
+            - link "مجله حقوقی" [ref=e160] [cursor=pointer]:
+              - /url: /blog
+            - link "اخبار حقوقی" [ref=e161] [cursor=pointer]:
+              - /url: /news
+            - link "تماس با ما" [ref=e162] [cursor=pointer]:
+              - /url: /contact
+        - generic [ref=e163]:
+          - heading "خدمات" [level=3] [ref=e164]
+          - generic [ref=e165]:
+            - link "مشاوره حقوقی" [ref=e166] [cursor=pointer]:
+              - /url: /services
+            - link "تنظیم قرارداد" [ref=e167] [cursor=pointer]:
+              - /url: /services
+            - link "تنظیم دادخواست" [ref=e168] [cursor=pointer]:
+              - /url: /services
+            - link "تنظیم شکواییه" [ref=e169] [cursor=pointer]:
+              - /url: /services
+            - link "پیگیری پرونده" [ref=e170] [cursor=pointer]:
+              - /url: /services
+        - generic [ref=e171]:
+          - heading "قراردادها" [level=3] [ref=e172]
+          - generic [ref=e173]:
+            - link "قراردادهای ملکی" [ref=e174] [cursor=pointer]:
+              - /url: /contracts
+            - link "قراردادهای استخدام" [ref=e175] [cursor=pointer]:
+              - /url: /contracts
+            - link "قراردادهای شراکت" [ref=e176] [cursor=pointer]:
+              - /url: /contracts
+            - link "قراردادهای کسب‌وکار" [ref=e177] [cursor=pointer]:
+              - /url: /contracts
+        - generic [ref=e178]:
+          - heading "اطلاعات تماس" [level=3] [ref=e179]
+          - generic [ref=e180]:
+            - generic [ref=e181]: ۰۲۱-۱۲۳۴۵۶۷۸
+            - generic [ref=e182]: info@deladgostar.com
+            - generic [ref=e183]: تهران، خیابان ولیعصر، خیابان مطهری، پلاک ۱۲، واحد ۳
+      - generic [ref=e185]:
+        - generic [ref=e186]: تمام حقوق برای مهدی مهاجر محفوظ است.
+        - generic [ref=e187]: LegalTech Foundation, Phase 1
+  - alert [ref=e188]
