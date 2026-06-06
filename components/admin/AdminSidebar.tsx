@@ -5,14 +5,14 @@ import { usePathname } from "next/navigation";
 import { LegalLogo } from "@/components/site/LegalLogo";
 
 const links = [
-  { label: "داشبورد", href: "/admin", icon: "M3 11.5 12 4l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-9.5Z" },
-  { label: "وبلاگ", href: "/admin/blog", icon: "M6 4h12v16H6V4Zm3 4h6M9 12h6M9 16h4" },
-  { label: "اخبار", href: "/admin/news", icon: "M5 5h14v14H5V5Zm3 4h8M8 13h8M8 17h5" },
-  { label: "خدمات", href: "/admin/services", icon: "M12 4v16M7 8h10M8 8l-3 7h6L8 8Zm8 0-3 7h6l-3-7Z" },
-  { label: "قراردادها", href: "/admin/contracts", icon: "M7 3h7l5 5v13H7V3Zm7 0v6h6M10 13h7M10 17h5" },
-  { label: "صفحات", href: "/admin/pages", icon: "M7 3h7l4 4v14H7V3Zm7 0v5h5" },
-  { label: "پیام ها", href: "/admin/messages", icon: "M4 6h16v12H4V6Zm0 1 8 6 8-6" },
-  { label: "کاربران", href: "/admin/users", icon: "M16 21v-2a4 4 0 0 0-8 0v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8 10v-2a3 3 0 0 0-2-2.8" },
+  { label: "پیشخوان", href: "/admin", icon: "M3 11.5 12 4l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-9.5Z" },
+  { label: "درخواست‌ها", href: "/admin/requests", icon: "M8 7h8M8 12h8M8 17h5M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" },
+  { label: "ثبت درخواست جدید", href: "/requests/new", icon: "M12 5v14M5 12h14" },
+  { label: "پرونده‌ها", href: "/admin/contracts", icon: "M4 7h7l2 2h7v10H4V7Z" },
+  { label: "مشتریان", href: "/admin/users", icon: "M16 21v-2a4 4 0 0 0-8 0v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8 10v-2a3 3 0 0 0-2-2.8" },
+  { label: "پیام‌ها", href: "/admin/messages", icon: "M4 6h16v12H4V6Zm0 1 8 6 8-6" },
+  { label: "فایل‌ها", href: "/admin/pages", icon: "M7 3h7l5 5v13H7V3Zm7 0v6h6M10 13h7M10 17h5" },
+  { label: "گزارش‌ها", href: "/admin/news", icon: "M5 19V9m7 10V5m7 14v-7" },
   { label: "تنظیمات", href: "/admin/settings", icon: "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-5v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" },
 ];
 
@@ -28,7 +28,7 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="bg-admin-nav p-4 text-white shadow-[24px_0_70px_rgba(0,0,0,0.18)] lg:sticky lg:top-0 lg:min-h-screen lg:w-[304px]">
+    <aside className="bg-admin-nav p-4 text-white shadow-[24px_0_70px_rgba(0,0,0,0.18)] lg:sticky lg:top-0 lg:min-h-screen lg:w-[278px]">
       <Link className="mb-10 flex items-center gap-3 [&_*]:text-white" href="/admin">
         <LegalLogo compact />
         <span>
@@ -77,7 +77,7 @@ export function AdminSidebar() {
             strokeLinejoin="round"
           />
         </svg>
-        بازگشت به سایت
+        خروج
       </Link>
     </aside>
   );
