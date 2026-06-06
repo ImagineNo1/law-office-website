@@ -103,15 +103,19 @@ function hasDatabase() {
   return Boolean(process.env.MONGODB_URI);
 }
 
+function canUseDemoFallback() {
+  return process.env.NODE_ENV !== "production" || process.env.ALLOW_DEMO_DATA === "true";
+}
+
 function idOf(value: unknown, fallback: string) {
   return value && typeof value === "object" && "toString" in value ? String(value) : fallback;
 }
 
 export async function getPlatformServices(): Promise<PlatformService[]> {
-  if (!hasDatabase()) return fallbackServices;
+  if (!hasDatabase()) return canUseDemoFallback() ? fallbackServices : [];
   await connectDb();
   const docs = await Service.find({ status: "published" }).sort({ order: 1, createdAt: -1 }).lean();
-  if (!docs.length) return fallbackServices;
+  if (!docs.length) return canUseDemoFallback() ? fallbackServices : [];
   return docs.map((doc, index) => ({
     id: idOf(doc._id, `service-${index + 1}`),
     title: String(doc.title),
@@ -136,10 +140,10 @@ export async function getPlatformServiceBySlug(slug: string) {
 }
 
 export async function getPlatformContracts(): Promise<PlatformContract[]> {
-  if (!hasDatabase()) return fallbackContracts;
+  if (!hasDatabase()) return canUseDemoFallback() ? fallbackContracts : [];
   await connectDb();
   const docs = await ContractTemplate.find({ status: "published" }).sort({ order: 1, createdAt: -1 }).lean();
-  if (!docs.length) return fallbackContracts;
+  if (!docs.length) return canUseDemoFallback() ? fallbackContracts : [];
   return docs.map((doc, index) => ({
     id: idOf(doc._id, `contract-${index + 1}`),
     title: String(doc.title),
@@ -161,10 +165,10 @@ export async function getPlatformContractBySlug(slug: string) {
 }
 
 export async function getPlatformLegalForms(): Promise<PlatformLegalForm[]> {
-  if (!hasDatabase()) return fallbackLegalForms;
+  if (!hasDatabase()) return canUseDemoFallback() ? fallbackLegalForms : [];
   await connectDb();
   const docs = await LegalFormTemplate.find({ status: "published" }).sort({ createdAt: -1 }).lean();
-  if (!docs.length) return fallbackLegalForms;
+  if (!docs.length) return canUseDemoFallback() ? fallbackLegalForms : [];
   return docs.map((doc, index) => ({
     id: idOf(doc._id, `form-${index + 1}`),
     title: String(doc.title),
@@ -178,14 +182,14 @@ export async function getPlatformLegalForms(): Promise<PlatformLegalForm[]> {
 
 export async function getPlatformFaqs(pageType?: PlatformFaq["pageType"], pageSlug?: string): Promise<PlatformFaq[]> {
   if (!hasDatabase()) {
-    return recoveryFaqs.map(([question, answer], index) => ({
+    return canUseDemoFallback() ? recoveryFaqs.map(([question, answer], index) => ({
       id: `faq-${index + 1}`,
       question,
       answer,
       category: "عمومی",
       pageType: pageType ?? "general",
       pageSlug: pageSlug ?? "",
-    }));
+    })) : [];
   }
   await connectDb();
   const query: Record<string, string> = { status: "published" };
@@ -194,14 +198,14 @@ export async function getPlatformFaqs(pageType?: PlatformFaq["pageType"], pageSl
   const docs = await FAQ.find(query).sort({ order: 1, createdAt: -1 }).lean();
   if (!docs.length && pageType !== "general") return getPlatformFaqs("general");
   if (!docs.length) {
-    return recoveryFaqs.map(([question, answer], index) => ({
+    return canUseDemoFallback() ? recoveryFaqs.map(([question, answer], index) => ({
       id: `faq-${index + 1}`,
       question,
       answer,
       category: "عمومی",
       pageType: pageType ?? "general",
       pageSlug: pageSlug ?? "",
-    }));
+    })) : [];
   }
   return docs.map((doc, index) => ({
     id: idOf(doc._id, `faq-${index + 1}`),

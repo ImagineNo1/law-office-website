@@ -11,10 +11,10 @@
       },
       "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-home.png",
       "dir": "rtl",
-      "cards": 60,
+      "cards": 36,
       "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 52158
+      "textLength": 32802
     },
     {
       "name": "mobile-home",
@@ -25,10 +25,10 @@
       },
       "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\mobile-home.png",
       "dir": "rtl",
-      "cards": 60,
+      "cards": 36,
       "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 52158
+      "textLength": 32802
     },
     {
       "name": "desktop-services",
@@ -39,10 +39,10 @@
       },
       "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-services.png",
       "dir": "rtl",
-      "cards": 33,
+      "cards": 18,
       "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 32610
+      "textLength": 19029
     },
     {
       "name": "desktop-service-detail",
@@ -53,10 +53,10 @@
       },
       "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-service-detail.png",
       "dir": "rtl",
-      "cards": 20,
+      "cards": 18,
       "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 30002
+      "textLength": 19487
     },
     {
       "name": "desktop-contracts",
@@ -67,10 +67,10 @@
       },
       "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-contracts.png",
       "dir": "rtl",
-      "cards": 65,
+      "cards": 17,
       "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 57777
+      "textLength": 20595
     },
     {
       "name": "desktop-contract-detail",
@@ -81,10 +81,10 @@
       },
       "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-contract-detail.png",
       "dir": "rtl",
-      "cards": 23,
+      "cards": 14,
       "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 25193
+      "textLength": 18613
     },
     {
       "name": "desktop-admin-requests",
@@ -109,10 +109,10 @@
       },
       "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-dashboard.png",
       "dir": "rtl",
-      "cards": 24,
+      "cards": 27,
       "tables": 1,
       "horizontalOverflow": false,
-      "textLength": 8982
+      "textLength": 10484
     },
     {
       "name": "desktop-dashboard-documents",
@@ -123,10 +123,10 @@
       },
       "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-dashboard-documents.png",
       "dir": "rtl",
-      "cards": 15,
+      "cards": 14,
       "tables": 1,
       "horizontalOverflow": false,
-      "textLength": 8524
+      "textLength": 10266
     },
     {
       "name": "desktop-dashboard-signatures",
@@ -138,9 +138,9 @@
       "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-dashboard-signatures.png",
       "dir": "rtl",
       "cards": 12,
-      "tables": 1,
+      "tables": 0,
       "horizontalOverflow": false,
-      "textLength": 8487
+      "textLength": 10329
     }
   ]
 }

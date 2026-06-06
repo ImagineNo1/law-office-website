@@ -23,6 +23,33 @@ export function ServicesExperience({
   const service = selectedService ?? services.find((item) => item.slug === detailSlug) ?? services[0];
   const isDetail = Boolean(detailSlug);
 
+  if (!service) {
+    return (
+      <PageShell>
+        <PublicHeader />
+        <section className="py-12">
+          <Container>
+            <div className="rounded-2xl border border-[#eadfce] bg-white p-10 text-center shadow-[0_18px_45px_rgba(11,23,42,.06)]">
+              <h1 className="text-3xl font-black">خدمتی برای نمایش وجود ندارد</h1>
+              <p className="mt-3 text-sm font-bold leading-7 text-[#66758A]">
+                محتوای خدمات هنوز در پایگاه داده منتشر نشده است.
+              </p>
+              <a className="mt-6 inline-flex h-12 items-center rounded-xl bg-[#0B172A] px-6 text-sm font-black text-white" href="/admin/services">
+                مدیریت خدمات
+              </a>
+              <div className="mt-8 grid gap-4 md:grid-cols-3">
+                {["ایجاد خدمت", "انتشار محتوا", "اتصال درخواست"].map((item) => (
+                  <div className="rounded-2xl bg-[#fbf7ef] p-4 text-sm font-black" key={item}>{item}</div>
+                ))}
+              </div>
+            </div>
+          </Container>
+        </section>
+        <PublicFooter />
+      </PageShell>
+    );
+  }
+
   return (
     <PageShell>
       <PublicHeader />
