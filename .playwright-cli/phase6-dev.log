@@ -1,0 +1,84 @@
+
+> law-office-website@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.7 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.199:3000
+✓ Ready in 496ms
+
+ GET /dashboard 200 in 3.3s (next.js: 3.0s, application-code: 337ms)
+⚠ Blocked cross-origin request to Next.js dev resource /_next/webpack-hmr from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /dashboard/documents 200 in 675ms (next.js: 600ms, application-code: 75ms)
+ GET /dashboard/signatures 200 in 667ms (next.js: 602ms, application-code: 65ms)
+ GET /dashboard/templates 200 in 727ms (next.js: 660ms, application-code: 67ms)
+ GET /dashboard/contacts 200 in 625ms (next.js: 521ms, application-code: 104ms)
+ GET /dashboard/workflows 200 in 764ms (next.js: 708ms, application-code: 55ms)
+ GET /dashboard/reports 200 in 601ms (next.js: 550ms, application-code: 51ms)
+ GET /dashboard 200 in 67ms (next.js: 3ms, application-code: 64ms)
+ GET /dashboard/documents 200 in 73ms (next.js: 3ms, application-code: 70ms)
+ GET /dashboard/signatures 200 in 74ms (next.js: 3ms, application-code: 70ms)
+ GET /dashboard/templates 200 in 59ms (next.js: 2ms, application-code: 57ms)
+ GET /dashboard/contacts 200 in 62ms (next.js: 2ms, application-code: 59ms)
+ GET /dashboard/workflows 200 in 112ms (next.js: 57ms, application-code: 55ms)
+ GET /dashboard/reports 200 in 57ms (next.js: 3ms, application-code: 55ms)
+ GET /dashboard 200 in 80ms (next.js: 2ms, application-code: 78ms)
+ GET /dashboard/documents 200 in 102ms (next.js: 37ms, application-code: 65ms)
+ GET /dashboard/signatures 200 in 99ms (next.js: 49ms, application-code: 50ms)
+ GET /dashboard/templates 200 in 64ms (next.js: 1853µs, application-code: 62ms)
+ GET /dashboard/contacts 200 in 52ms (next.js: 3ms, application-code: 49ms)
+ GET /dashboard/workflows 200 in 70ms (next.js: 2ms, application-code: 68ms)
+ GET /dashboard/reports 200 in 59ms (next.js: 3ms, application-code: 56ms)
+ GET /dashboard 200 in 77ms (next.js: 2ms, application-code: 74ms)
+ GET /dashboard/documents 200 in 122ms (next.js: 2ms, application-code: 120ms)
+ GET /dashboard/signatures 200 in 88ms (next.js: 4ms, application-code: 84ms)
+ GET /dashboard/templates 200 in 69ms (next.js: 3ms, application-code: 67ms)
+ GET /dashboard/contacts 200 in 59ms (next.js: 2ms, application-code: 57ms)
+ GET /dashboard/workflows 200 in 54ms (next.js: 3ms, application-code: 51ms)
+ GET /dashboard/reports 200 in 47ms (next.js: 3ms, application-code: 44ms)
+ GET /dashboard 200 in 68ms (next.js: 2ms, application-code: 66ms)
+ GET /dashboard/documents 200 in 61ms (next.js: 3ms, application-code: 59ms)
+ GET /dashboard/signatures 200 in 59ms (next.js: 3ms, application-code: 56ms)
+ GET /dashboard/templates 200 in 55ms (next.js: 4ms, application-code: 51ms)
+ GET /dashboard/contacts 200 in 60ms (next.js: 2ms, application-code: 57ms)
+ GET /dashboard/workflows 200 in 54ms (next.js: 3ms, application-code: 51ms)
+ GET /dashboard/reports 200 in 36ms (next.js: 2ms, application-code: 34ms)
+ GET /dashboard 200 in 72ms (next.js: 2ms, application-code: 70ms)
+ GET /dashboard/documents 200 in 46ms (next.js: 2ms, application-code: 44ms)
+ GET /dashboard/signatures 200 in 60ms (next.js: 1995µs, application-code: 58ms)
+ GET /dashboard/templates 200 in 57ms (next.js: 2ms, application-code: 54ms)
+ GET /dashboard/contacts 200 in 48ms (next.js: 4ms, application-code: 45ms)
+ GET /dashboard/workflows 200 in 62ms (next.js: 3ms, application-code: 59ms)
+ GET /dashboard/reports 200 in 40ms (next.js: 2ms, application-code: 38ms)
+ GET /dashboard 200 in 382ms (next.js: 90ms, application-code: 292ms)
+ GET /dashboard/documents 200 in 322ms (next.js: 76ms, application-code: 246ms)
+ GET /dashboard/signatures 200 in 351ms (next.js: 76ms, application-code: 275ms)
+ GET /dashboard/templates 200 in 335ms (next.js: 75ms, application-code: 260ms)
+ GET /dashboard/contacts 200 in 357ms (next.js: 83ms, application-code: 273ms)
+ GET /dashboard/workflows 200 in 365ms (next.js: 95ms, application-code: 271ms)
+ GET /dashboard/reports 200 in 291ms (next.js: 58ms, application-code: 233ms)
+ GET /dashboard 200 in 63ms (next.js: 2ms, application-code: 61ms)
+ GET /dashboard/documents 200 in 64ms (next.js: 3ms, application-code: 61ms)
+ GET /dashboard/signatures 200 in 61ms (next.js: 2ms, application-code: 58ms)
+ GET /dashboard/templates 200 in 51ms (next.js: 3ms, application-code: 48ms)
+ GET /dashboard/contacts 200 in 64ms (next.js: 2ms, application-code: 62ms)
+ GET /dashboard/workflows 200 in 62ms (next.js: 2ms, application-code: 60ms)
+ GET /dashboard/reports 200 in 52ms (next.js: 2ms, application-code: 50ms)
+ GET /dashboard 200 in 68ms (next.js: 1767µs, application-code: 67ms)
+ GET /dashboard/documents 200 in 65ms (next.js: 2ms, application-code: 63ms)
+ GET /dashboard/signatures 200 in 65ms (next.js: 4ms, application-code: 60ms)
+ GET /dashboard/templates 200 in 73ms (next.js: 2ms, application-code: 71ms)
+ GET /dashboard/contacts 200 in 63ms (next.js: 2ms, application-code: 61ms)
+ GET /dashboard/workflows 200 in 61ms (next.js: 4ms, application-code: 57ms)
+ GET /dashboard/reports 200 in 50ms (next.js: 2ms, application-code: 48ms)
+[?25h
