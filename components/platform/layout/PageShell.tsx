@@ -27,7 +27,7 @@ export function Container({
   className?: string;
 }) {
   return (
-    <div className={`mx-auto w-[min(1440px,calc(100%-32px))] ${className}`}>
+    <div className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>
       {children}
     </div>
   );

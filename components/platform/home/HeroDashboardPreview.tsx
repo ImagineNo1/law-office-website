@@ -1,40 +1,70 @@
-import { fa } from "@/lib/platform-db";
+const stats = [
+  { value: "۸۵۴", label: "سند فعال", icon: "file" },
+  { value: "۲۳", label: "در انتظار امضا", icon: "pen" },
+  { value: "۵۰", label: "درخواست‌های CRM", icon: "users" },
+];
+
+const docs = [
+  { name: "قرارداد اجاره ملک تجاری", date: "۱۴۰۳/۰۸/۲۰", status: "پیش‌نویس" },
+  { name: "قرارداد استخدام", date: "۱۴۰۳/۰۸/۱۸", status: "در حال بررسی" },
+  { name: "اظهارنامه رسمی مالیاتی", date: "۱۴۰۳/۰۸/۱۵", status: "امضا شده" },
+];
+
+function Icon({ name }: { name: string }) {
+  const paths: Record<string, string> = {
+    file: "M7 3h7l5 5v13H7V3Zm7 0v6h6",
+    pen: "M16.8 3.6 20.4 7.2 9.6 18H6v-3.6L16.8 3.6Z",
+    users: "M16 21v-2a4 4 0 0 0-8 0v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z",
+  };
+  return (
+    <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
+      <path d={paths[name]} stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
+    </svg>
+  );
+}
 
 export function HeroDashboardPreview() {
   return (
-    <div className="relative hidden lg:block">
-      <div className="absolute -inset-4 rounded-[2rem] bg-[linear-gradient(135deg,rgba(11,23,42,.14),rgba(201,151,63,.12),transparent)] blur-2xl" />
-      <div className="relative rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[0_30px_90px_rgba(15,23,42,.14)]">
-        <div className="mb-5 flex items-center justify-between">
-          <strong className="text-lg font-black text-slate-950">داشبورد اسناد و امضا</strong>
-          <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">عملیاتی</span>
-        </div>
-        <div className="grid grid-cols-3 gap-3">
-          {[
-            ["اسناد فعال", 854],
-            ["در انتظار امضا", 23],
-            ["درخواست های CRM", 50],
-          ].map(([label, value]) => (
-            <div className="rounded-xl bg-slate-50 p-4 text-center" key={String(label)}>
-              <p className="text-xs font-black text-slate-500">{label}</p>
-              <strong className="mt-3 block text-3xl font-black text-slate-950">{fa(value)}</strong>
-            </div>
-          ))}
-        </div>
-        <div className="mt-5">
-          <div className="mb-3 flex items-center justify-between">
-            <strong className="text-sm font-black">اسناد اخیر</strong>
-            <span className="text-xs font-black text-[#C9973F]">مشاهده همه</span>
+    <div className="hidden lg:block">
+      <div className="relative">
+        <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/10 to-transparent blur-2xl" />
+        <div className="relative space-y-5 rounded-2xl border border-border/50 bg-card p-6 shadow-2xl">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold">داشبورد اسناد و امضا</h3>
+            <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground">فعلی</span>
           </div>
-          {["قرارداد اجاره ملک تجاری", "قرارداد استخدام کارمند", "اظهارنامه رسمی مالیاتی"].map((item, index) => (
-            <div className="flex items-center justify-between rounded-xl px-3 py-3 transition hover:bg-slate-50" key={item}>
-              <div>
-                <p className="text-sm font-black text-slate-900">{item}</p>
-                <p className="text-xs font-bold text-slate-500">۱۴۰۳/۰۳/{fa(20 + index)}</p>
+
+          <div className="grid grid-cols-3 gap-3">
+            {stats.map((stat) => (
+              <div className="rounded-xl bg-muted/50 p-4 text-center" key={stat.label}>
+                <span className="mx-auto mb-2 flex size-5 items-center justify-center text-accent">
+                  <Icon name={stat.icon} />
+                </span>
+                <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{stat.label}</p>
               </div>
-              <span className="rounded-lg bg-emerald-50 px-2.5 py-1 text-[10px] font-black text-emerald-700">امضا شده</span>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm font-semibold text-foreground">اسناد اخیر</p>
+            {docs.map((doc) => (
+              <div className="flex items-center justify-between rounded-lg px-3 py-2.5 transition-colors hover:bg-muted/50" key={doc.name}>
+                <div className="flex items-center gap-3">
+                  <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Icon name="file" />
+                  </span>
+                  <span>
+                    <span className="block text-sm font-medium">{doc.name}</span>
+                    <span className="text-xs text-muted-foreground">{doc.date}</span>
+                  </span>
+                </div>
+                <span className={`rounded-full px-2.5 py-1 text-[10px] font-medium ${doc.status === "امضا شده" ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"}`}>
+                  {doc.status}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

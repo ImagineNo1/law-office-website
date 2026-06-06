@@ -11,40 +11,26 @@ export function AdminHeader({
   userName: string;
 }) {
   return (
-    <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white/90 px-4 py-4 backdrop-blur-xl sm:px-6 lg:px-8">
-      <div>
-        <p className="text-xs font-black text-[#C9973F]">Admin CMS</p>
-        <h1 className="mt-1 font-heading text-2xl font-black text-slate-950">{title}</h1>
-        {description ? <p className="mt-1 text-sm text-slate-500">{description}</p> : null}
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border/50 bg-background/80 px-4 backdrop-blur-xl">
+      <div className="flex flex-1 items-center gap-2 rounded-lg bg-muted/50 px-3 py-2 sm:max-w-md">
+        <svg aria-hidden="true" className="size-4 text-muted-foreground" viewBox="0 0 24 24" fill="none">
+          <path d="m21 21-4.2-4.2M10.8 18a7.2 7.2 0 1 1 0-14.4 7.2 7.2 0 0 1 0 14.4Z" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" />
+        </svg>
+        <input className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/60" placeholder="جستجو..." />
       </div>
-      <div className="flex items-center gap-3">
-        <label className="hidden h-11 w-72 items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-500 md:flex">
-          <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none">
-            <path
-              d="m21 21-4.2-4.2M10.8 18a7.2 7.2 0 1 1 0-14.4 7.2 7.2 0 0 1 0 14.4Z"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeWidth="1.8"
-            />
-          </svg>
-          <input className="w-full bg-transparent outline-none placeholder:text-slate-400" placeholder="جستجو..." />
-        </label>
-        <form action={logoutAction}>
-          <button
-            className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:border-rose-200 hover:text-rose-600"
-            type="submit"
-          >
-            خروج
-          </button>
-        </form>
-        <ThemeToggle />
-        <div className="flex items-center gap-3 rounded-full border border-slate-200 bg-white py-1 pr-1 pl-4 text-sm font-bold text-slate-950 shadow-sm">
-          <span className="grid size-9 place-items-center rounded-full bg-[#C9973F] text-[#1b1305]">
-            {userName.slice(0, 1)}
-          </span>
-          {userName}
-        </div>
+      <div className="hidden min-w-0 flex-1 lg:block">
+        <p className="truncate text-xs text-muted-foreground">{description ?? title}</p>
       </div>
+      <span className="hidden rounded-full border border-border px-2.5 py-1 text-xs text-muted-foreground sm:flex">مدیر سیستم</span>
+      <ThemeToggle />
+      <form action={logoutAction}>
+        <button className="rounded-lg px-3 py-2 text-sm text-muted-foreground transition hover:bg-muted hover:text-foreground" type="submit">
+          خروج
+        </button>
+      </form>
+      <span className="flex size-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+        {userName.slice(0, 1)}
+      </span>
     </header>
   );
 }

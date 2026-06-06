@@ -4,44 +4,56 @@ export const metadata = {
   title: "بازیابی رمز عبور",
 };
 
+function MailIcon() {
+  return (
+    <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
+      <path d="M4 6h16v12H4V6Zm0 1 8 6 8-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
 export default function ForgotPasswordPage() {
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-10" dir="rtl">
-      <section className="mx-auto grid min-h-[calc(100vh-80px)] max-w-5xl overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-2xl shadow-slate-900/10 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="bg-[#071326] p-8 text-white lg:p-12">
-          <Link className="inline-flex items-center gap-3 text-lg font-black" href="/">
-            <span className="grid size-11 place-items-center rounded-2xl bg-[#C9973F] text-[#1b1305]">و</span>
-            وکیل‌یار
+    <main className="flex min-h-screen items-center justify-center bg-background px-4 py-10 text-foreground" dir="rtl">
+      <section className="w-full max-w-md rounded-2xl border border-border/50 bg-card p-8 shadow-xl shadow-primary/5">
+        <Link className="mx-auto mb-8 flex w-fit items-center gap-3" href="/">
+          <span className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+            <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
+              <path d="m16 16 3-7 3 7M2 16l3-7 3 7M12 3v18M5 9h14M4 16h5M15 16h5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
+            </svg>
+          </span>
+          <span>
+            <span className="block text-lg font-bold">وکیل‌یار</span>
+            <span className="-mt-1 block text-[10px] text-muted-foreground">سامانه خدمات، قرارداد و امضا</span>
+          </span>
+        </Link>
+
+        <div className="mb-8 text-center">
+          <span className="mx-auto mb-4 flex size-12 items-center justify-center rounded-2xl bg-accent/10 text-accent">
+            <MailIcon />
+          </span>
+          <h1 className="text-2xl font-extrabold">بازیابی رمز عبور</h1>
+          <p className="mt-2 text-sm text-muted-foreground">لینک بازیابی به ایمیل شما ارسال می‌شود</p>
+        </div>
+
+        <form className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground" htmlFor="email">آدرس ایمیل</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"><MailIcon /></span>
+              <input autoComplete="email" className="h-12 w-full rounded-lg border border-border bg-white px-4 pl-10 text-sm outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/15" id="email" name="email" placeholder="you@example.com" required type="email" />
+            </div>
+          </div>
+          <button className="h-12 w-full rounded-lg bg-primary text-sm font-medium text-primary-foreground transition hover:bg-primary/90" type="button">
+            ارسال لینک بازیابی
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-sm">
+          <Link className="font-medium text-primary hover:underline" href="/login">
+            ← بازگشت به صفحه ورود
           </Link>
-          <div className="mt-20">
-            <p className="text-sm font-black text-[#D4A64A]">Secure recovery</p>
-            <h1 className="mt-4 text-4xl font-black leading-[1.35]">بازیابی امن دسترسی حساب</h1>
-            <p className="mt-5 text-sm leading-8 text-slate-300">
-              برای حفظ امنیت پرونده‌ها، درخواست بازیابی پس از تایید ایمیل و سیاست‌های احراز هویت فعلی سامانه انجام می‌شود.
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center p-8 lg:p-12">
-          <div className="w-full">
-            <p className="text-xs font-black text-[#C9973F]">فراموشی رمز</p>
-            <h2 className="mt-2 text-3xl font-black text-slate-950">درخواست بازیابی</h2>
-            <form className="mt-8 grid gap-5">
-              <label className="grid gap-2 text-sm font-bold text-slate-700">
-                ایمیل حساب
-                <input className="h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 outline-none transition focus:border-[#C9973F] focus:bg-white" name="email" placeholder="name@example.com" type="email" />
-              </label>
-              <button className="h-12 rounded-2xl bg-[#071326] text-sm font-black text-white shadow-lg shadow-slate-900/10" type="button">
-                ارسال لینک بازیابی
-              </button>
-            </form>
-            <p className="mt-6 text-sm text-slate-500">
-              این صفحه با معماری احراز هویت فعلی آماده شده و تا اتصال اکشن بازیابی، عملیات ارسال ایمیل را اجرا نمی‌کند.
-            </p>
-            <Link className="mt-5 inline-flex text-sm font-black text-[#9A6A19]" href="/login">
-              بازگشت به ورود
-            </Link>
-          </div>
-        </div>
+        </p>
       </section>
     </main>
   );

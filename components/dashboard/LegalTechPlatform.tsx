@@ -115,7 +115,7 @@ function Icon({ name, className = "size-5" }: { name: string; className?: string
 }
 
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <section className={`rounded-2xl border border-slate-200 bg-white shadow-sm ${className}`}>{children}</section>;
+  return <section className={`rounded-xl border border-border/50 bg-card ${className}`}>{children}</section>;
 }
 
 function EmptyState({ title, description }: { title: string; description: string }) {
@@ -143,22 +143,24 @@ function Shell({ children, data }: { children: React.ReactNode; data: DashboardD
   const usedStorage = data.storageStats.percent;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-950" dir="rtl">
-      <aside className="fixed inset-y-0 right-0 z-40 hidden w-72 bg-[#071326] p-5 text-white shadow-2xl xl:block">
+    <div className="flex min-h-screen bg-background text-foreground" dir="rtl">
+      <aside className="fixed inset-y-0 right-0 z-40 hidden w-64 flex-col bg-sidebar text-sidebar-foreground lg:flex">
+        <div className="border-b border-sidebar-border p-5">
         <Link className="flex items-center gap-3" href="/dashboard">
-          <span className="grid size-12 place-items-center rounded-2xl bg-[#C9973F] text-xl font-black text-[#1b1305]">و</span>
+          <span className="grid size-9 place-items-center rounded-lg bg-sidebar-primary text-sm font-bold text-sidebar-primary-foreground">و</span>
           <span>
-            <span className="block text-xl font-black">وکیل‌یار</span>
-            <span className="text-xs text-slate-300">سامانه اسناد و امضای دیجیتال</span>
+            <span className="block text-sm font-bold">وکیل‌یار</span>
+            <span className="text-[10px] text-sidebar-foreground/50">سامانه اسناد و امضا</span>
           </span>
         </Link>
-        <nav className="mt-8 grid gap-1.5">
+        </div>
+        <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
           {navItems.map((item) => {
             const active = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(`${item.href}/`));
             return (
               <Link
-                className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition ${
-                  active ? "bg-white text-[#071326] shadow-lg" : "text-slate-300 hover:bg-white/10 hover:text-white"
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 ${
+                  active ? "bg-sidebar-accent font-semibold text-sidebar-primary" : "text-sidebar-foreground/60 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
                 }`}
                 href={item.href}
                 key={item.href}
@@ -169,35 +171,34 @@ function Shell({ children, data }: { children: React.ReactNode; data: DashboardD
             );
           })}
         </nav>
-        <Card className="mt-8 border-white/10 bg-white/8 p-4 text-white shadow-none">
+        <div className="border-t border-sidebar-border p-4">
+        <Card className="rounded-xl border-0 bg-sidebar-accent p-4 text-sidebar-foreground shadow-none">
           <div className="flex items-center justify-between text-sm font-bold">
             <span>فضای ذخیره‌سازی</span>
-            <span className="text-[#D4A64A]">{toFaNumber(usedStorage)}٪</span>
+            <span className="text-sidebar-primary">{toFaNumber(usedStorage)}٪</span>
           </div>
           <div className="mt-3 h-2 rounded-full bg-white/15">
-            <div className="h-full rounded-full bg-[#D4A64A]" style={{ width: `${usedStorage}%` }} />
+            <div className="h-full rounded-full bg-sidebar-primary" style={{ width: `${usedStorage}%` }} />
           </div>
           <p className="mt-3 text-xs text-slate-300">
             {toFaNumber(data.storageStats.usedGb)} گیگابایت استفاده شده
           </p>
         </Card>
+        </div>
       </aside>
-      <div className="xl:mr-72">
-        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 px-4 py-4 backdrop-blur-xl sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <p className="text-xs font-black text-[#C9973F]">پلتفرم مدیریت اسناد</p>
-              <h1 className="mt-1 text-2xl font-black text-slate-950">داشبورد پیشرفته حقوقی</h1>
+      <div className="flex-1 lg:mr-64">
+        <header className="sticky top-0 z-30 border-b border-border/50 bg-background/80 backdrop-blur-xl">
+          <div className="flex h-16 items-center justify-between px-4 sm:px-6">
+            <div className="hidden items-center gap-2 rounded-lg bg-muted/50 px-3 py-2 sm:flex sm:w-80">
+              <Icon name="search" className="size-4 text-muted-foreground" />
+              <input className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/60" placeholder="جستجو در اسناد، قراردادها، مخاطبین..." />
             </div>
-            <div className="flex flex-1 items-center justify-end gap-3">
-              <label className="hidden h-11 w-full max-w-sm items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-500 md:flex">
+            <div className="flex items-center gap-3">
+              <button className="relative rounded-lg p-2 hover:bg-muted">
                 <Icon name="search" className="size-4" />
-                <input className="w-full bg-transparent outline-none placeholder:text-slate-400" placeholder="جستجو در اسناد، مخاطبین و قالب‌ها..." />
-              </label>
-              <Link className="inline-flex h-11 items-center gap-2 rounded-2xl bg-[#071326] px-5 text-sm font-black text-white shadow-lg shadow-slate-900/10 transition hover:bg-[#0B172A]" href="/dashboard/documents">
-                <Icon name="plus" className="size-4" />
-                سند جدید
-              </Link>
+                <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-accent" />
+              </button>
+              <span className="flex size-9 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">ع</span>
             </div>
           </div>
         </header>
@@ -216,17 +217,17 @@ function KpiGrid({ data }: { data: DashboardData }) {
     { label: "قالب‌ها", value: data.stats.templates, icon: "template", accent: "text-[#9A6A19] bg-[#FFF8EA]" },
   ];
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
       {cards.map((card) => (
-        <Card className="p-5" key={card.label}>
-          <div className="flex items-start justify-between gap-4">
-            <span className={`grid size-12 place-items-center rounded-2xl ${card.accent}`}>
+        <Card className="p-5 transition-shadow hover:shadow-lg" key={card.label}>
+          <div className="mb-3 flex items-start justify-between">
+            <span className={`grid size-10 place-items-center rounded-xl ${card.accent}`}>
               <Icon name={card.icon} />
             </span>
             <span className="text-xs font-black text-emerald-600">+{toFaNumber(12)}٪</span>
           </div>
-          <strong className="mt-5 block text-3xl font-black text-slate-950">{toFaNumber(card.value)}</strong>
-          <p className="mt-1 text-sm font-bold text-slate-500">{card.label}</p>
+          <strong className="block text-2xl font-extrabold text-foreground">{toFaNumber(card.value)}</strong>
+          <p className="mt-1 text-xs text-muted-foreground">{card.label}</p>
         </Card>
       ))}
     </div>
@@ -340,15 +341,30 @@ function StoragePanel({ data }: { data: DashboardData }) {
 
 function DashboardHome({ data }: { data: DashboardData }) {
   return (
-    <div className="grid gap-6">
-      <KpiGrid data={data} />
-      <div className="grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
-        <DocumentsTable documents={data.documents.slice(0, 6)} />
-        <SignaturePanel data={data} />
+    <div className="space-y-8">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+        <div>
+          <h1 className="text-2xl font-extrabold sm:text-3xl">داشبورد پیشرفته</h1>
+          <p className="mt-1 text-sm text-muted-foreground">خوش آمدید، علی محمدی</p>
+        </div>
+        <Link className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-accent-foreground transition hover:bg-accent/90" href="/dashboard/documents">
+          <Icon name="plus" className="size-4" />
+          سند جدید
+        </Link>
       </div>
-      <div className="grid gap-6 xl:grid-cols-3">
+      <KpiGrid data={data} />
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <DocumentsTable documents={data.documents.slice(0, 6)} />
+        </div>
+        <div className="space-y-6">
+          <QuickActions />
+          <SignaturePanel data={data} />
+        </div>
+      </div>
+      <div className="grid gap-6 lg:grid-cols-3">
         <StoragePanel data={data} />
-        <Card className="p-6 xl:col-span-2">
+        <Card className="p-6 lg:col-span-2">
           <h2 className="text-lg font-black text-slate-950">گردش کار فعال</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             {data.workflows.slice(0, 4).map((workflow) => (
@@ -386,6 +402,32 @@ function DashboardHome({ data }: { data: DashboardData }) {
         </div>
       </Card>
     </div>
+  );
+}
+
+function QuickActions() {
+  const actions = [
+    ["ایجاد سند جدید", "plus"],
+    ["بارگذاری", "files"],
+    ["ارسال برای امضا", "send"],
+    ["ایجاد قالب", "template"],
+  ];
+  return (
+    <Card>
+      <div className="border-b border-border/50 px-6 py-4">
+        <h2 className="text-lg font-bold">اقدامات سریع</h2>
+      </div>
+      <div className="space-y-2 p-6">
+        {actions.map(([label, icon]) => (
+          <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-right text-sm transition-colors hover:bg-muted/50" key={label} type="button">
+            <span className="flex size-8 items-center justify-center rounded-lg bg-accent/10 text-accent">
+              <Icon name={icon} className="size-4" />
+            </span>
+            <span className="font-medium">{label}</span>
+          </button>
+        ))}
+      </div>
+    </Card>
   );
 }
 
