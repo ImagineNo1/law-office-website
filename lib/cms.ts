@@ -305,6 +305,10 @@ export async function getContractBySlug(slug: string) {
 }
 
 export async function getPublishedServices(limit?: number) {
+  if (!hasDatabase()) {
+    return limit ? serviceSamples.slice(0, limit) : serviceSamples;
+  }
+
   await connectDb();
   const query = Service.find({ status: "published" }).sort({ order: 1, createdAt: -1 });
   if (limit) {

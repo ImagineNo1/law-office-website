@@ -183,3 +183,58 @@ export type AdminContentRow = {
   date: string;
   status: string;
 };
+
+export type RequestStatus =
+  | "new"
+  | "reviewing"
+  | "waiting_for_client"
+  | "quoted"
+  | "in_progress"
+  | "completed"
+  | "cancelled";
+
+export type RequestPriority = "low" | "medium" | "high" | "urgent";
+
+export type RequestNote = {
+  id: string;
+  author: string;
+  message: string;
+  createdAt: string;
+};
+
+export type RequestAttachment = {
+  id: string;
+  filename: string;
+  size: string;
+  uploadedBy: "client" | "admin";
+  uploadedAt: string;
+};
+
+export type RequestMessage = {
+  id: string;
+  sender: "client" | "admin";
+  senderName: string;
+  message: string;
+  createdAt: string;
+  avatar?: string;
+};
+
+export type ServiceRequestData = {
+  id: string;
+  requestNumber: string;
+  fullName: string;
+  phone: string;
+  email?: string;
+  serviceSlug: string;
+  serviceTitle: string;
+  subject: string;
+  description: string;
+  priority: RequestPriority;
+  status: RequestStatus;
+  assignedTo?: string;
+  adminNotes: RequestNote[];
+  attachments: RequestAttachment[];
+  messages: RequestMessage[];
+  createdAt: string;
+  updatedAt: string;
+};
