@@ -18,13 +18,22 @@ export function HomeExperience({
   services?: PlatformService[];
 }) {
   return (
-    <PageShell dark>
+    <PageShell>
       <PublicHeader />
       <HeroSection />
-      <section className="bg-slate-50 py-10 text-[#0B172A]">
-        <Container className="grid gap-6 xl:grid-cols-[310px_1fr]">
-          <PrimaryPathways />
-          <ServicesShowcase services={services} />
+      <section id="services" className="bg-white py-20 text-slate-950">
+        <Container>
+          <div className="mb-12 text-center">
+            <span className="rounded-full border border-[#C9973F]/20 bg-[#C9973F]/10 px-4 py-1.5 text-xs font-black text-[#A87522]">خدمات تخصصی</span>
+            <h2 className="mt-4 text-3xl font-black md:text-4xl">مسیرهای اصلی خدمات حقوقی</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm font-bold leading-7 text-slate-500">
+              از مشاوره تا تنظیم سند و امضای دیجیتال، تمام نیازهای حقوقی شما در یکجا.
+            </p>
+          </div>
+          <div className="grid gap-6 xl:grid-cols-[280px_1fr]">
+            <PrimaryPathways />
+            <ServicesShowcase services={services} />
+          </div>
         </Container>
       </section>
       <ContractPreview contracts={contracts} />
