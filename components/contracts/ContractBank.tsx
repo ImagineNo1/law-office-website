@@ -1,5 +1,5 @@
 import { recoveryContracts } from "@/lib/platform-recovery-data";
-import { ContractCard } from "@/components/platform/RecoveryUi";
+import { ContractCard } from "@/components/platform/contracts/ContractCard";
 
 export function ContractBank() {
   return (

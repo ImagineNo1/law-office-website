@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ServicesExperience } from "@/components/platform/RecoveryUi";
+import { ServicesExperience } from "@/components/platform/services/ServicesExperience";
 
 export const metadata: Metadata = { title: "خدمات حقوقی" };
 

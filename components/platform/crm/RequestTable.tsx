@@ -1,0 +1,39 @@
+import Link from "next/link";
+import { crmRequests } from "@/lib/platform-recovery-data";
+import { RequestStatusBadge } from "@/components/platform/crm/RequestStatusBadge";
+
+export function RequestTable() {
+  return (
+    <div className="overflow-hidden rounded-2xl bg-white shadow-[0_18px_45px_rgba(11,23,42,.06)]">
+      <div className="flex flex-col gap-3 border-b border-[#eadfce] p-5 lg:flex-row lg:items-center lg:justify-between">
+        <h2 className="text-xl font-black">جدول درخواست‌ها</h2>
+        <div className="flex gap-2">
+          <input className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" placeholder="جستجو..." />
+          <select className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold">
+            <option>همه وضعیت‌ها</option>
+          </select>
+        </div>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[900px] text-sm">
+          <thead className="bg-[#fbf7ef] text-[#66758A]">
+            <tr>{["شماره", "موکل", "خدمت", "وضعیت", "اولویت", "تاریخ", "عملیات"].map((h) => <th className="px-5 py-4 text-right font-black" key={h}>{h}</th>)}</tr>
+          </thead>
+          <tbody>
+            {crmRequests.slice(0, 14).map((r) => (
+              <tr className="border-t border-[#eadfce]" key={r.id}>
+                <td className="px-5 py-4 font-black">{r.number}</td>
+                <td className="px-5 py-4 font-bold">{r.client}</td>
+                <td className="px-5 py-4 text-[#66758A]">{r.service}</td>
+                <td className="px-5 py-4"><RequestStatusBadge status={r.status} /></td>
+                <td className="px-5 py-4">{r.priority}</td>
+                <td className="px-5 py-4">{r.date}</td>
+                <td className="px-5 py-4"><Link className="rounded-lg border border-[#eadfce] px-3 py-2 font-black" href={`/admin/requests/${r.id}`}>مشاهده</Link></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

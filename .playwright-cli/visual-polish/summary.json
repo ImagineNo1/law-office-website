@@ -1,0 +1,146 @@
+{
+  "checked": 10,
+  "failures": [],
+  "results": [
+    {
+      "name": "desktop-home",
+      "route": "/",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-home.png",
+      "dir": "rtl",
+      "cards": 60,
+      "tables": 0,
+      "horizontalOverflow": false,
+      "textLength": 66206
+    },
+    {
+      "name": "mobile-home",
+      "route": "/",
+      "viewport": {
+        "width": 390,
+        "height": 1100
+      },
+      "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\mobile-home.png",
+      "dir": "rtl",
+      "cards": 60,
+      "tables": 0,
+      "horizontalOverflow": false,
+      "textLength": 66206
+    },
+    {
+      "name": "desktop-services",
+      "route": "/services",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-services.png",
+      "dir": "rtl",
+      "cards": 33,
+      "tables": 0,
+      "horizontalOverflow": false,
+      "textLength": 42785
+    },
+    {
+      "name": "desktop-service-detail",
+      "route": "/services/contract-drafting",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-service-detail.png",
+      "dir": "rtl",
+      "cards": 20,
+      "tables": 0,
+      "horizontalOverflow": false,
+      "textLength": 39505
+    },
+    {
+      "name": "desktop-contracts",
+      "route": "/contracts",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-contracts.png",
+      "dir": "rtl",
+      "cards": 65,
+      "tables": 0,
+      "horizontalOverflow": false,
+      "textLength": 73747
+    },
+    {
+      "name": "desktop-contract-detail",
+      "route": "/contracts/ملکی/property-lease",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-contract-detail.png",
+      "dir": "rtl",
+      "cards": 23,
+      "tables": 0,
+      "horizontalOverflow": false,
+      "textLength": 33544
+    },
+    {
+      "name": "desktop-admin-requests",
+      "route": "/admin/requests",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-admin-requests.png",
+      "dir": "rtl",
+      "cards": 6,
+      "tables": 1,
+      "horizontalOverflow": false,
+      "textLength": 37214
+    },
+    {
+      "name": "desktop-dashboard",
+      "route": "/dashboard",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-dashboard.png",
+      "dir": "rtl",
+      "cards": 24,
+      "tables": 1,
+      "horizontalOverflow": false,
+      "textLength": 14166
+    },
+    {
+      "name": "desktop-dashboard-documents",
+      "route": "/dashboard/documents",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-dashboard-documents.png",
+      "dir": "rtl",
+      "cards": 15,
+      "tables": 1,
+      "horizontalOverflow": false,
+      "textLength": 13839
+    },
+    {
+      "name": "desktop-dashboard-signatures",
+      "route": "/dashboard/signatures",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "screenshot": "D:\\VsCode\\mahdi law\\law-office-website\\.playwright-cli\\visual-polish\\desktop-dashboard-signatures.png",
+      "dir": "rtl",
+      "cards": 12,
+      "tables": 1,
+      "horizontalOverflow": false,
+      "textLength": 13805
+    }
+  ]
+}

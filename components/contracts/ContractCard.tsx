@@ -1,1 +1,1 @@
-export { ContractCard } from "@/components/platform/RecoveryUi";
+export { ContractCard } from "@/components/platform/contracts/ContractCard";

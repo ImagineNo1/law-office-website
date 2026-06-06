@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PublicHeader } from "@/components/platform/RecoveryUi";
+import { PublicHeader } from "@/components/platform/layout/PublicHeader";
 import { crmRequests } from "@/lib/platform-recovery-data";
 
 export const metadata: Metadata = { title: "پیگیری درخواست" };

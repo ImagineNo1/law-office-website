@@ -1,0 +1,30 @@
+import { PageShell, Container } from "@/components/platform/layout/PageShell";
+import { PublicHeader } from "@/components/platform/layout/PublicHeader";
+import { PublicFooter } from "@/components/platform/layout/PublicFooter";
+import { HeroSection } from "@/components/platform/home/HeroSection";
+import { PrimaryPathways } from "@/components/platform/home/PrimaryPathways";
+import { ServicesShowcase } from "@/components/platform/home/ServicesShowcase";
+import { ContractPreview } from "@/components/platform/home/ContractPreview";
+import { KnowledgePreview } from "@/components/platform/home/KnowledgePreview";
+import { TrustStrip } from "@/components/platform/home/TrustStrip";
+import { FinalCta } from "@/components/platform/home/FinalCta";
+
+export function HomeExperience() {
+  return (
+    <PageShell dark>
+      <PublicHeader />
+      <HeroSection />
+      <section className="bg-[#F7F3EA] py-10 text-[#0B172A]">
+        <Container className="grid gap-6 xl:grid-cols-[310px_1fr]">
+          <PrimaryPathways />
+          <ServicesShowcase />
+        </Container>
+      </section>
+      <ContractPreview />
+      <KnowledgePreview />
+      <TrustStrip />
+      <FinalCta />
+      <PublicFooter />
+    </PageShell>
+  );
+}

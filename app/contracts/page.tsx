@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ContractsExperience } from "@/components/platform/RecoveryUi";
+import { ContractsExperience } from "@/components/platform/contracts/ContractsExperience";
 
 export const metadata: Metadata = { title: "بانک قراردادها" };
 

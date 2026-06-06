@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { RequestFormExperience } from "@/components/platform/RecoveryUi";
+import { RequestFormExperience } from "@/components/platform/services/RequestFormExperience";
 
 export const metadata: Metadata = { title: "ثبت درخواست حقوقی" };
 
