@@ -1,22 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f3ea;
-  --foreground: #0b172a;
+  --background: #ffffff;
+  --foreground: #0f172a;
   --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --surface-soft: #f1f5f9;
   --surface-strong: #ffffff;
   --soft-gray: #f8fafc;
   --navy: #0b172a;
-  --navy-2: #17213a;
-  --muted: #4f5f75;
+  --navy-2: #111827;
+  --muted: #64748b;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
   --gold: #c9973f;
-  --gold-light: #d4a64a;
-  --border: #e7dfd0;
+  --gold-light: #f8e7bf;
+  --gold-soft: #f8e7bf;
+  --cream-accent: #fff8ea;
+  --border: #e2e8f0;
   --admin-nav: #0b172a;
   --ring: rgba(201, 151, 63, 0.3);
   --shadow-card-rgb: 11, 23, 42;
-  --font-heading: var(--font-vazirmatn), Tahoma, Arial, sans-serif;
-  --font-body: var(--font-vazirmatn), Tahoma, Arial, sans-serif;
+  --font-heading: "Vazirmatn", "IRANSansX", "Yekan Bakh", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: "Vazirmatn", "IRANSansX", "Yekan Bakh", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .dark {
@@ -41,12 +47,18 @@
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-surface-strong: var(--surface-strong);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-soft: var(--surface-soft);
   --color-soft-gray: var(--soft-gray);
   --color-navy: var(--navy);
   --color-navy-2: var(--navy-2);
   --color-muted: var(--muted);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
   --color-gold: var(--gold);
   --color-gold-light: var(--gold-light);
+  --color-gold-soft: var(--gold-soft);
+  --color-cream-accent: var(--cream-accent);
   --color-border: var(--border);
   --color-admin-nav: var(--admin-nav);
   --shadow-soft: 0 28px 80px rgba(var(--shadow-card-rgb), 0.14);
@@ -72,6 +84,8 @@ body {
     background-color 260ms ease,
     color 260ms ease;
   text-rendering: optimizeLegibility;
+  line-height: 1.9;
+  font-feature-settings: "kern" 1;
 }
 
 body,
@@ -201,7 +215,7 @@ select {
       rgba(255, 255, 255, 0.9),
       transparent 30rem
     ),
-    linear-gradient(180deg, #f8f5ef 0%, #ffffff 48%, #f8f5ef 100%);
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 48%, #ffffff 100%);
 }
 
 .dark .soft-page-bg {
@@ -258,7 +272,7 @@ select {
 .law-hero {
   position: relative;
   overflow: hidden;
-  background: #f8f5ef;
+  background: #ffffff;
   color: #0f172a;
 }
 
@@ -277,7 +291,7 @@ select {
   overflow: hidden;
   min-height: 700px;
   border-radius: 32px;
-  border: 1px solid #ece6d8;
+  border: 1px solid #e2e8f0;
   background: #ffffff;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.06);
 }
@@ -366,7 +380,7 @@ select {
   .law-hero-media {
     min-height: 700px;
     border-top: 0;
-    border-right: 1px solid #ece6d8;
+    border-right: 1px solid #e2e8f0;
   }
 
   .dark .law-hero-media {
@@ -438,7 +452,7 @@ h3 {
 
 .premium-panel {
   border: 1px solid var(--border);
-  background: rgba(255, 253, 248, 0.76);
+  background: rgba(255, 255, 255, 0.86);
   box-shadow: var(--shadow-soft);
   backdrop-filter: blur(22px);
 }
@@ -461,4 +475,24 @@ h3 {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+
+h1,
+h2,
+h3,
+.font-heading {
+  line-height: 1.45;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+p,
+li {
+  line-height: 1.9;
+}
+
+button,
+a {
+  letter-spacing: normal;
 }

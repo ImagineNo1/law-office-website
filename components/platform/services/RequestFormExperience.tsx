@@ -28,23 +28,23 @@ export function RequestFormExperience({ services = fallbackServices }: { service
             <div className="grid gap-4 md:grid-cols-2">
               <label className="grid gap-2 text-sm font-black">
                 نام و نام خانوادگی
-                <input className="h-12 rounded-xl border border-[#eadfce] px-4 outline-none focus:border-[#C9973F]" name="fullName" required />
+                <input className="h-12 rounded-xl border border-slate-200 px-4 outline-none focus:border-[#C9973F]" name="fullName" required />
               </label>
               <label className="grid gap-2 text-sm font-black">
                 شماره تماس
-                <input className="h-12 rounded-xl border border-[#eadfce] px-4 outline-none focus:border-[#C9973F]" name="phone" required />
+                <input className="h-12 rounded-xl border border-slate-200 px-4 outline-none focus:border-[#C9973F]" name="phone" required />
               </label>
               <label className="grid gap-2 text-sm font-black">
                 ایمیل
-                <input className="h-12 rounded-xl border border-[#eadfce] px-4 outline-none focus:border-[#C9973F]" name="email" type="email" />
+                <input className="h-12 rounded-xl border border-slate-200 px-4 outline-none focus:border-[#C9973F]" name="email" type="email" />
               </label>
               <label className="grid gap-2 text-sm font-black">
                 موضوع درخواست
-                <input className="h-12 rounded-xl border border-[#eadfce] px-4 outline-none focus:border-[#C9973F]" name="subject" required />
+                <input className="h-12 rounded-xl border border-slate-200 px-4 outline-none focus:border-[#C9973F]" name="subject" required />
               </label>
               <label className="grid gap-2 text-sm font-black">
                 <span>نوع خدمت</span>
-                <select className="h-12 rounded-xl border border-[#eadfce] px-4" name="serviceSlug">
+                <select className="h-12 rounded-xl border border-slate-200 px-4" name="serviceSlug">
                   {services.map((service) => (
                     <option key={service.slug} value={service.slug}>
                       {service.title}
@@ -54,14 +54,14 @@ export function RequestFormExperience({ services = fallbackServices }: { service
               </label>
               <label className="grid gap-2 text-sm font-black">
                 <span>فوریت</span>
-                <select className="h-12 rounded-xl border border-[#eadfce] px-4" name="priority">
+                <select className="h-12 rounded-xl border border-slate-200 px-4" name="priority">
                   <option value="medium">عادی</option>
                   <option value="urgent">فوری</option>
                 </select>
               </label>
               <label className="grid gap-2 text-sm font-black md:col-span-2">
                 شرح درخواست
-                <textarea className="min-h-36 rounded-xl border border-[#eadfce] p-4 outline-none focus:border-[#C9973F]" name="description" required />
+                <textarea className="min-h-36 rounded-xl border border-slate-200 p-4 outline-none focus:border-[#C9973F]" name="description" required />
               </label>
             </div>
             <button className="mt-6 h-12 rounded-xl bg-[#C9973F] px-8 text-sm font-black text-white">

@@ -62,7 +62,7 @@ function ToggleShell({
   return (
     <button
       aria-label={isDark ? "تغییر به حالت روشن" : "تغییر به حالت تیره"}
-      className="relative inline-flex h-10 w-[70px] items-center rounded-full border border-[#ece6d8] bg-white p-1 text-[#0f172a] shadow-[0_10px_24px_rgba(0,0,0,0.06)] transition focus:outline-none focus:ring-4 focus:ring-[rgba(201,162,74,0.28)] dark:border-[rgba(212,168,79,0.16)] dark:bg-white/[0.04] dark:text-white"
+      className="relative inline-flex h-10 w-[70px] items-center rounded-full border border-slate-200 bg-white p-1 text-[#0f172a] shadow-[0_10px_24px_rgba(0,0,0,0.06)] transition focus:outline-none focus:ring-4 focus:ring-[rgba(201,162,74,0.28)] dark:border-[rgba(212,168,79,0.16)] dark:bg-white/[0.04] dark:text-white"
       disabled={!onClick}
       onClick={onClick}
       type="button"

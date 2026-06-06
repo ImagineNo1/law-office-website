@@ -6,7 +6,7 @@ export function RecentActivity() {
       <h2 className="text-xl font-black">فعالیت‌های اخیر</h2>
       <div className="mt-4 grid gap-3">
         {fallbackDashboardEvents.slice(0, 6).map((event) => (
-          <div className="rounded-xl bg-[#fbf7ef] p-3 text-sm font-black" key={event.id}>{event.title}</div>
+          <div className="rounded-xl bg-slate-50 p-3 text-sm font-black" key={event.id}>{event.title}</div>
         ))}
       </div>
     </section>

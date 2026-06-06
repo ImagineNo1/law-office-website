@@ -7,7 +7,7 @@ export function MessagesPanel({ messages = [] }: { messages?: ServiceRequestData
       <h2 className="text-xl font-black">پیام ها و یادداشت ها</h2>
       <div className="mt-4 grid gap-3">
         {(messages.length ? messages.map((item) => item.message) : fallback).map((message) => (
-          <p className="rounded-xl bg-[#fbf7ef] p-3 text-sm font-bold" key={message}>{message}</p>
+          <p className="rounded-xl bg-slate-50 p-3 text-sm font-bold" key={message}>{message}</p>
         ))}
       </div>
     </section>

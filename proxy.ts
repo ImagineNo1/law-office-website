@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 const ADMIN_COOKIE = "admin_token";
+const CLIENT_COOKIE = "client_session";
 
 function base64UrlToBytes(value: string) {
   const padded = value.replace(/-/g, "+").replace(/_/g, "/");
@@ -48,23 +49,38 @@ async function verifyToken(token: string) {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (!pathname.startsWith("/admin") || pathname === "/admin/login") {
-    return NextResponse.next();
+  if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
+    const token = request.cookies.get(ADMIN_COOKIE)?.value;
+    const valid = token ? await verifyToken(token) : false;
+
+    if (valid) {
+      return NextResponse.next();
+    }
+
+    const url = request.nextUrl.clone();
+    url.pathname = "/admin/login";
+    url.searchParams.set("next", pathname);
+    return NextResponse.redirect(url);
   }
 
-  const token = request.cookies.get(ADMIN_COOKIE)?.value;
-  const valid = token ? await verifyToken(token) : false;
+  if (pathname.startsWith("/dashboard")) {
+    const token = request.cookies.get(CLIENT_COOKIE)?.value;
+    const demoValid = process.env.NODE_ENV !== "production" && token === "demo";
+    const valid = token && (demoValid || (await verifyToken(token)));
 
-  if (valid) {
-    return NextResponse.next();
+    if (valid) {
+      return NextResponse.next();
+    }
+
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.searchParams.set("next", pathname);
+    return NextResponse.redirect(url);
   }
 
-  const url = request.nextUrl.clone();
-  url.pathname = "/admin/login";
-  url.searchParams.set("next", pathname);
-  return NextResponse.redirect(url);
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/dashboard/:path*"],
 };

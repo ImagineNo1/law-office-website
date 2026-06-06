@@ -25,7 +25,7 @@ export function ClientSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="bg-admin-nav px-4 py-6 text-white shadow-[24px_0_70px_rgba(0,0,0,0.18)] lg:sticky lg:top-0 lg:min-h-screen lg:w-[306px]">
+    <aside className="bg-[#071326] px-4 py-6 text-white shadow-[24px_0_70px_rgba(0,0,0,0.18)] lg:sticky lg:top-0 lg:min-h-screen lg:w-[306px]">
       <Link className="mb-10 flex items-center gap-3 [&_*]:text-white" href="/dashboard">
         <LegalLogo compact />
         <span>
@@ -37,7 +37,7 @@ export function ClientSidebar() {
         {links.map((link, index) => {
           const active = activePath(pathname, link.href);
           return (
-            <Link className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-black transition ${active ? "bg-white/12 text-gold shadow-inner ring-1 ring-gold/30" : "text-slate-200 hover:bg-white/8 hover:text-white"}`} href={link.href} key={`${link.href}-${link.label}`}>
+            <Link className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-black transition ${active ? "bg-white/10 text-gold shadow-inner ring-1 ring-gold/30" : "text-slate-200 hover:bg-white/8 hover:text-white"}`} href={link.href} key={`${link.href}-${link.label}`}>
               <span className="flex items-center gap-3">
                 <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none"><path d={link.icon} stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" /></svg>
                 {link.label}

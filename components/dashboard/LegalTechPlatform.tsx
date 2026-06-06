@@ -74,15 +74,15 @@ const statusLabels: Record<string, string> = {
 const statusClass: Record<string, string> = {
   draft: "bg-slate-100 text-slate-700",
   reviewing: "bg-blue-50 text-blue-700",
-  waiting_signature: "bg-amber-50 text-amber-700",
+  waiting_signature: "bg-[#FFF8EA] text-amber-700",
   signed: "bg-emerald-50 text-emerald-700",
   archived: "bg-stone-100 text-stone-700",
   cancelled: "bg-red-50 text-red-700",
-  pending: "bg-amber-50 text-amber-700",
+  pending: "bg-[#FFF8EA] text-amber-700",
   rejected: "bg-red-50 text-red-700",
   expired: "bg-slate-100 text-slate-700",
   active: "bg-emerald-50 text-emerald-700",
-  paused: "bg-amber-50 text-amber-700",
+  paused: "bg-[#FFF8EA] text-amber-700",
   completed: "bg-emerald-50 text-emerald-700",
 };
 
@@ -113,13 +113,13 @@ function Icon({ name, className = "size-5" }: { name: string; className?: string
 }
 
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <section className={`rounded-2xl border border-[#ece4d6] bg-white shadow-[0_18px_45px_rgba(11,23,42,0.07)] ${className}`}>{children}</section>;
+  return <section className={`rounded-2xl border border-slate-200 bg-white shadow-sm ${className}`}>{children}</section>;
 }
 
 function EmptyState({ title, href = "/admin", action = "مدیریت داده ها" }: { title: string; href?: string; action?: string }) {
   return (
     <Card className="p-8 text-center">
-      <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#F7F3EA] text-[#C9973F]"><Icon name="files" /></span>
+      <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-slate-50 text-[#C9973F]"><Icon name="files" /></span>
       <h2 className="mt-4 text-xl font-black">{title}</h2>
       <p className="mt-2 text-sm font-bold leading-7 text-[#66758A]">هنوز داده عملیاتی برای نمایش وجود ندارد.</p>
       <Link className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-[#0B172A] px-5 text-sm font-black text-white" href={href}>{action}</Link>
@@ -131,7 +131,7 @@ function Ring({ value, label, sublabel, size = "size-36" }: { value: number; lab
   return (
     <div className={`relative grid ${size} place-items-center text-center`}>
       <svg viewBox="0 0 42 42" className="absolute inset-0 size-full -rotate-90">
-        <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#EFE7D9" strokeWidth="4" />
+        <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#E2E8F0" strokeWidth="4" />
         <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#C9973F" strokeDasharray={`${value} ${100 - value}`} strokeLinecap="round" strokeWidth="4" />
       </svg>
       <span className="relative grid gap-1">
@@ -145,8 +145,8 @@ function Ring({ value, label, sublabel, size = "size-36" }: { value: number; lab
 function Shell({ children, title, data }: { children: React.ReactNode; title: string; data: DashboardData }) {
   const pathname = usePathname();
   return (
-    <div className="min-h-screen bg-[#F7F3EA] text-[#0B172A] lg:flex lg:flex-row-reverse" dir="rtl">
-      <aside className="bg-[#07182b] px-4 py-6 text-white lg:sticky lg:top-0 lg:min-h-screen lg:w-[292px]">
+    <div className="min-h-screen bg-[#F8FAFC] text-[#0B172A] lg:flex lg:flex-row-reverse" dir="rtl">
+      <aside className="bg-[#071326] px-4 py-6 text-white lg:sticky lg:top-0 lg:min-h-screen lg:w-[292px]">
         <Link className="mb-8 flex items-center gap-3 px-2" href="/dashboard">
           <span className="grid size-12 place-items-center rounded-2xl border border-[#C9973F]/40 bg-white/8 text-[#D4A64A]"><Icon name="pen" /></span>
           <span><span className="block text-2xl font-black">وکیل یار</span><span className="text-sm text-slate-300">سامانه اسناد و امضا</span></span>
@@ -171,10 +171,10 @@ function Shell({ children, title, data }: { children: React.ReactNode; title: st
         </Card>
       </aside>
       <div className="min-w-0 flex-1">
-        <header className="border-b border-[#ece4d6] bg-white/90 px-4 py-4 shadow-sm backdrop-blur sm:px-6 lg:px-8">
+        <header className="border-b border-slate-200 bg-white/90 px-4 py-4 shadow-sm backdrop-blur sm:px-6 lg:px-8">
           <div className="grid gap-4 xl:grid-cols-[1fr_420px_1fr] xl:items-center">
             <div className="flex items-center gap-3"><span className="grid size-12 place-items-center rounded-2xl bg-[#0B172A] text-sm font-black text-white ring-2 ring-[#D4A64A]/40">ع م</span><div><p className="text-sm font-black">علی محمدی</p><p className="text-xs font-bold text-[#66758A]">مدیر حساب</p></div></div>
-            <label className="flex min-h-12 items-center gap-3 rounded-xl border border-[#ece4d6] bg-white px-4 text-sm font-bold text-[#66758A]"><Icon name="search" className="size-4" /><input className="min-w-0 flex-1 bg-transparent outline-none" placeholder="جستجو در اسناد، قراردادها، مخاطبین..." /></label>
+            <label className="flex min-h-12 items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-[#66758A]"><Icon name="search" className="size-4" /><input className="min-w-0 flex-1 bg-transparent outline-none" placeholder="جستجو در اسناد، قراردادها، مخاطبین..." /></label>
             <div className="xl:text-left"><h1 className="text-2xl font-black">{title}</h1><p className="mt-1 text-xs font-bold text-[#66758A]">خوش آمدید، علی محمدی</p></div>
           </div>
         </header>
@@ -192,23 +192,23 @@ function KpiGrid({ data }: { data: DashboardData }) {
     ["مخاطبین", data.stats.contacts, "در دفترچه", "contacts"],
     ["قالب ها", data.stats.templates, "قالب فعال", "template"],
   ];
-  return <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">{items.map(([label, value, hint, icon]) => <Card className="p-5" key={String(label)}><div className="flex items-center justify-between gap-3"><div><p className="text-sm font-black text-[#4f5f75]">{label}</p><strong className="mt-3 block text-4xl font-black">{toFaNumber(value as number)}</strong><span className="mt-2 block text-xs font-bold text-emerald-600">{hint}</span></div><span className="grid size-14 place-items-center rounded-2xl bg-[#F7F3EA] text-[#C9973F]"><Icon name={String(icon)} /></span></div></Card>)}</div>;
+  return <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">{items.map(([label, value, hint, icon]) => <Card className="p-5" key={String(label)}><div className="flex items-center justify-between gap-3"><div><p className="text-sm font-black text-[#4f5f75]">{label}</p><strong className="mt-3 block text-4xl font-black">{toFaNumber(value as number)}</strong><span className="mt-2 block text-xs font-bold text-emerald-600">{hint}</span></div><span className="grid size-14 place-items-center rounded-2xl bg-slate-50 text-[#C9973F]"><Icon name={String(icon)} /></span></div></Card>)}</div>;
 }
 
 function DocumentsTable({ documents, compact = false }: { documents: LegalDocumentRecord[]; compact?: boolean }) {
   return (
     <Card className="overflow-hidden">
-      <div className="flex flex-col gap-3 border-b border-[#ece4d6] p-5 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-3 border-b border-slate-200 p-5 lg:flex-row lg:items-center lg:justify-between">
         <h2 className="text-xl font-black">{compact ? "اسناد اخیر" : "مرکز اسناد"}</h2>
-        <div className="flex flex-col gap-2 sm:flex-row"><input className="min-h-11 rounded-xl border border-[#ece4d6] bg-white px-4 text-sm font-bold outline-none focus:border-[#C9973F]" placeholder="جستجو..." /><select className="min-h-11 rounded-xl border border-[#ece4d6] bg-white px-4 text-sm font-bold outline-none focus:border-[#C9973F]"><option>همه دسته بندی ها</option></select></div>
+        <div className="flex flex-col gap-2 sm:flex-row"><input className="min-h-11 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:border-[#C9973F]" placeholder="جستجو..." /><select className="min-h-11 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:border-[#C9973F]"><option>همه دسته بندی ها</option></select></div>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[860px] text-sm">
-          <thead className="bg-[#fbf7ef] text-[#4f5f75]"><tr>{["نام سند", "دسته بندی", "آخرین تغییر", "وضعیت", "عملیات"].map((item) => <th className="px-5 py-4 text-right font-black" key={item}>{item}</th>)}</tr></thead>
-          <tbody>{documents.length ? documents.map((document) => <tr className="border-t border-[#ece4d6] hover:bg-[#fbf7ef]" key={document.id}><td className="px-5 py-4"><div className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-xl bg-red-50 text-red-600"><Icon name="files" className="size-4" /></span><div><p className="font-black">{document.title}</p><p className="mt-1 text-xs font-bold text-[#66758A]">{document.description}</p></div></div></td><td className="px-5 py-4 font-bold text-[#4f5f75]">{categoryFa[document.category]}</td><td className="px-5 py-4 font-bold text-[#4f5f75]">{document.updatedAt}</td><td className="px-5 py-4"><span className={`rounded-lg px-3 py-1 text-xs font-black ${statusClass[document.status]}`}>{statusLabels[document.status]}</span></td><td className="px-5 py-4"><div className="flex items-center gap-2">{["eye", "download", "share", "archive", "trash"].map((icon) => <button className="grid size-9 place-items-center rounded-lg border border-[#ece4d6] text-[#0B172A] hover:border-[#C9973F] hover:text-[#C9973F]" key={icon} title={icon}><Icon name={icon} className="size-4" /></button>)}</div></td></tr>) : <tr className="border-t border-[#ece4d6]"><td className="px-5 py-8 text-center text-sm font-black text-[#66758A]" colSpan={5}>سندی برای نمایش وجود ندارد.</td></tr>}</tbody>
+          <thead className="bg-slate-50 text-[#4f5f75]"><tr>{["نام سند", "دسته بندی", "آخرین تغییر", "وضعیت", "عملیات"].map((item) => <th className="px-5 py-4 text-right font-black" key={item}>{item}</th>)}</tr></thead>
+          <tbody>{documents.length ? documents.map((document) => <tr className="border-t border-slate-200 hover:bg-slate-50" key={document.id}><td className="px-5 py-4"><div className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-xl bg-red-50 text-red-600"><Icon name="files" className="size-4" /></span><div><p className="font-black">{document.title}</p><p className="mt-1 text-xs font-bold text-[#66758A]">{document.description}</p></div></div></td><td className="px-5 py-4 font-bold text-[#4f5f75]">{categoryFa[document.category]}</td><td className="px-5 py-4 font-bold text-[#4f5f75]">{document.updatedAt}</td><td className="px-5 py-4"><span className={`rounded-lg px-3 py-1 text-xs font-black ${statusClass[document.status]}`}>{statusLabels[document.status]}</span></td><td className="px-5 py-4"><div className="flex items-center gap-2">{["eye", "download", "share", "archive", "trash"].map((icon) => <button className="grid size-9 place-items-center rounded-lg border border-slate-200 text-[#0B172A] hover:border-[#C9973F] hover:text-[#C9973F]" key={icon} title={icon}><Icon name={icon} className="size-4" /></button>)}</div></td></tr>) : <tr className="border-t border-slate-200"><td className="px-5 py-8 text-center text-sm font-black text-[#66758A]" colSpan={5}>سندی برای نمایش وجود ندارد.</td></tr>}</tbody>
         </table>
       </div>
-      {!compact ? <div className="flex items-center justify-between border-t border-[#ece4d6] p-4 text-xs font-black text-[#66758A]"><span>نمایش {toFaNumber(documents.length)} سند</span><span>صفحه ۱</span></div> : null}
+      {!compact ? <div className="flex items-center justify-between border-t border-slate-200 p-4 text-xs font-black text-[#66758A]"><span>نمایش {toFaNumber(documents.length)} سند</span><span>صفحه ۱</span></div> : null}
     </Card>
   );
 }
@@ -216,7 +216,7 @@ function DocumentsTable({ documents, compact = false }: { documents: LegalDocume
 function SignatureRequestsList({ rows, status }: { rows: SignatureRequestRecord[]; status?: SignatureRequestRecord["status"] }) {
   const filtered = rows.filter((item) => !status || item.status === status).slice(0, 8);
   if (!filtered.length) return <EmptyState title="درخواست امضایی برای نمایش وجود ندارد" href="/dashboard/signatures" action="ارسال برای امضا" />;
-  return <Card className="overflow-hidden"><div className="border-b border-[#ece4d6] p-5"><h2 className="text-xl font-black">درخواست های امضا</h2></div><div className="overflow-x-auto"><table className="w-full min-w-[760px] text-sm"><thead className="bg-[#fbf7ef] text-[#4f5f75]"><tr>{["سند", "امضاکننده", "ارسال", "مهلت", "وضعیت"].map((item) => <th className="px-5 py-4 text-right font-black" key={item}>{item}</th>)}</tr></thead><tbody>{filtered.map((request) => <tr className="border-t border-[#ece4d6]" key={request.id}><td className="px-5 py-4 font-black">{request.documentTitle}</td><td className="px-5 py-4 font-bold text-[#4f5f75]">{request.signer}</td><td className="px-5 py-4 font-bold text-[#4f5f75]">{request.sentAt}</td><td className="px-5 py-4 font-bold text-[#4f5f75]">{request.dueAt}</td><td className="px-5 py-4"><span className={`rounded-lg px-3 py-1 text-xs font-black ${statusClass[request.status]}`}>{statusLabels[request.status] ?? request.status}</span></td></tr>)}</tbody></table></div></Card>;
+  return <Card className="overflow-hidden"><div className="border-b border-slate-200 p-5"><h2 className="text-xl font-black">درخواست های امضا</h2></div><div className="overflow-x-auto"><table className="w-full min-w-[760px] text-sm"><thead className="bg-slate-50 text-[#4f5f75]"><tr>{["سند", "امضاکننده", "ارسال", "مهلت", "وضعیت"].map((item) => <th className="px-5 py-4 text-right font-black" key={item}>{item}</th>)}</tr></thead><tbody>{filtered.map((request) => <tr className="border-t border-slate-200" key={request.id}><td className="px-5 py-4 font-black">{request.documentTitle}</td><td className="px-5 py-4 font-bold text-[#4f5f75]">{request.signer}</td><td className="px-5 py-4 font-bold text-[#4f5f75]">{request.sentAt}</td><td className="px-5 py-4 font-bold text-[#4f5f75]">{request.dueAt}</td><td className="px-5 py-4"><span className={`rounded-lg px-3 py-1 text-xs font-black ${statusClass[request.status]}`}>{statusLabels[request.status] ?? request.status}</span></td></tr>)}</tbody></table></div></Card>;
 }
 
 function SignaturePanel({ data }: { data: DashboardData }) {
@@ -226,17 +226,17 @@ function SignaturePanel({ data }: { data: DashboardData }) {
 function WorkflowTimeline({ data }: { data: DashboardData }) {
   const steps = data.workflows[0]?.steps ?? [];
   if (!steps.length) return <EmptyState title="گردش کاری تعریف نشده است" href="/dashboard/workflows" action="ایجاد گردش کار" />;
-  return <Card className="p-5"><h2 className="text-lg font-black">گردش کار اسناد</h2><div className="mt-5 grid gap-4">{steps.map((step, index) => <div className="grid grid-cols-[34px_1fr] gap-3" key={step.title}><span className={`grid size-8 place-items-center rounded-full text-xs font-black ${step.status === "completed" ? "bg-emerald-600 text-white" : step.status === "active" ? "bg-blue-600 text-white" : "bg-white text-[#9AA5B1] ring-1 ring-[#d8d1c6]"}`}>{step.status === "completed" ? "✓" : toFaNumber(index + 1)}</span><div className="border-b border-[#ece4d6] pb-4 last:border-0"><p className="font-black">{step.title}</p><p className="mt-1 text-xs font-bold text-[#66758A]">وضعیت: {statusLabels[step.status] ?? step.status}</p></div></div>)}</div></Card>;
+  return <Card className="p-5"><h2 className="text-lg font-black">گردش کار اسناد</h2><div className="mt-5 grid gap-4">{steps.map((step, index) => <div className="grid grid-cols-[34px_1fr] gap-3" key={step.title}><span className={`grid size-8 place-items-center rounded-full text-xs font-black ${step.status === "completed" ? "bg-emerald-600 text-white" : step.status === "active" ? "bg-blue-600 text-white" : "bg-white text-[#9AA5B1] ring-1 ring-[#d8d1c6]"}`}>{step.status === "completed" ? "✓" : toFaNumber(index + 1)}</span><div className="border-b border-slate-200 pb-4 last:border-0"><p className="font-black">{step.title}</p><p className="mt-1 text-xs font-bold text-[#66758A]">وضعیت: {statusLabels[step.status] ?? step.status}</p></div></div>)}</div></Card>;
 }
 
 function ContactsWidget({ data }: { data: DashboardData }) {
   if (!data.contacts.length) return <EmptyState title="مخاطبی ثبت نشده است" href="/dashboard/contacts" action="افزودن مخاطب" />;
-  return <Card className="p-5"><h2 className="text-lg font-black">مخاطبین اخیر</h2><div className="mt-4 grid gap-3">{data.contacts.slice(0, 5).map((contact) => <div className="flex items-center justify-between rounded-xl border border-[#ece4d6] p-3" key={contact.id}><div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-full bg-[#EEF4FF] text-xs font-black text-blue-700">{contact.fullName.slice(0, 1)}</span><div><p className="text-sm font-black">{contact.fullName}</p><p className="text-xs font-bold text-[#66758A]">{contact.role}</p></div></div><button className="text-[#66758A]">⋮</button></div>)}</div></Card>;
+  return <Card className="p-5"><h2 className="text-lg font-black">مخاطبین اخیر</h2><div className="mt-4 grid gap-3">{data.contacts.slice(0, 5).map((contact) => <div className="flex items-center justify-between rounded-xl border border-slate-200 p-3" key={contact.id}><div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-full bg-[#EEF4FF] text-xs font-black text-blue-700">{contact.fullName.slice(0, 1)}</span><div><p className="text-sm font-black">{contact.fullName}</p><p className="text-xs font-bold text-[#66758A]">{contact.role}</p></div></div><button className="text-[#66758A]">⋮</button></div>)}</div></Card>;
 }
 
 function TemplatesWidget({ data }: { data: DashboardData }) {
   if (!data.templates.length) return <EmptyState title="قالب سندی ثبت نشده است" href="/dashboard/templates" action="ایجاد قالب" />;
-  return <Card className="p-5"><h2 className="text-lg font-black">قالب های پرتکرار</h2><div className="mt-4 grid gap-3">{data.templates.slice(0, 5).map((template) => <div className="flex items-center justify-between border-b border-[#ece4d6] pb-3 last:border-0" key={template.id}><div><p className="text-sm font-black">{template.title}</p><p className="text-xs font-bold text-[#66758A]">استفاده: {toFaNumber(template.usageCount)} بار</p></div><span className="grid size-9 place-items-center rounded-xl bg-blue-50 text-blue-700"><Icon name="template" className="size-4" /></span></div>)}</div></Card>;
+  return <Card className="p-5"><h2 className="text-lg font-black">قالب های پرتکرار</h2><div className="mt-4 grid gap-3">{data.templates.slice(0, 5).map((template) => <div className="flex items-center justify-between border-b border-slate-200 pb-3 last:border-0" key={template.id}><div><p className="text-sm font-black">{template.title}</p><p className="text-xs font-bold text-[#66758A]">استفاده: {toFaNumber(template.usageCount)} بار</p></div><span className="grid size-9 place-items-center rounded-xl bg-blue-50 text-blue-700"><Icon name="template" className="size-4" /></span></div>)}</div></Card>;
 }
 
 function StorageWidget({ data }: { data: DashboardData }) {
@@ -249,7 +249,7 @@ function ActivityWidget({ data }: { data: DashboardData }) {
 }
 
 function SecurityWidget({ data }: { data: DashboardData }) {
-  return <Card className="p-5"><h2 className="text-lg font-black">امنیت و هشدارها</h2><div className="mt-4 grid gap-3">{data.securityEvents.map((event) => <div className="flex items-center justify-between rounded-xl bg-[#fbf7ef] p-3" key={event.label}><div><p className="text-sm font-black">{event.label}</p><p className="mt-1 text-xs font-bold text-[#66758A]">{event.detail}</p></div><span className={`grid size-8 place-items-center rounded-full text-white ${event.status === "success" ? "bg-emerald-600" : "bg-amber-500"}`}>{event.status === "success" ? "✓" : "!"}</span></div>)}</div></Card>;
+  return <Card className="p-5"><h2 className="text-lg font-black">امنیت و هشدارها</h2><div className="mt-4 grid gap-3">{data.securityEvents.map((event) => <div className="flex items-center justify-between rounded-xl bg-slate-50 p-3" key={event.label}><div><p className="text-sm font-black">{event.label}</p><p className="mt-1 text-xs font-bold text-[#66758A]">{event.detail}</p></div><span className={`grid size-8 place-items-center rounded-full text-white ${event.status === "success" ? "bg-emerald-600" : "bg-[#FFF8EA]0"}`}>{event.status === "success" ? "✓" : "!"}</span></div>)}</div></Card>;
 }
 
 function DashboardContent({ data }: { data: DashboardData }) {
@@ -258,7 +258,7 @@ function DashboardContent({ data }: { data: DashboardData }) {
 
 function QuickActionsPanel() {
   const actions = [["ایجاد سند جدید", "/dashboard/documents", "files"], ["بارگذاری سند", "/dashboard/documents", "archive"], ["ارسال برای امضا", "/dashboard/signatures", "pen"], ["ایجاد قالب", "/dashboard/templates", "template"], ["افزودن مخاطب", "/dashboard/contacts", "contacts"], ["ارسال گروهی", "/dashboard/bulk-send", "send"]];
-  return <Card className="p-5"><h2 className="text-lg font-black">اقدامات سریع</h2><div className="mt-4 grid overflow-hidden rounded-xl border border-[#ece4d6]">{actions.map(([label, href, icon]) => <Link className="flex items-center justify-between border-b border-[#ece4d6] px-4 py-3 text-sm font-black last:border-b-0 hover:bg-[#fbf7ef]" href={href} key={label}><span>{label}</span><Icon name={icon} className="size-4 text-[#C9973F]" /></Link>)}</div></Card>;
+  return <Card className="p-5"><h2 className="text-lg font-black">اقدامات سریع</h2><div className="mt-4 grid overflow-hidden rounded-xl border border-slate-200">{actions.map(([label, href, icon]) => <Link className="flex items-center justify-between border-b border-slate-200 px-4 py-3 text-sm font-black last:border-b-0 hover:bg-slate-50" href={href} key={label}><span>{label}</span><Icon name={icon} className="size-4 text-[#C9973F]" /></Link>)}</div></Card>;
 }
 
 function BulkSendWidget({ data }: { data: DashboardData }) {
@@ -269,12 +269,12 @@ function BulkSendWidget({ data }: { data: DashboardData }) {
 }
 
 function ArchiveContent({ data }: { data: DashboardData }) {
-  return <div className="grid gap-6 xl:grid-cols-[1fr_320px]"><div className="grid gap-6"><DocumentsTable documents={data.archivedDocuments} /><Card className="p-5"><h2 className="text-lg font-black">تاریخچه آرشیو و بازیابی</h2><div className="mt-4 grid gap-3">{data.archivedDocuments.slice(0, 5).map((doc) => <div className="flex items-center justify-between rounded-xl bg-[#fbf7ef] p-3" key={doc.id}><span className="font-black">{doc.title}</span><button className="rounded-lg bg-[#0B172A] px-3 py-2 text-xs font-black text-white">بازیابی</button></div>)}</div></Card></div><StorageWidget data={data} /></div>;
+  return <div className="grid gap-6 xl:grid-cols-[1fr_320px]"><div className="grid gap-6"><DocumentsTable documents={data.archivedDocuments} /><Card className="p-5"><h2 className="text-lg font-black">تاریخچه آرشیو و بازیابی</h2><div className="mt-4 grid gap-3">{data.archivedDocuments.slice(0, 5).map((doc) => <div className="flex items-center justify-between rounded-xl bg-slate-50 p-3" key={doc.id}><span className="font-black">{doc.title}</span><button className="rounded-lg bg-[#0B172A] px-3 py-2 text-xs font-black text-white">بازیابی</button></div>)}</div></Card></div><StorageWidget data={data} /></div>;
 }
 
 function ContactsContent({ data }: { data: DashboardData }) {
   if (!data.contacts.length) return <EmptyState title="مخاطبی ثبت نشده است" href="/dashboard/contacts" action="افزودن مخاطب" />;
-  return <div className="grid gap-6"><Card className="p-5"><div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"><h2 className="text-xl font-black">مدیریت مخاطبین</h2><div className="flex gap-2"><input className="min-h-11 rounded-xl border border-[#ece4d6] px-4 text-sm font-bold" placeholder="جستجوی مخاطب" /><button className="rounded-xl bg-[#0B172A] px-4 text-sm font-black text-white">افزودن مخاطب</button></div></div></Card><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">{data.contacts.slice(0, 12).map((contact) => <Card className="p-5" key={contact.id}><div className="flex items-center gap-3"><span className="grid size-12 place-items-center rounded-full bg-blue-50 text-lg font-black text-blue-700">{contact.fullName.slice(0, 1)}</span><div><h3 className="font-black">{contact.fullName}</h3><p className="text-xs font-bold text-[#66758A]">{contact.role}</p></div></div><p className="mt-4 text-sm font-bold text-[#4f5f75]">{contact.organization}</p><p className="mt-2 text-xs font-bold text-[#66758A]">{contact.email}</p><div className="mt-4 flex flex-wrap gap-2">{contact.tags.map((tag) => <span className="rounded-full bg-[#F7F3EA] px-3 py-1 text-xs font-black" key={tag}>{tag}</span>)}</div></Card>)}</div></div>;
+  return <div className="grid gap-6"><Card className="p-5"><div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"><h2 className="text-xl font-black">مدیریت مخاطبین</h2><div className="flex gap-2"><input className="min-h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" placeholder="جستجوی مخاطب" /><button className="rounded-xl bg-[#0B172A] px-4 text-sm font-black text-white">افزودن مخاطب</button></div></div></Card><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">{data.contacts.slice(0, 12).map((contact) => <Card className="p-5" key={contact.id}><div className="flex items-center gap-3"><span className="grid size-12 place-items-center rounded-full bg-blue-50 text-lg font-black text-blue-700">{contact.fullName.slice(0, 1)}</span><div><h3 className="font-black">{contact.fullName}</h3><p className="text-xs font-bold text-[#66758A]">{contact.role}</p></div></div><p className="mt-4 text-sm font-bold text-[#4f5f75]">{contact.organization}</p><p className="mt-2 text-xs font-bold text-[#66758A]">{contact.email}</p><div className="mt-4 flex flex-wrap gap-2">{contact.tags.map((tag) => <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-black" key={tag}>{tag}</span>)}</div></Card>)}</div></div>;
 }
 
 function TemplatesContent({ data }: { data: DashboardData }) {
@@ -284,7 +284,7 @@ function TemplatesContent({ data }: { data: DashboardData }) {
 
 function WorkflowsContent({ data }: { data: DashboardData }) {
   if (!data.workflows.length) return <EmptyState title="گردش کاری تعریف نشده است" href="/dashboard/workflows" action="ایجاد گردش کار" />;
-  return <div className="grid gap-6"><Card className="p-5"><h2 className="text-xl font-black">مدیریت گردش کار</h2><p className="mt-2 text-sm font-bold text-[#66758A]">سازنده گردش کار با نقش ها، مراحل و وضعیت پیشرفت.</p></Card><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">{data.workflows.map((workflow) => <Card className="p-5" key={workflow.id}><div className="flex items-center justify-between"><h3 className="font-black">{workflow.name}</h3><span className={`rounded-lg px-3 py-1 text-xs font-black ${statusClass[workflow.status]}`}>{statusLabels[workflow.status] ?? workflow.status}</span></div><div className="mt-4 h-2 rounded-full bg-[#F0E7D8]"><span className="block h-full rounded-full bg-[#C9973F]" style={{ width: `${workflow.progress}%` }} /></div><p className="mt-3 text-xs font-bold text-[#66758A]">نقش ها: {workflow.assignedRoles.join("، ")}</p><div className="mt-4 grid gap-2">{workflow.steps.slice(0, 3).map((step) => <span className="rounded-lg bg-[#fbf7ef] px-3 py-2 text-xs font-black" key={step.title}>{step.title}</span>)}</div></Card>)}</div></div>;
+  return <div className="grid gap-6"><Card className="p-5"><h2 className="text-xl font-black">مدیریت گردش کار</h2><p className="mt-2 text-sm font-bold text-[#66758A]">سازنده گردش کار با نقش ها، مراحل و وضعیت پیشرفت.</p></Card><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">{data.workflows.map((workflow) => <Card className="p-5" key={workflow.id}><div className="flex items-center justify-between"><h3 className="font-black">{workflow.name}</h3><span className={`rounded-lg px-3 py-1 text-xs font-black ${statusClass[workflow.status]}`}>{statusLabels[workflow.status] ?? workflow.status}</span></div><div className="mt-4 h-2 rounded-full bg-[#F0E7D8]"><span className="block h-full rounded-full bg-[#C9973F]" style={{ width: `${workflow.progress}%` }} /></div><p className="mt-3 text-xs font-bold text-[#66758A]">نقش ها: {workflow.assignedRoles.join("، ")}</p><div className="mt-4 grid gap-2">{workflow.steps.slice(0, 3).map((step) => <span className="rounded-lg bg-slate-50 px-3 py-2 text-xs font-black" key={step.title}>{step.title}</span>)}</div></Card>)}</div></div>;
 }
 
 function SignatureStats({ data }: { data: DashboardData }) {
@@ -293,15 +293,15 @@ function SignatureStats({ data }: { data: DashboardData }) {
 }
 
 function ReportsContent({ data }: { data: DashboardData }) {
-  return <div className="grid gap-6"><Card className="p-5"><div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"><h2 className="text-xl font-black">مرکز گزارش ها</h2><div className="flex gap-2"><select className="min-h-11 rounded-xl border border-[#ece4d6] px-4 text-sm font-bold"><option>۶ ماه اخیر</option></select><button className="rounded-xl bg-[#0B172A] px-4 text-sm font-black text-white">خروجی Excel</button></div></div></Card><div className="grid gap-6 xl:grid-cols-2"><Card className="p-5"><h3 className="mb-4 font-black">اسناد ایجاد شده و تکمیل امضا</h3><ResponsiveContainer height={300} width="100%"><AreaChart data={data.reportSeries}><CartesianGrid stroke="#EFE7D9" /><XAxis dataKey="month" /><YAxis /><Tooltip /><Legend /><Area dataKey="documents" name="اسناد" stroke="#C9973F" fill="#C9973F" fillOpacity={0.22} /><Area dataKey="signatures" name="امضاها" stroke="#0B172A" fill="#0B172A" fillOpacity={0.14} /></AreaChart></ResponsiveContainer></Card><Card className="p-5"><h3 className="mb-4 font-black">دانلود قرارداد و فعالیت موکل</h3><ResponsiveContainer height={300} width="100%"><BarChart data={data.reportSeries}><CartesianGrid stroke="#EFE7D9" /><XAxis dataKey="month" /><YAxis /><Tooltip /><Legend /><Bar dataKey="downloads" name="دانلود" fill="#C9973F" radius={[8, 8, 0, 0]} /><Bar dataKey="clients" name="موکل" fill="#17213A" radius={[8, 8, 0, 0]} /></BarChart></ResponsiveContainer></Card></div></div>;
+  return <div className="grid gap-6"><Card className="p-5"><div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"><h2 className="text-xl font-black">مرکز گزارش ها</h2><div className="flex gap-2"><select className="min-h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold"><option>۶ ماه اخیر</option></select><button className="rounded-xl bg-[#0B172A] px-4 text-sm font-black text-white">خروجی Excel</button></div></div></Card><div className="grid gap-6 xl:grid-cols-2"><Card className="p-5"><h3 className="mb-4 font-black">اسناد ایجاد شده و تکمیل امضا</h3><ResponsiveContainer height={300} width="100%"><AreaChart data={data.reportSeries}><CartesianGrid stroke="#E2E8F0" /><XAxis dataKey="month" /><YAxis /><Tooltip /><Legend /><Area dataKey="documents" name="اسناد" stroke="#C9973F" fill="#C9973F" fillOpacity={0.22} /><Area dataKey="signatures" name="امضاها" stroke="#0B172A" fill="#0B172A" fillOpacity={0.14} /></AreaChart></ResponsiveContainer></Card><Card className="p-5"><h3 className="mb-4 font-black">دانلود قرارداد و فعالیت موکل</h3><ResponsiveContainer height={300} width="100%"><BarChart data={data.reportSeries}><CartesianGrid stroke="#E2E8F0" /><XAxis dataKey="month" /><YAxis /><Tooltip /><Legend /><Bar dataKey="downloads" name="دانلود" fill="#C9973F" radius={[8, 8, 0, 0]} /><Bar dataKey="clients" name="موکل" fill="#17213A" radius={[8, 8, 0, 0]} /></BarChart></ResponsiveContainer></Card></div></div>;
 }
 
 function BulkSendContent({ data }: { data: DashboardData }) {
-  return <div className="grid gap-6 xl:grid-cols-[1fr_340px]"><Card className="p-6"><h2 className="text-xl font-black">ارسال گروهی امضا</h2><div className="mt-6 grid gap-4 md:grid-cols-2"><select className="min-h-12 rounded-xl border border-[#ece4d6] px-4 font-bold"><option>انتخاب قالب</option>{data.templates.map((template) => <option key={template.id}>{template.title}</option>)}</select><select className="min-h-12 rounded-xl border border-[#ece4d6] px-4 font-bold"><option>انتخاب گروه مخاطبین</option>{data.contacts.slice(0, 6).map((contact) => <option key={contact.id}>{contact.group}</option>)}</select></div><div className="mt-6 grid gap-3">{["انتخاب قالب", "انتخاب مخاطبین", "ایجاد گروه دریافت کنندگان", "ارسال درخواست ها", "پیگیری تحویل"].map((step, index) => <div className="flex items-center justify-between rounded-xl bg-[#fbf7ef] p-4" key={step}><span className="font-black">{step}</span><span className="grid size-8 place-items-center rounded-full bg-[#C9973F] text-xs font-black text-white">{toFaNumber(index + 1)}</span></div>)}</div></Card><div className="grid gap-6"><BulkSendWidget data={data} /><SignatureRequestsList rows={data.signatureRequests} status="pending" /></div></div>;
+  return <div className="grid gap-6 xl:grid-cols-[1fr_340px]"><Card className="p-6"><h2 className="text-xl font-black">ارسال گروهی امضا</h2><div className="mt-6 grid gap-4 md:grid-cols-2"><select className="min-h-12 rounded-xl border border-slate-200 px-4 font-bold"><option>انتخاب قالب</option>{data.templates.map((template) => <option key={template.id}>{template.title}</option>)}</select><select className="min-h-12 rounded-xl border border-slate-200 px-4 font-bold"><option>انتخاب گروه مخاطبین</option>{data.contacts.slice(0, 6).map((contact) => <option key={contact.id}>{contact.group}</option>)}</select></div><div className="mt-6 grid gap-3">{["انتخاب قالب", "انتخاب مخاطبین", "ایجاد گروه دریافت کنندگان", "ارسال درخواست ها", "پیگیری تحویل"].map((step, index) => <div className="flex items-center justify-between rounded-xl bg-slate-50 p-4" key={step}><span className="font-black">{step}</span><span className="grid size-8 place-items-center rounded-full bg-[#C9973F] text-xs font-black text-white">{toFaNumber(index + 1)}</span></div>)}</div></Card><div className="grid gap-6"><BulkSendWidget data={data} /><SignatureRequestsList rows={data.signatureRequests} status="pending" /></div></div>;
 }
 
 function PermissionsContent({ data }: { data: DashboardData }) {
-  return <div className="grid gap-6"><Card className="p-5"><h2 className="text-xl font-black">سطوح دسترسی و ممیزی</h2><p className="mt-2 text-sm font-bold text-[#66758A]">تخصیص نقش، ویرایش مجوزها و ثبت تغییرات امنیتی.</p></Card><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">{data.roles.map((role) => <Card className="p-5" key={role.id}><div className="flex items-center justify-between"><Icon name="lock" className="size-6 text-[#C9973F]" /><span className="text-xs font-bold text-[#66758A]">{toFaNumber(role.members)} عضو</span></div><h3 className="mt-4 text-xl font-black">{role.name}</h3><div className="mt-4 grid gap-2">{role.permissions.map((permission) => <span className="rounded-lg bg-[#fbf7ef] px-3 py-2 text-xs font-black" key={permission}>{permission}</span>)}</div><p className="mt-4 text-xs font-bold text-[#66758A]">آخرین ممیزی: {role.lastAudit}</p></Card>)}</div><SecurityWidget data={data} /></div>;
+  return <div className="grid gap-6"><Card className="p-5"><h2 className="text-xl font-black">سطوح دسترسی و ممیزی</h2><p className="mt-2 text-sm font-bold text-[#66758A]">تخصیص نقش، ویرایش مجوزها و ثبت تغییرات امنیتی.</p></Card><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">{data.roles.map((role) => <Card className="p-5" key={role.id}><div className="flex items-center justify-between"><Icon name="lock" className="size-6 text-[#C9973F]" /><span className="text-xs font-bold text-[#66758A]">{toFaNumber(role.members)} عضو</span></div><h3 className="mt-4 text-xl font-black">{role.name}</h3><div className="mt-4 grid gap-2">{role.permissions.map((permission) => <span className="rounded-lg bg-slate-50 px-3 py-2 text-xs font-black" key={permission}>{permission}</span>)}</div><p className="mt-4 text-xs font-bold text-[#66758A]">آخرین ممیزی: {role.lastAudit}</p></Card>)}</div><SecurityWidget data={data} /></div>;
 }
 
 export function LegalTechPlatform({ data, page }: { data: DashboardData; page: PageKind }) {

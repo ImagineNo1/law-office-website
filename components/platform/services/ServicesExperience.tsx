@@ -29,7 +29,7 @@ export function ServicesExperience({
         <PublicHeader />
         <section className="py-12">
           <Container>
-            <div className="rounded-2xl border border-[#eadfce] bg-white p-10 text-center shadow-[0_18px_45px_rgba(11,23,42,.06)]">
+            <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-[0_18px_45px_rgba(11,23,42,.06)]">
               <h1 className="text-3xl font-black">خدمتی برای نمایش وجود ندارد</h1>
               <p className="mt-3 text-sm font-bold leading-7 text-[#66758A]">
                 محتوای خدمات هنوز در پایگاه داده منتشر نشده است.
@@ -39,7 +39,7 @@ export function ServicesExperience({
               </a>
               <div className="mt-8 grid gap-4 md:grid-cols-3">
                 {["ایجاد خدمت", "انتشار محتوا", "اتصال درخواست"].map((item) => (
-                  <div className="rounded-2xl bg-[#fbf7ef] p-4 text-sm font-black" key={item}>{item}</div>
+                  <div className="rounded-2xl bg-slate-50 p-4 text-sm font-black" key={item}>{item}</div>
                 ))}
               </div>
             </div>

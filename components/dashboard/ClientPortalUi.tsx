@@ -5,16 +5,16 @@ import type { RequestStatus, ServiceRequestData } from "@/types";
 
 const statusColors: Record<string, string> = {
   reviewing: "bg-blue-50 text-blue-700",
-  in_progress: "bg-amber-50 text-amber-700",
+  in_progress: "bg-[#FFF8EA] text-amber-700",
   waiting_for_client: "bg-violet-50 text-violet-700",
   completed: "bg-emerald-50 text-emerald-700",
   cancelled: "bg-red-50 text-red-700",
   ready: "bg-emerald-50 text-emerald-700",
   active: "bg-blue-50 text-blue-700",
-  draft: "bg-amber-50 text-amber-700",
+  draft: "bg-[#FFF8EA] text-amber-700",
   expired: "bg-red-50 text-red-700",
   paid: "bg-emerald-50 text-emerald-700",
-  pending: "bg-amber-50 text-amber-700",
+  pending: "bg-[#FFF8EA] text-amber-700",
 };
 
 export const contractStatusLabels: Record<ClientContract["status"], string> = {
@@ -36,7 +36,7 @@ export function PortalCard({ children, className = "" }: { children: React.React
 
 export function ClientKpiCards({ kpis }: { kpis: { label: string; value: number; hint: string; icon: string }[] }) {
   const iconMap: Record<string, string> = { briefcase: "▣", clock: "◷", check: "✓", document: "▤", folder: "□" };
-  const colors = ["bg-blue-50 text-blue-700", "bg-amber-50 text-amber-700", "bg-emerald-50 text-emerald-700", "bg-violet-50 text-violet-700", "bg-orange-50 text-orange-700"];
+  const colors = ["bg-blue-50 text-blue-700", "bg-[#FFF8EA] text-amber-700", "bg-emerald-50 text-emerald-700", "bg-violet-50 text-violet-700", "bg-[#FFF8EA] text-orange-700"];
 
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
@@ -66,7 +66,7 @@ export function ProfileCard({ profile }: { profile: ClientProfileData }) {
       <h3 className="mt-4 text-xl font-black text-navy">{profile.fullName}</h3>
       <p className="mt-3 text-sm font-bold text-muted">{profile.phone}</p>
       <p className="mt-2 text-sm font-bold text-muted">{profile.email}</p>
-      <div className="mt-5 rounded-2xl bg-[#fbf7ef] p-4 text-right">
+      <div className="mt-5 rounded-2xl bg-slate-50 p-4 text-right">
         <div className="mb-2 flex items-center justify-between text-xs font-black text-muted"><span>تکمیل پروفایل</span><span>{profile.completion}٪</span></div>
         <span className="block h-2 overflow-hidden rounded-full bg-white"><span className="block h-full rounded-full bg-gold" style={{ width: `${profile.completion}%` }} /></span>
       </div>
@@ -147,7 +147,7 @@ export function QuickActions() {
       <h2 className="mb-5 text-lg font-black text-navy">دسترسی سریع</h2>
       <div className="grid overflow-hidden rounded-2xl border border-border">
         {actions.map(([label, href, icon]) => (
-          <Link className="flex items-center justify-between border-b border-border px-4 py-4 text-sm font-black text-navy transition last:border-b-0 hover:bg-[#fbf7ef]" href={href} key={label}><span>{label}</span><span className="grid size-8 place-items-center rounded-full bg-gold text-white">{icon}</span></Link>
+          <Link className="flex items-center justify-between border-b border-border px-4 py-4 text-sm font-black text-navy transition last:border-b-0 hover:bg-slate-50" href={href} key={label}><span>{label}</span><span className="grid size-8 place-items-center rounded-full bg-gold text-white">{icon}</span></Link>
         ))}
       </div>
     </PortalCard>
@@ -163,7 +163,7 @@ export function RequestsTable({ requests }: { requests: ServiceRequestData[] }) 
           <thead className="bg-slate-50 text-muted"><tr>{["شماره درخواست", "خدمت", "وضعیت", "اولویت", "تاریخ ثبت", "عملیات"].map((item) => <th className="px-5 py-4 text-right font-black" key={item}>{item}</th>)}</tr></thead>
           <tbody>
             {requests.slice(0, 8).map((request) => (
-              <tr className="border-t border-border hover:bg-[#fbf7ef]" key={request.id}><td className="px-5 py-4 font-black text-navy">{request.requestNumber}</td><td className="px-5 py-4 font-bold text-muted">{request.serviceTitle}</td><td className="px-5 py-4"><span className={`rounded-full px-3 py-1 text-xs font-black ${statusColors[request.status]}`}>{requestStatusLabels[request.status]}</span></td><td className="px-5 py-4 font-bold text-muted">{request.priority}</td><td className="px-5 py-4 font-bold text-muted">{formatRequestDate(request.createdAt)}</td><td className="px-5 py-4"><Link className="rounded-lg border border-border px-3 py-2 text-xs font-black text-navy hover:border-gold hover:text-gold" href={`/dashboard/requests/${request.id}`}>مشاهده جزئیات</Link></td></tr>
+              <tr className="border-t border-border hover:bg-slate-50" key={request.id}><td className="px-5 py-4 font-black text-navy">{request.requestNumber}</td><td className="px-5 py-4 font-bold text-muted">{request.serviceTitle}</td><td className="px-5 py-4"><span className={`rounded-full px-3 py-1 text-xs font-black ${statusColors[request.status]}`}>{requestStatusLabels[request.status]}</span></td><td className="px-5 py-4 font-bold text-muted">{request.priority}</td><td className="px-5 py-4 font-bold text-muted">{formatRequestDate(request.createdAt)}</td><td className="px-5 py-4"><Link className="rounded-lg border border-border px-3 py-2 text-xs font-black text-navy hover:border-gold hover:text-gold" href={`/dashboard/requests/${request.id}`}>مشاهده جزئیات</Link></td></tr>
             ))}
           </tbody>
         </table>
@@ -185,5 +185,5 @@ export function PaymentsTable({ payments }: { payments: ClientPayment[] }) {
 }
 
 export function MessagingCenter({ messages }: { messages: ClientMessage[] }) {
-  return <PortalCard className="p-5"><div className="mb-5 flex items-center justify-between"><h2 className="text-xl font-black text-navy">مرکز پیام‌ها</h2><span className="rounded-full bg-gold px-3 py-1 text-xs font-black text-white">پشتیبانی فعال</span></div><div className="grid max-h-[560px] gap-4 overflow-y-auto rounded-2xl bg-[#fbf7ef] p-4">{messages.slice(0, 12).map((message) => <div className={`flex ${message.sender === "client" ? "justify-start" : "justify-end"}`} key={message.id}><div className={`max-w-[78%] rounded-2xl border border-border bg-white p-4 shadow-sm ${message.sender === "legal" ? "border-gold/40" : ""}`}><div className="mb-2 flex items-center gap-2"><span className="grid size-8 place-items-center rounded-full bg-navy text-xs font-black text-white">{message.senderName.slice(0, 1)}</span><strong className="text-xs text-navy">{message.senderName}</strong><span className="text-xs font-bold text-muted">{message.timestamp}</span></div><p className="text-sm font-bold leading-7 text-muted">{message.message}</p></div></div>)}</div><div className="mt-4 flex gap-2 rounded-2xl border border-border p-3"><button className="grid size-10 place-items-center rounded-xl bg-slate-100">📎</button><input className="min-w-0 flex-1 bg-transparent text-sm font-bold outline-none" placeholder="ارسال پیام..." /><button className="rounded-xl bg-gold px-5 py-3 text-sm font-black text-white">ارسال</button></div></PortalCard>;
+  return <PortalCard className="p-5"><div className="mb-5 flex items-center justify-between"><h2 className="text-xl font-black text-navy">مرکز پیام‌ها</h2><span className="rounded-full bg-gold px-3 py-1 text-xs font-black text-white">پشتیبانی فعال</span></div><div className="grid max-h-[560px] gap-4 overflow-y-auto rounded-2xl bg-slate-50 p-4">{messages.slice(0, 12).map((message) => <div className={`flex ${message.sender === "client" ? "justify-start" : "justify-end"}`} key={message.id}><div className={`max-w-[78%] rounded-2xl border border-border bg-white p-4 shadow-sm ${message.sender === "legal" ? "border-gold/40" : ""}`}><div className="mb-2 flex items-center gap-2"><span className="grid size-8 place-items-center rounded-full bg-navy text-xs font-black text-white">{message.senderName.slice(0, 1)}</span><strong className="text-xs text-navy">{message.senderName}</strong><span className="text-xs font-bold text-muted">{message.timestamp}</span></div><p className="text-sm font-bold leading-7 text-muted">{message.message}</p></div></div>)}</div><div className="mt-4 flex gap-2 rounded-2xl border border-border p-3"><button className="grid size-10 place-items-center rounded-xl bg-slate-100">📎</button><input className="min-w-0 flex-1 bg-transparent text-sm font-bold outline-none" placeholder="ارسال پیام..." /><button className="rounded-xl bg-gold px-5 py-3 text-sm font-black text-white">ارسال</button></div></PortalCard>;
 }

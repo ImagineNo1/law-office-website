@@ -43,15 +43,15 @@ function Fields({ form }: { form?: AdminForm }) {
     <>
       <input name="id" type="hidden" value={form?.id ?? ""} />
       <div className="grid gap-3 md:grid-cols-3">
-        <input className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" defaultValue={form?.title} name="title" placeholder="عنوان فرم" required />
-        <input className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" defaultValue={form?.slug} name="slug" placeholder="slug" required />
-        <input className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" defaultValue={form?.category} name="category" placeholder="دسته بندی" required />
+        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={form?.title} name="title" placeholder="عنوان فرم" required />
+        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={form?.slug} name="slug" placeholder="slug" required />
+        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={form?.category} name="category" placeholder="دسته بندی" required />
       </div>
-      <textarea className="min-h-24 rounded-xl border border-[#eadfce] p-4 text-sm font-bold" defaultValue={form?.description} name="description" placeholder="توضیحات" />
-      <textarea className="min-h-24 rounded-xl border border-[#eadfce] p-4 text-sm font-bold" defaultValue={form?.fields.join("\n")} name="fields" placeholder="فیلدها، هر خط یک مورد" />
+      <textarea className="min-h-24 rounded-xl border border-slate-200 p-4 text-sm font-bold" defaultValue={form?.description} name="description" placeholder="توضیحات" />
+      <textarea className="min-h-24 rounded-xl border border-slate-200 p-4 text-sm font-bold" defaultValue={form?.fields.join("\n")} name="fields" placeholder="فیلدها، هر خط یک مورد" />
       <div className="grid gap-3 md:grid-cols-2">
-        <input className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" defaultValue={form?.usageCount ?? 0} name="usageCount" placeholder="تعداد استفاده" type="number" />
-        <select className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" defaultValue={form?.status ?? "published"} name="status">
+        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={form?.usageCount ?? 0} name="usageCount" placeholder="تعداد استفاده" type="number" />
+        <select className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={form?.status ?? "published"} name="status">
           <option value="published">منتشر شده</option>
           <option value="draft">پیش نویس</option>
           <option value="archived">آرشیو شده</option>
@@ -95,7 +95,7 @@ export default async function AdminLegalFormsPage() {
                 <button className="h-11 rounded-xl bg-[#C9973F] px-5 text-sm font-black text-white">ذخیره تغییرات</button>
               </form>
               <div className="mt-3 flex gap-2">
-                <form action={archiveLegalFormAction}><input name="id" type="hidden" value={form.id} /><button className="h-10 rounded-xl border border-[#eadfce] px-4 text-sm font-black">آرشیو</button></form>
+                <form action={archiveLegalFormAction}><input name="id" type="hidden" value={form.id} /><button className="h-10 rounded-xl border border-slate-200 px-4 text-sm font-black">آرشیو</button></form>
                 <form action={deleteLegalFormAction}><input name="id" type="hidden" value={form.id} /><button className="h-10 rounded-xl border border-red-200 px-4 text-sm font-black text-red-600">حذف</button></form>
               </div>
             </details>

@@ -11,7 +11,7 @@ export default async function RequestSuccessPage({ searchParams }: { searchParam
         <span className="mx-auto grid size-16 place-items-center rounded-full bg-emerald-50 text-3xl text-emerald-600">✓</span>
         <h1 className="mt-5 text-3xl font-black text-navy">درخواست شما با موفقیت ثبت شد</h1>
         <p className="mt-4 text-sm font-bold leading-7 text-muted">شماره درخواست خود را برای پیگیری نزد خود نگه دارید.</p>
-        <div className="mt-6 rounded-2xl border border-dashed border-gold bg-[#fbf7ef] p-5"><p className="text-xs font-black text-muted">شماره درخواست</p><strong className="mt-2 block text-2xl font-black text-navy" dir="ltr">{requestNumber}</strong></div>
+        <div className="mt-6 rounded-2xl border border-dashed border-gold bg-slate-50 p-5"><p className="text-xs font-black text-muted">شماره درخواست</p><strong className="mt-2 block text-2xl font-black text-navy" dir="ltr">{requestNumber}</strong></div>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center"><Link className="rounded-xl bg-gold px-5 py-3 text-sm font-black text-white" href={`/requests/${requestNumber}`}>پیگیری درخواست</Link><Link className="rounded-xl border border-border px-5 py-3 text-sm font-black text-navy" href="/">بازگشت به سایت</Link></div>
       </section>
     </main>

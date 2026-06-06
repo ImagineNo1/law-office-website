@@ -21,7 +21,7 @@ export function HomeExperience({
     <PageShell dark>
       <PublicHeader />
       <HeroSection />
-      <section className="bg-[#F7F3EA] py-10 text-[#0B172A]">
+      <section className="bg-slate-50 py-10 text-[#0B172A]">
         <Container className="grid gap-6 xl:grid-cols-[310px_1fr]">
           <PrimaryPathways />
           <ServicesShowcase services={services} />

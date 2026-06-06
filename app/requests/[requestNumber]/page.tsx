@@ -18,7 +18,7 @@ export default async function RequestTrackingPage({
   const steps = ["ثبت درخواست", "بررسی اولیه", "تخصیص کارشناس", "در حال انجام", "تحویل نهایی"];
 
   return (
-    <main className="min-h-screen bg-[#F7F3EA] text-[#0B172A]" dir="rtl">
+    <main className="min-h-screen bg-slate-50 text-[#0B172A]" dir="rtl">
       <PublicHeader />
       <section className="py-8">
         <div className="mx-auto grid w-[min(1200px,calc(100%-32px))] gap-6 lg:grid-cols-[1fr_340px]">
@@ -29,7 +29,7 @@ export default async function RequestTrackingPage({
               {steps.map((step, index) => (
                 <div className="grid grid-cols-[40px_1fr] gap-3" key={step}>
                   <span className="grid size-9 place-items-center rounded-full bg-[#C9973F] text-xs font-black text-white">{index + 1}</span>
-                  <div className="border-b border-[#eadfce] pb-4">
+                  <div className="border-b border-slate-200 pb-4">
                     <h2 className="font-black">{step}</h2>
                     <p className="text-sm font-bold text-[#66758A]">وضعیت در کارتابل ثبت شده است.</p>
                   </div>

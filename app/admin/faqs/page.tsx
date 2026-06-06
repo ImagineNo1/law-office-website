@@ -43,20 +43,20 @@ function Fields({ faq }: { faq?: AdminFaq }) {
     <>
       <input name="id" type="hidden" value={faq?.id ?? ""} />
       <div className="grid gap-3 md:grid-cols-4">
-        <input className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold md:col-span-2" defaultValue={faq?.question} name="question" placeholder="سوال" required />
-        <input className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" defaultValue={faq?.category} name="category" placeholder="دسته" />
-        <input className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" defaultValue={faq?.order ?? 0} name="order" type="number" />
+        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold md:col-span-2" defaultValue={faq?.question} name="question" placeholder="سوال" required />
+        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={faq?.category} name="category" placeholder="دسته" />
+        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={faq?.order ?? 0} name="order" type="number" />
       </div>
-      <textarea className="min-h-24 rounded-xl border border-[#eadfce] p-4 text-sm font-bold" defaultValue={faq?.answer} name="answer" placeholder="پاسخ" required />
+      <textarea className="min-h-24 rounded-xl border border-slate-200 p-4 text-sm font-bold" defaultValue={faq?.answer} name="answer" placeholder="پاسخ" required />
       <div className="grid gap-3 md:grid-cols-3">
-        <select className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" defaultValue={faq?.pageType ?? "general"} name="pageType">
+        <select className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={faq?.pageType ?? "general"} name="pageType">
           <option value="general">عمومی</option>
           <option value="service">خدمت</option>
           <option value="contract">قرارداد</option>
           <option value="legal-form">فرم حقوقی</option>
         </select>
-        <input className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" defaultValue={faq?.pageSlug} name="pageSlug" placeholder="page slug" />
-        <select className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" defaultValue={faq?.status ?? "published"} name="status">
+        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={faq?.pageSlug} name="pageSlug" placeholder="page slug" />
+        <select className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={faq?.status ?? "published"} name="status">
           <option value="published">منتشر شده</option>
           <option value="draft">پیش نویس</option>
           <option value="archived">آرشیو شده</option>
@@ -82,14 +82,14 @@ export default async function AdminFaqsPage({
     <AdminCrmShell>
       <h1 className="text-3xl font-black">مدیریت سوالات متداول</h1>
       <form className="mt-6 flex flex-wrap gap-3 rounded-2xl bg-white p-4 shadow-[0_18px_45px_rgba(11,23,42,.06)]">
-        <select className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" defaultValue={params?.pageType ?? ""} name="pageType">
+        <select className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={params?.pageType ?? ""} name="pageType">
           <option value="">همه pageType ها</option>
           <option value="general">عمومی</option>
           <option value="service">خدمت</option>
           <option value="contract">قرارداد</option>
           <option value="legal-form">فرم حقوقی</option>
         </select>
-        <input className="h-11 rounded-xl border border-[#eadfce] px-4 text-sm font-bold" defaultValue={params?.pageSlug ?? ""} name="pageSlug" placeholder="pageSlug" />
+        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={params?.pageSlug ?? ""} name="pageSlug" placeholder="pageSlug" />
         <button className="h-11 rounded-xl bg-[#0B172A] px-5 text-sm font-black text-white">فیلتر</button>
       </form>
       <div className="mt-6 grid gap-6">
@@ -106,7 +106,7 @@ export default async function AdminFaqsPage({
               <summary className="cursor-pointer font-black">{faq.question} <span className="text-xs text-[#66758A]">({faq.pageType}/{faq.status})</span></summary>
               <form action={saveFaqAction} className="mt-4 grid gap-4"><Fields faq={faq} /><button className="h-11 rounded-xl bg-[#C9973F] px-5 text-sm font-black text-white">ذخیره تغییرات</button></form>
               <div className="mt-3 flex gap-2">
-                <form action={archiveFaqAction}><input name="id" type="hidden" value={faq.id} /><button className="h-10 rounded-xl border border-[#eadfce] px-4 text-sm font-black">آرشیو</button></form>
+                <form action={archiveFaqAction}><input name="id" type="hidden" value={faq.id} /><button className="h-10 rounded-xl border border-slate-200 px-4 text-sm font-black">آرشیو</button></form>
                 <form action={deleteFaqAction}><input name="id" type="hidden" value={faq.id} /><button className="h-10 rounded-xl border border-red-200 px-4 text-sm font-black text-red-600">حذف</button></form>
               </div>
             </details>
