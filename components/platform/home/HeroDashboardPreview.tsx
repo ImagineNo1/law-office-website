@@ -22,7 +22,7 @@ export function HeroDashboardPreview() {
           <span className="text-xs font-black text-[#C9973F]">مشاهده همه</span>
         </div>
         {["قرارداد اجاره ملک تجاری", "قرارداد استخدام کارمند", "اظهارنامه رسمی مالیاتی", "وکالت‌نامه کاری"].map((item, index) => (
-          <div className="grid grid-cols-[1fr_92px_86px] gap-3 border-t border-[#eadfce] py-3 text-sm" key={item}>
+          <div className="grid grid-cols-[1fr_92px_86px] gap-3 border-t border-slate-200 py-3 text-sm" key={item}>
             <span className="font-black">{item}</span>
             <span className="font-bold text-[#66758A]">۱۴۰۳/۰۳/{fa(20 + index)}</span>
             <span className="rounded-lg bg-emerald-50 px-2 py-1 text-center text-xs font-black text-emerald-700">امضا شده</span>

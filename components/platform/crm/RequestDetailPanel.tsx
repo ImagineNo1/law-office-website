@@ -13,7 +13,7 @@ export function RequestDetailPanel({ request }: { request: ServiceRequestData })
           اولویت: requestPriorityLabels[request.priority],
           تاریخ: formatRequestDate(request.createdAt),
         }).map(([key, value]) => (
-          <div className="rounded-xl bg-[#fbf7ef] p-4" key={key}>
+          <div className="rounded-xl bg-slate-50 p-4" key={key}>
             <p className="text-xs font-black text-[#66758A]">{key}</p>
             <strong className="mt-2 block">{value}</strong>
           </div>

@@ -8,8 +8,8 @@ import {
 
 const statusClass: Record<RequestStatus, string> = {
   new: "bg-slate-100 text-slate-700 ring-slate-200",
-  reviewing: "bg-amber-50 text-amber-700 ring-amber-200",
-  waiting_for_client: "bg-orange-50 text-orange-700 ring-orange-200",
+  reviewing: "bg-[#FFF8EA] text-amber-700 ring-amber-200",
+  waiting_for_client: "bg-[#FFF8EA] text-orange-700 ring-orange-200",
   quoted: "bg-purple-50 text-purple-700 ring-purple-200",
   in_progress: "bg-blue-50 text-blue-700 ring-blue-200",
   completed: "bg-emerald-50 text-emerald-700 ring-emerald-200",
@@ -170,7 +170,7 @@ export function RequestTable({ requests }: { requests: ServiceRequestData[] }) {
           </thead>
           <tbody>
             {requests.slice(0, 10).map((request) => (
-              <tr className="border-t border-border/70 hover:bg-[#fbf7ef]" key={request.id}>
+              <tr className="border-t border-border/70 hover:bg-slate-50" key={request.id}>
                 <td className="px-5 py-4 font-black text-navy">{request.requestNumber}</td>
                 <td className="px-5 py-4 font-bold text-muted">{request.serviceTitle}</td>
                 <td className="px-5 py-4 font-bold text-navy">{request.fullName}</td>

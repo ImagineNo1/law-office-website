@@ -7,7 +7,7 @@ export function PrimaryPathways() {
       <h2 className="text-lg font-black">مسیرهای اصلی</h2>
       <div className="mt-4 grid gap-2">
         {items.map((item) => (
-          <span className="flex items-center gap-3 rounded-xl border border-[#eadfce] px-4 py-3 text-sm font-black" key={item}>
+          <span className="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 text-sm font-black" key={item}>
             <IconBox>§</IconBox>
             {item}
           </span>
