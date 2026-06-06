@@ -9,6 +9,7 @@ const links = [
   { label: "وبلاگ", href: "/admin/blog", icon: "M6 4h12v16H6V4Zm3 4h6M9 12h6M9 16h4" },
   { label: "اخبار", href: "/admin/news", icon: "M5 5h14v14H5V5Zm3 4h8M8 13h8M8 17h5" },
   { label: "خدمات", href: "/admin/services", icon: "M12 4v16M7 8h10M8 8l-3 7h6L8 8Zm8 0-3 7h6l-3-7Z" },
+  { label: "قراردادها", href: "/admin/contracts", icon: "M7 3h7l5 5v13H7V3Zm7 0v6h6M10 13h7M10 17h5" },
   { label: "صفحات", href: "/admin/pages", icon: "M7 3h7l4 4v14H7V3Zm7 0v5h5" },
   { label: "پیام ها", href: "/admin/messages", icon: "M4 6h16v12H4V6Zm0 1 8 6 8-6" },
   { label: "کاربران", href: "/admin/users", icon: "M16 21v-2a4 4 0 0 0-8 0v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8 10v-2a3 3 0 0 0-2-2.8" },

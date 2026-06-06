@@ -7,6 +7,7 @@ import { clearAdminCookie, requireAdmin, setAdminCookie, signJwt } from "@/lib/a
 import { connectDb } from "@/lib/db";
 import { ensureDefaultAdmin } from "@/lib/ensure-default-admin";
 import { slugFromTitle } from "@/lib/slug";
+import { ContractTemplate } from "@/models/ContractTemplate";
 import { HomeContent } from "@/models/HomeContent";
 import { Message } from "@/models/Message";
 import { News } from "@/models/News";
@@ -89,6 +90,7 @@ function revalidatePublicContent() {
     "/institute",
     "/contact",
     "/services",
+    "/contracts",
     "/blog",
     "/news",
   ].forEach((path) => revalidatePath(path));
@@ -214,6 +216,58 @@ export async function deleteNewsAction(formData: FormData) {
   await News.findByIdAndDelete(text(formData, "id"));
   revalidatePath("/admin/news");
   revalidatePath("/news");
+  revalidatePath("/");
+}
+
+
+export async function saveContractAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+
+  const id = text(formData, "id");
+  const title = text(formData, "title");
+  const payload = {
+    title,
+    slug: text(formData, "slug") || slugFromTitle(title),
+    category: text(formData, "category") || "ملکی",
+    excerpt: text(formData, "excerpt"),
+    content: text(formData, "content"),
+    heroImage: text(formData, "heroImage"),
+    priceLabel: text(formData, "priceLabel"),
+    sampleFileUrl: text(formData, "sampleFileUrl"),
+    useCases: parseLines(text(formData, "useCases")),
+    benefits: parseLines(text(formData, "benefits")),
+    requiredDocuments: parseLines(text(formData, "requiredDocuments")),
+    faqItems: parseFaqItems(text(formData, "faqItems")),
+    relatedContracts: parseLines(text(formData, "relatedContracts")),
+    status: publishedStatus(text(formData, "status")),
+    order: Number(text(formData, "order")) || 0,
+    seoTitle: text(formData, "seoTitle"),
+    seoDescription: text(formData, "seoDescription"),
+  };
+
+  if (!payload.title || !payload.excerpt || !payload.category) {
+    throw new Error("عنوان، دسته‌بندی و خلاصه قرارداد الزامی است.");
+  }
+
+  if (id) {
+    await ContractTemplate.findByIdAndUpdate(id, payload, { runValidators: true });
+  } else {
+    await ContractTemplate.create(payload);
+  }
+
+  revalidatePath("/admin/contracts");
+  revalidatePath("/contracts");
+  revalidatePath(`/contracts/${payload.category}/${payload.slug}`);
+  revalidatePath("/");
+}
+
+export async function deleteContractAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+  await ContractTemplate.findByIdAndDelete(text(formData, "id"));
+  revalidatePath("/admin/contracts");
+  revalidatePath("/contracts");
   revalidatePath("/");
 }
 

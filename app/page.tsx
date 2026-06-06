@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { HeroSection } from "@/components/site/HeroSection";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
@@ -239,7 +240,7 @@ export default async function Home() {
               />
               <div className="grid gap-2">
                 {contractCategories.map((category, index) => (
-                  <a
+                  <Link
                     className={`rounded-xl px-4 py-3 text-sm font-black transition ${
                       index === 0
                         ? "bg-white text-gold shadow-card"
@@ -249,7 +250,7 @@ export default async function Home() {
                     key={category}
                   >
                     {category}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </aside>

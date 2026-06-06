@@ -49,6 +49,32 @@ export type Service = {
   status?: PublishStatus;
 };
 
+export type ContractTemplate = {
+  id?: string;
+  title: string;
+  slug: string;
+  category: string;
+  excerpt: string;
+  content?: string;
+  heroImage?: string;
+  priceLabel?: string;
+  sampleFileUrl?: string;
+  useCases?: string[];
+  benefits?: string[];
+  requiredDocuments?: string[];
+  faqItems?: {
+    question: string;
+    answer: string;
+  }[];
+  relatedContracts?: string[];
+  status?: PublishStatus;
+  order?: number;
+  seoTitle?: string;
+  seoDescription?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 export type SiteStat = {
   label: string;
   value: string;

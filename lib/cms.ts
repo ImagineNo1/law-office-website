@@ -1,5 +1,7 @@
+import { contractSamples, getFallbackContract } from "@/lib/contract-data";
 import { connectDb } from "@/lib/db";
 import { getFallbackService, isMojibake, serviceSamples } from "@/lib/service-data";
+import { ContractTemplate } from "@/models/ContractTemplate";
 import { HomeContent } from "@/models/HomeContent";
 import { Message } from "@/models/Message";
 import { News } from "@/models/News";
@@ -10,6 +12,7 @@ import { SiteSettings } from "@/models/SiteSettings";
 import { User } from "@/models/User";
 import type {
   Article,
+  ContractTemplate as ContractTemplateData,
   HomeContentData,
   MessageData,
   NewsItem,
@@ -74,6 +77,10 @@ function formatDate(value: DateLike) {
   }).format(new Date(value));
 }
 
+function hasDatabase() {
+  return Boolean(process.env.MONGODB_URI);
+}
+
 function sortByOrder<T extends { order?: number }>(items: T[]) {
   return [...items].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 }
@@ -92,6 +99,30 @@ type PostLike = {
 };
 
 type NewsLike = Omit<PostLike, "category">;
+
+
+type ContractLike = {
+  _id?: unknown;
+  title: string;
+  slug: string;
+  category: string;
+  excerpt: string;
+  content?: string | null;
+  heroImage?: string | null;
+  priceLabel?: string | null;
+  sampleFileUrl?: string | null;
+  useCases?: string[] | null;
+  benefits?: string[] | null;
+  requiredDocuments?: string[] | null;
+  faqItems?: { question: string; answer: string }[] | null;
+  relatedContracts?: string[] | null;
+  status?: "draft" | "published";
+  order?: number;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  createdAt?: DateLike;
+  updatedAt?: DateLike;
+};
 
 type ServiceLike = {
   _id?: unknown;
@@ -140,6 +171,32 @@ function toNews(doc: NewsLike): NewsItem {
   };
 }
 
+
+function toContract(doc: ContractLike): ContractTemplateData {
+  return {
+    id: String(doc._id ?? ""),
+    title: doc.title,
+    slug: doc.slug,
+    category: doc.category,
+    excerpt: doc.excerpt,
+    content: doc.content ?? "",
+    heroImage: doc.heroImage ?? "",
+    priceLabel: doc.priceLabel ?? "",
+    sampleFileUrl: doc.sampleFileUrl ?? "",
+    useCases: doc.useCases ?? [],
+    benefits: doc.benefits ?? [],
+    requiredDocuments: doc.requiredDocuments ?? [],
+    faqItems: doc.faqItems ?? [],
+    relatedContracts: doc.relatedContracts ?? [],
+    status: doc.status ?? "draft",
+    order: doc.order ?? 0,
+    seoTitle: doc.seoTitle ?? "",
+    seoDescription: doc.seoDescription ?? "",
+    createdAt: formatDate(doc.createdAt),
+    updatedAt: formatDate(doc.updatedAt ?? doc.createdAt),
+  };
+}
+
 function toService(doc: ServiceLike): ServiceData {
   return {
     id: String(doc._id ?? ""),
@@ -162,6 +219,10 @@ function toService(doc: ServiceLike): ServiceData {
 }
 
 export async function getSiteSettings(): Promise<SiteSettingsData> {
+  if (!hasDatabase()) {
+    return defaultSettings;
+  }
+
   await connectDb();
   const settings = await SiteSettings.findOne({ key: "site" }).lean();
 
@@ -201,6 +262,46 @@ export async function getHomeContent(): Promise<HomeContentData> {
     stats: sortByOrder(content.stats ?? []),
     contactCta: { ...defaultHomeContent.contactCta, ...content.contactCta },
   };
+}
+
+
+export async function getPublishedContracts(limit?: number) {
+  if (!hasDatabase()) {
+    return limit ? contractSamples.slice(0, limit) : contractSamples;
+  }
+
+  await connectDb();
+  const query = ContractTemplate.find({ status: "published" }).sort({ order: 1, createdAt: -1 });
+  if (limit) {
+    query.limit(limit);
+  }
+  const docs = await query.lean();
+  const contracts = docs.map(toContract);
+  if (!contracts.length) {
+    return limit ? contractSamples.slice(0, limit) : contractSamples;
+  }
+  return contracts;
+}
+
+export async function getAllContracts() {
+  if (!hasDatabase()) {
+    return [];
+  }
+
+  await connectDb();
+  const docs = await ContractTemplate.find().sort({ order: 1, createdAt: -1 }).lean();
+  return docs.map(toContract);
+}
+
+export async function getContractBySlug(slug: string) {
+  if (!hasDatabase()) {
+    return getFallbackContract(slug);
+  }
+
+  await connectDb();
+  const doc = await ContractTemplate.findOne({ slug, status: "published" }).lean();
+  const contract = doc ? toContract(doc) : null;
+  return contract ?? getFallbackContract(slug);
 }
 
 export async function getPublishedServices(limit?: number) {
