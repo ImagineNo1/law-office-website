@@ -11,7 +11,17 @@ export default function DashboardProfilePage() {
     <ClientPortalShell title="پروفایل کاربری">
       <div className="grid gap-6 xl:grid-cols-[320px_1fr]">
         <ProfileCard profile={profile} />
-        <PortalCard className="p-6"><h2 className="text-xl font-black text-navy">اطلاعات شخصی</h2><div className="mt-6 grid gap-5 md:grid-cols-2"><Field label="نام و نام خانوادگی" value={profile.fullName} /><Field label="شماره تماس" value={profile.phone} /><Field label="ایمیل" value={profile.email} /><Field label="کد ملی" value={profile.nationalCode} /><Field className="md:col-span-2" label="آدرس" value={profile.address} /></div><button className="mt-6 rounded-xl bg-gold px-6 py-3 text-sm font-black text-white">ذخیره تغییرات</button></PortalCard>
+        <PortalCard className="p-6">
+          <h2 className="text-xl font-black text-navy">اطلاعات شخصی</h2>
+          <div className="mt-6 grid gap-5 md:grid-cols-2">
+            <Field label="نام و نام خانوادگی" value={profile.fullName} />
+            <Field label="شماره تماس" value={profile.phone} />
+            <Field label="ایمیل" value={profile.email} />
+            <Field label="کد ملی" value={profile.nationalCode} />
+            <Field className="md:col-span-2" label="آدرس" value={profile.address} />
+          </div>
+          <button className="mt-6 rounded-xl bg-gold px-6 py-3 text-sm font-black text-white">ذخیره تغییرات</button>
+        </PortalCard>
       </div>
     </ClientPortalShell>
   );

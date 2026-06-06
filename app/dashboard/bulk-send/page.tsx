@@ -1,10 +1,5 @@
-import type { Metadata } from "next";
-import { LegalTechPlatform } from "@/components/dashboard/LegalTechPlatform";
-import { getDashboardData } from "@/lib/dashboard-db";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = { title: "ارسال گروهی" };
-
-export default async function BulkSendPage() {
-  const data = await getDashboardData();
-  return <LegalTechPlatform data={data} page="bulk-send" />;
+export default function DashboardBulkSendRedirectPage() {
+  redirect("/dashboard");
 }

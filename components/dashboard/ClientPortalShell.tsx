@@ -2,7 +2,7 @@ import { ClientSidebar } from "@/components/dashboard/ClientSidebar";
 import { currentClientProfile } from "@/lib/client-portal";
 import { getClientSession } from "@/lib/client-auth";
 
-export async function ClientPortalShell({ children, title = "داشبورد مشتری" }: { children: React.ReactNode; title?: string }) {
+export async function ClientPortalShell({ children, title = "پیشخوان" }: { children: React.ReactNode; title?: string }) {
   const session = await getClientSession();
   const displayName = session?.fullName || currentClientProfile.fullName;
   const initials = displayName.split(" ").filter(Boolean).slice(0, 2).map((part) => part[0]).join("") || "ک";
@@ -18,10 +18,15 @@ export async function ClientPortalShell({ children, title = "داشبورد مش
               <p className="mt-2 text-sm font-bold text-slate-500">خوش آمدید، {displayName}</p>
             </div>
             <div className="flex flex-wrap items-center gap-3 text-navy">
-              <span className="text-sm font-bold text-slate-500">پشتیبانی ۲۴/۷ · ۰۲۱-۱۲۳۴۵۶۷۸</span>
-              <span className="relative grid size-10 place-items-center rounded-xl border border-slate-200 bg-white">🔔<span className="absolute -top-1 -left-1 grid size-5 place-items-center rounded-full bg-gold text-[10px] font-black text-white">۳</span></span>
-              <span className="relative grid size-10 place-items-center rounded-xl border border-slate-200 bg-white">✉<span className="absolute -top-1 -left-1 grid size-5 place-items-center rounded-full bg-gold text-[10px] font-black text-white">۲</span></span>
-              <span className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-black"><span className="grid size-8 place-items-center rounded-lg bg-[#0B172A] text-xs text-white">{initials}</span>{displayName}</span>
+              <span className="text-sm font-bold text-slate-500">پشتیبانی ۲۴/۷</span>
+              <span className="relative grid size-10 place-items-center rounded-xl border border-slate-200 bg-white">
+                پیام
+                <span className="absolute -left-1 -top-1 grid size-5 place-items-center rounded-full bg-gold text-[10px] font-black text-white">۲</span>
+              </span>
+              <span className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-black">
+                <span className="grid size-8 place-items-center rounded-lg bg-[#0B172A] text-xs text-white">{initials}</span>
+                {displayName}
+              </span>
             </div>
           </div>
         </header>

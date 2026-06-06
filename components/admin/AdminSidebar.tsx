@@ -6,13 +6,14 @@ import { usePathname } from "next/navigation";
 const links = [
   { label: "پیشخوان", href: "/admin", icon: "M3 11.5 12 4l9 7.5V21h-6v-6H9v6H3v-9.5Z" },
   { label: "درخواست‌ها", href: "/admin/requests", icon: "M7 3h10v18H7V3Zm3 5h4M10 12h4M10 16h3" },
+  { label: "خدمات", href: "/admin/services", icon: "M12 5v14M5 12h14" },
   { label: "قراردادها", href: "/admin/contracts", icon: "M4 7h7l2 2h7v10H4V7Z" },
   { label: "فرم‌های حقوقی", href: "/admin/legal-forms", icon: "M7 3h7l5 5v13H7V3Zm7 0v6h6" },
   { label: "سوالات متداول", href: "/admin/faqs", icon: "M12 18h.01M9.1 9a3 3 0 1 1 5.7 1.4c-.8 1.5-2.8 1.7-2.8 3.6" },
-  { label: "مشتریان", href: "/admin/users", icon: "M16 21v-2a4 4 0 0 0-8 0v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" },
+  { label: "وبلاگ", href: "/admin/blog", icon: "M5 4h14v16H5V4Zm4 5h6M9 13h6M9 17h4" },
+  { label: "اخبار", href: "/admin/news", icon: "M5 19V9m7 10V5m7 14v-7" },
   { label: "پیام‌ها", href: "/admin/messages", icon: "M4 6h16v12H4V6Zm0 1 8 6 8-6" },
-  { label: "فایل‌ها", href: "/admin/pages", icon: "M4 7h7l2 2h7v10H4V7Z" },
-  { label: "گزارش‌ها", href: "/admin/news", icon: "M5 19V9m7 10V5m7 14v-7" },
+  { label: "کاربران", href: "/admin/users", icon: "M16 21v-2a4 4 0 0 0-8 0v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" },
   { label: "تنظیمات", href: "/admin/settings", icon: "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-5v2M12 19v2M3 12h2M19 12h2" },
 ];
 

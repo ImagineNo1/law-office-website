@@ -6,7 +6,7 @@ import { RequestDetailPanel } from "@/components/platform/crm/RequestDetailPanel
 import { RequestTimeline } from "@/components/platform/crm/RequestTimeline";
 import { getServiceRequestById } from "@/lib/platform-db";
 
-export const metadata: Metadata = { title: "جزئیات درخواست CRM" };
+export const metadata: Metadata = { title: "جزئیات درخواست" };
 
 export default async function AdminRequestDetailPage({
   params,
@@ -19,7 +19,7 @@ export default async function AdminRequestDetailPage({
 
   return (
     <AdminCrmShell>
-      <h1 className="text-3xl font-black">پرونده درخواست {request.requestNumber}</h1>
+      <h1 className="text-3xl font-black">درخواست {request.requestNumber}</h1>
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_360px]">
         <div className="grid gap-6">
           <RequestDetailPanel request={request} />

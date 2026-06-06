@@ -74,15 +74,12 @@ const statusClass: Record<string, string> = {
 
 const navItems = [
   { label: "پیشخوان", href: "/dashboard", icon: "home" },
-  { label: "اسناد", href: "/dashboard/documents", icon: "files" },
-  { label: "امضای دیجیتال", href: "/dashboard/signatures", icon: "pen" },
-  { label: "بایگانی", href: "/dashboard/archive", icon: "archive" },
-  { label: "قالب‌ها", href: "/dashboard/templates", icon: "template" },
-  { label: "مخاطبین", href: "/dashboard/contacts", icon: "contacts" },
-  { label: "ارسال گروهی", href: "/dashboard/bulk-send", icon: "send" },
-  { label: "گردش کار", href: "/dashboard/workflows", icon: "workflow" },
-  { label: "دسترسی‌ها", href: "/dashboard/permissions", icon: "lock" },
-  { label: "گزارش‌ها", href: "/dashboard/reports", icon: "chart" },
+  { label: "درخواست‌های من", href: "/dashboard/requests", icon: "files" },
+  { label: "قراردادهای من", href: "/dashboard/contracts", icon: "template" },
+  { label: "فایل‌های من", href: "/dashboard/files", icon: "archive" },
+  { label: "پیام‌ها", href: "/dashboard/messages", icon: "send" },
+  { label: "پرداخت‌ها", href: "/dashboard/payments", icon: "chart" },
+  { label: "پروفایل کاربری", href: "/dashboard/profile", icon: "contacts" },
 ];
 
 const iconPaths: Record<string, string> = {
@@ -150,7 +147,7 @@ function Shell({ children, data }: { children: React.ReactNode; data: DashboardD
           <span className="grid size-9 place-items-center rounded-lg bg-sidebar-primary text-sm font-bold text-sidebar-primary-foreground">و</span>
           <span>
             <span className="block text-sm font-bold">وکیل‌یار</span>
-            <span className="text-[10px] text-sidebar-foreground/50">سامانه اسناد و امضا</span>
+            <span className="text-[10px] text-sidebar-foreground/50">پورتال مشتری</span>
           </span>
         </Link>
         </div>
@@ -191,7 +188,7 @@ function Shell({ children, data }: { children: React.ReactNode; data: DashboardD
           <div className="flex h-16 items-center justify-between px-4 sm:px-6">
             <div className="hidden items-center gap-2 rounded-lg bg-muted/50 px-3 py-2 sm:flex sm:w-80">
               <Icon name="search" className="size-4 text-muted-foreground" />
-              <input className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/60" placeholder="جستجو در اسناد، قراردادها، مخاطبین..." />
+              <input className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/60" placeholder="جستجو در درخواست‌ها، قراردادها، فایل‌ها..." />
             </div>
             <div className="flex items-center gap-3">
               <button className="relative rounded-lg p-2 hover:bg-muted">
@@ -347,9 +344,9 @@ function DashboardHome({ data }: { data: DashboardData }) {
           <h1 className="text-2xl font-extrabold sm:text-3xl">داشبورد پیشرفته</h1>
           <p className="mt-1 text-sm text-muted-foreground">خوش آمدید، علی محمدی</p>
         </div>
-        <Link className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-accent-foreground transition hover:bg-accent/90" href="/dashboard/documents">
+        <Link className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-accent-foreground transition hover:bg-accent/90" href="/dashboard/files">
           <Icon name="plus" className="size-4" />
-          سند جدید
+          فایل‌های من
         </Link>
       </div>
       <KpiGrid data={data} />
@@ -481,7 +478,7 @@ function SignatureRow({ request }: { request: SignatureRequestRecord }) {
 function TemplatesContent({ data }: { data: DashboardData }) {
   return (
     <div className="grid gap-6">
-      <PageHeader title="قالب‌های اسناد" cta="ایجاد قالب" href="/dashboard/templates" />
+      <PageHeader title="قراردادها" cta="مشاهده قراردادها" href="/dashboard/contracts" />
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {data.templates.map((template) => (
           <Card className="p-5" key={template.id}>
@@ -506,7 +503,7 @@ function TemplatesContent({ data }: { data: DashboardData }) {
 function ContactsContent({ data }: { data: DashboardData }) {
   return (
     <div className="grid gap-6">
-      <PageHeader title="مدیریت مخاطبین" cta="افزودن مخاطب" href="/dashboard/contacts" />
+      <PageHeader title="پیشخوان" cta="بازگشت به پیشخوان" href="/dashboard" />
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {data.contacts.map((contact) => (
           <Card className="p-5" key={contact.id}>
@@ -533,7 +530,7 @@ function ContactsContent({ data }: { data: DashboardData }) {
 function WorkflowsContent({ data }: { data: DashboardData }) {
   return (
     <div className="grid gap-6">
-      <PageHeader title="مدیریت گردش کار" cta="ساخت گردش کار" href="/dashboard/workflows" />
+      <PageHeader title="پیشخوان" cta="بازگشت به پیشخوان" href="/dashboard" />
       <div className="grid gap-4 xl:grid-cols-2">
         {data.workflows.map((workflow) => (
           <Card className="p-6" key={workflow.id}>
@@ -565,7 +562,7 @@ function WorkflowsContent({ data }: { data: DashboardData }) {
 function ReportsContent({ data }: { data: DashboardData }) {
   return (
     <div className="grid gap-6">
-      <PageHeader title="مرکز گزارش‌ها" cta="خروجی گزارش" href="/dashboard/reports" />
+      <PageHeader title="پیشخوان" cta="بازگشت به پیشخوان" href="/dashboard" />
       <div className="grid gap-6 xl:grid-cols-2">
         <Card className="p-6">
           <h2 className="text-lg font-black text-slate-950">اسناد ایجاد شده</h2>
@@ -621,7 +618,7 @@ function SimpleContent({ data, page }: { data: DashboardData; page: PageKind }) 
   if (page === "bulk-send") {
     return (
       <div className="grid gap-6">
-        <PageHeader title="ارسال گروهی" cta="شروع ارسال" href="/dashboard/bulk-send" />
+        <PageHeader title="پیشخوان" cta="بازگشت به پیشخوان" href="/dashboard" />
         <Card className="p-6">
           <div className="grid gap-4 md:grid-cols-4">
             {["انتخاب قالب", "انتخاب مخاطبین", "ساخت گروه گیرندگان", "پیگیری ارسال"].map((step, index) => (
@@ -639,7 +636,7 @@ function SimpleContent({ data, page }: { data: DashboardData; page: PageKind }) 
   if (page === "permissions") {
     return (
       <div className="grid gap-6">
-        <PageHeader title="مدیریت سطوح دسترسی" cta="افزودن نقش" href="/dashboard/permissions" />
+        <PageHeader title="پیشخوان" cta="بازگشت به پیشخوان" href="/dashboard" />
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
           {data.roles.map((role) => (
             <Card className="p-5" key={role.name}>

@@ -1,10 +1,5 @@
-import type { Metadata } from "next";
-import { LegalTechPlatform } from "@/components/dashboard/LegalTechPlatform";
-import { getDashboardData } from "@/lib/dashboard-db";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = { title: "مرکز اسناد" };
-
-export default async function DocumentsPage() {
-  const data = await getDashboardData();
-  return <LegalTechPlatform data={data} page="documents" />;
+export default function DashboardDocumentsRedirectPage() {
+  redirect("/dashboard");
 }

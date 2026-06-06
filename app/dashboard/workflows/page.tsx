@@ -1,10 +1,5 @@
-import type { Metadata } from "next";
-import { LegalTechPlatform } from "@/components/dashboard/LegalTechPlatform";
-import { getDashboardData } from "@/lib/dashboard-db";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = { title: "مدیریت گردش کار" };
-
-export default async function WorkflowsPage() {
-  const data = await getDashboardData();
-  return <LegalTechPlatform data={data} page="workflows" />;
+export default function DashboardWorkflowsRedirectPage() {
+  redirect("/dashboard");
 }

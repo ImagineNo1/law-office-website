@@ -3,16 +3,18 @@ import Link from "next/link";
 export function AdminCrmSidebar() {
   const items = [
     ["درخواست‌ها", "/admin/requests"],
+    ["خدمات", "/admin/services"],
     ["قراردادها", "/admin/contracts"],
-    ["فرم‌ها", "/admin/legal-forms"],
+    ["فرم‌های حقوقی", "/admin/legal-forms"],
     ["سوالات متداول", "/admin/faqs"],
-    ["گزارش‌ها", "/admin"],
+    ["پیام‌ها", "/admin/messages"],
+    ["کاربران", "/admin/users"],
   ];
   return (
     <aside className="border-l border-slate-200 bg-white p-5 shadow-sm lg:min-h-screen lg:w-[290px]">
       <div className="rounded-2xl bg-[#071326] p-5 text-white">
-        <h2 className="text-2xl font-black">Legal CRM</h2>
-        <p className="mt-2 text-xs font-bold text-slate-300">کارتابل عملیات حقوقی</p>
+        <h2 className="text-2xl font-black">Admin CRM</h2>
+        <p className="mt-2 text-xs font-bold text-slate-300">کارتابل درخواست‌ها</p>
       </div>
       <nav className="mt-6 grid gap-2">
         {items.map(([label, href]) => (
