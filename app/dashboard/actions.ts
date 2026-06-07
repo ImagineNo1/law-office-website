@@ -2,6 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { requireClient } from "@/lib/client-auth";
+import { getPlatformServiceBySlug } from "@/lib/platform-db";
+import { createServiceRequest } from "@/lib/service-requests";
 import {
   appendClientRequestMessage,
   createClientMessage,
@@ -12,10 +15,36 @@ function text(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
 }
 
+export async function createDashboardRequestAction(formData: FormData) {
+  const client = await requireClient("/dashboard/requests");
+  const serviceSlug = text(formData, "serviceSlug") || "general";
+  const selectedService = await getPlatformServiceBySlug(serviceSlug);
+  const subject = text(formData, "subject");
+  const description = text(formData, "description");
+
+  if (!subject || !description) return;
+
+  await createServiceRequest({
+    clientId: client.id,
+    fullName: client.fullName,
+    phone: client.phone,
+    email: client.email,
+    serviceSlug,
+    serviceTitle: selectedService?.title ?? text(formData, "serviceTitle") ?? "مشاوره حقوقی",
+    subject,
+    description,
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/requests");
+}
+
 export async function sendClientMessageAction(formData: FormData) {
   const message = text(formData, "message");
   if (!message) return;
-  await createClientMessage(message);
+  const threadTitle = text(formData, "threadTitle") || "گفتگوی پشتیبانی";
+  const threadId = text(formData, "threadId");
+  await createClientMessage(message, threadTitle, threadId);
   revalidatePath("/dashboard/messages");
 }
 

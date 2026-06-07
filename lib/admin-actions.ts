@@ -17,6 +17,7 @@ import { Service } from "@/models/Service";
 import { SiteSettings } from "@/models/SiteSettings";
 import { User } from "@/models/User";
 import { ClientUser } from "@/models/ClientUser";
+import { ClientMessage } from "@/models/ClientMessage";
 import { ServiceRequest } from "@/models/ServiceRequest";
 
 function text(formData: FormData, key: string) {
@@ -31,8 +32,9 @@ function publishedStatus(value: string): "draft" | "published" {
   return value === "published" ? "published" : "draft";
 }
 
-function userRole(value: string): "admin" | "editor" {
-  return value === "admin" ? "admin" : "editor";
+function userRole(value: string): "super_admin" | "admin" | "user" {
+  if (value === "super_admin" || value === "admin") return value;
+  return "user";
 }
 
 function userStatus(value: string): "active" | "disabled" {
@@ -469,6 +471,25 @@ export async function deleteMessageAction(formData: FormData) {
   revalidatePath("/admin");
 }
 
+
+export async function sendAdminClientMessageAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+  const clientId = text(formData, "clientId");
+  const message = text(formData, "message");
+  if (!clientId || !message) return;
+  await ClientMessage.create({
+    clientId,
+    senderType: "admin",
+    sender: "admin",
+    message,
+    threadId: text(formData, "threadId") || "general",
+    threadTitle: text(formData, "threadTitle") || "گفتگوی پشتیبانی",
+  });
+  revalidatePath("/admin/messages");
+  revalidatePath("/dashboard/messages");
+}
+
 export async function saveUserAction(formData: FormData) {
   await requireAdmin();
   await connectDb();
@@ -506,17 +527,37 @@ export async function saveClientUserAction(formData: FormData) {
   await requireAdmin();
   await connectDb();
 
-  await ClientUser.findByIdAndUpdate(
-    text(formData, "id"),
-    {
-      fullName: text(formData, "fullName"),
-      phone: text(formData, "phone"),
-      email: text(formData, "email").toLowerCase(),
-      nationalCode: text(formData, "nationalCode"),
-      status: clientStatus(text(formData, "status")),
-    },
-    { runValidators: true },
-  );
+  const id = text(formData, "id");
+  const password = text(formData, "password");
+  const payload: Record<string, unknown> = {
+    fullName: text(formData, "fullName"),
+    phone: text(formData, "phone"),
+    email: text(formData, "email").toLowerCase(),
+    nationalCode: text(formData, "nationalCode"),
+    status: clientStatus(text(formData, "status")),
+    role: userRole(text(formData, "role")),
+  };
+  if (password) payload.passwordHash = await bcrypt.hash(password, 12);
+  if (id) {
+    await ClientUser.findByIdAndUpdate(id, payload, { runValidators: true });
+  } else {
+    if (!password) throw new Error("رمز عبور برای کاربر جدید الزامی است.");
+    await ClientUser.create(payload);
+  }
+  revalidatePath("/admin/users");
+}
+
+export async function deleteUserAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+  await User.findByIdAndDelete(text(formData, "id"));
+  revalidatePath("/admin/users");
+}
+
+export async function deleteClientUserAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+  await ClientUser.findByIdAndDelete(text(formData, "id"));
   revalidatePath("/admin/users");
 }
 

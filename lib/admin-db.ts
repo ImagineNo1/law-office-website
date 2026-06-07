@@ -1,5 +1,6 @@
 import { connectDb } from "@/lib/db";
 import { ClientUser } from "@/models/ClientUser";
+import { ClientMessage } from "@/models/ClientMessage";
 import { ContractTemplate } from "@/models/ContractTemplate";
 import { FAQ } from "@/models/FAQ";
 import { LegalFormTemplate } from "@/models/LegalFormTemplate";
@@ -49,10 +50,22 @@ export async function getAdminFaqs(filters?: { pageSlug?: string; pageType?: str
   return docs.map((doc) => ({ ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt), updatedAtText: formatAdminDate(doc.updatedAt) }));
 }
 
+export async function getAdminPostById(id: string) {
+  await connectDb();
+  const doc = await Post.findById(id).lean();
+  return doc ? { ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt), updatedAtText: formatAdminDate(doc.updatedAt), publishedAtText: formatAdminDate(doc.publishedAt) } : null;
+}
+
 export async function getAdminPosts() {
   await connectDb();
   const docs = await Post.find().sort({ publishedAt: -1, createdAt: -1 }).lean();
   return docs.map((doc) => ({ ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt), updatedAtText: formatAdminDate(doc.updatedAt), publishedAtText: formatAdminDate(doc.publishedAt) }));
+}
+
+export async function getAdminNewsById(id: string) {
+  await connectDb();
+  const doc = await News.findById(id).lean();
+  return doc ? { ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt), updatedAtText: formatAdminDate(doc.updatedAt), publishedAtText: formatAdminDate(doc.publishedAt) } : null;
 }
 
 export async function getAdminNews() {
@@ -65,6 +78,36 @@ export async function getAdminMessages() {
   await connectDb();
   const docs = await Message.find().sort({ createdAt: -1 }).lean();
   return docs.map((doc) => ({ ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt) }));
+}
+
+
+export async function getAdminClientConversations() {
+  await connectDb();
+  const docs = await ClientMessage.find().sort({ createdAt: 1 }).lean<{
+    _id: unknown;
+    clientId: string;
+    senderType?: "client" | "admin";
+    sender?: "client" | "lawyer" | "admin";
+    message: string;
+    threadId?: string;
+    threadTitle?: string;
+    createdAt?: Date | string;
+  }[]>();
+  const clientIds = Array.from(new Set(docs.map((doc) => doc.clientId).filter(Boolean)));
+  const clients = await ClientUser.find({ _id: { $in: clientIds } }).select("fullName phone email").lean();
+  const clientMap = new Map(clients.map((client) => [String(client._id), client]));
+  const groups = new Map<string, { threadId: string; threadTitle: string; clientId: string; clientName: string; clientPhone: string; messages: { id: string; sender: "client" | "admin"; senderName: string; message: string; createdAtText: string }[] }>();
+  for (const doc of docs) {
+    const threadId = doc.threadId ?? "general";
+    const key = `${doc.clientId}:${threadId}`;
+    const client = clientMap.get(doc.clientId);
+    const sender = doc.senderType ?? (doc.sender === "client" ? "client" : "admin");
+    if (!groups.has(key)) {
+      groups.set(key, { threadId, threadTitle: doc.threadTitle ?? "گفتگوی پشتیبانی", clientId: doc.clientId, clientName: client?.fullName ?? "کاربر", clientPhone: client?.phone ?? "", messages: [] });
+    }
+    groups.get(key)?.messages.push({ id: idOf(doc._id), sender, senderName: sender === "client" ? client?.fullName ?? "کاربر" : "تیم مدیریت", message: doc.message, createdAtText: formatAdminDate(doc.createdAt) });
+  }
+  return Array.from(groups.values()).sort((a, b) => (b.messages.at(-1)?.id ?? "").localeCompare(a.messages.at(-1)?.id ?? ""));
 }
 
 export async function getAdminUsers() {

@@ -11,7 +11,7 @@ type JwtPayload = Record<string, string | number | boolean>;
 export type AdminJwtPayload = JwtPayload & {
   userId: string;
   email: string;
-  role: "admin" | "editor";
+  role: "super_admin" | "admin" | "user";
 };
 
 function getJwtSecret() {
@@ -110,7 +110,7 @@ export async function getCurrentUser() {
     .select("fullName email role status")
     .lean();
 
-  if (!user || user.status !== "active") {
+  if (!user || user.status !== "active" || !["admin", "super_admin"].includes(user.role)) {
     return null;
   }
 

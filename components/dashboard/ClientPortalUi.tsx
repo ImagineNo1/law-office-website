@@ -192,15 +192,17 @@ export function RequestsTable({
   requests,
   search = "",
   status = "",
+  action,
 }: {
   requests: ServiceRequestData[];
   search?: string;
   status?: string;
+  action?: React.ReactNode;
 }) {
   return (
     <PortalCard className="overflow-hidden">
       <div className="flex flex-col gap-3 border-b border-border p-5 lg:flex-row lg:items-center lg:justify-between">
-        <h2 className="text-xl font-black text-navy">درخواست‌های اخیر</h2>
+        <div className="flex flex-wrap items-center gap-3"><h2 className="text-xl font-black text-navy">درخواست‌های اخیر</h2>{action}</div>
         <form className="flex flex-col gap-2 sm:flex-row">
           <input className="service-input" defaultValue={search} name="q" placeholder="جستجو..." />
           <select className="service-input" defaultValue={status} name="status">
@@ -223,7 +225,7 @@ export function RequestsTable({
         </div>
       ) : (
         <div className="p-5">
-          <EmptyState ctaHref="/requests/new" ctaLabel="ثبت درخواست جدید" description="برای شروع، درخواست حقوقی جدیدی ثبت کنید تا روند بررسی و پیگیری آن در همین بخش نمایش داده شود." icon="request" title="هنوز درخواستی ثبت نکرده‌اید" />
+          <div className="grid gap-4"><EmptyState description="برای شروع، درخواست حقوقی جدیدی ثبت کنید تا روند بررسی و پیگیری آن در همین بخش نمایش داده شود." icon="request" title="هنوز درخواستی ثبت نکرده‌اید" />{action ? <div className="flex justify-center">{action}</div> : null}</div>
         </div>
       )}
     </PortalCard>
@@ -247,5 +249,76 @@ export function PaymentsTable({ payments }: { payments: ClientPaymentRecord[] })
 }
 
 export function MessagingCenter({ messages }: { messages: ClientMessageRecord[] }) {
-  return <PortalCard className="p-5"><div className="mb-5 flex items-center justify-between"><h2 className="font-heading text-xl font-extrabold text-primary">مرکز پیام‌ها</h2><span className="rounded-full bg-accent px-3 py-1 text-xs font-extrabold text-accent-foreground">پشتیبانی فعال</span></div>{messages.length ? <div className="grid max-h-[560px] gap-4 overflow-y-auto rounded-lg bg-muted p-4">{messages.map((message) => <div className={`flex ${message.sender === "client" ? "justify-start" : "justify-end"}`} key={message.id}><div className={`max-w-[78%] rounded-lg border border-border bg-card p-4 shadow-sm ${message.sender === "admin" ? "border-accent/40" : ""}`}><div className="mb-2 flex items-center gap-2"><span className="grid size-8 place-items-center rounded-lg bg-primary text-xs font-extrabold text-primary-foreground">{message.senderName.slice(0, 1)}</span><strong className="text-xs text-primary">{message.senderName}</strong><span className="text-xs font-bold text-muted-foreground">{message.timestamp}</span></div><p className="text-sm font-medium leading-8 text-muted-foreground">{message.message}</p></div></div>)}</div> : <EmptyState description="پیام‌های شما و پاسخ‌های تیم حقوقی پس از ارسال در همین بخش ثبت می‌شود." icon="message" title="هنوز پیامی ثبت نشده است" />}<form action={sendClientMessageAction} className="mt-4 flex gap-2 rounded-lg border border-border p-3"><input className="min-w-0 flex-1 bg-transparent text-sm font-bold outline-none" name="message" placeholder="ارسال پیام..." /><button className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-extrabold text-accent-foreground" type="submit"><Send aria-hidden="true" className="size-4" />ارسال</button></form></PortalCard>;
+  const conversations = messages.reduce<{ threadId: string; title: string; messages: ClientMessageRecord[]; lastAt: string }[]>((items, message) => {
+    const existing = items.find((item) => item.threadId === message.threadId);
+    if (existing) {
+      existing.messages.push(message);
+      existing.lastAt = message.timestamp;
+      return items;
+    }
+    items.push({ threadId: message.threadId, title: message.threadTitle, messages: [message], lastAt: message.timestamp });
+    return items;
+  }, []);
+  const activeConversation = conversations[0];
+
+  return (
+    <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
+      <PortalCard className="p-5">
+        <div className="mb-5 flex items-center justify-between gap-3">
+          <h2 className="font-heading text-xl font-extrabold text-primary">لیست گفتگوها</h2>
+          <span className="rounded-full bg-accent px-3 py-1 text-xs font-extrabold text-accent-foreground">پشتیبانی</span>
+        </div>
+        <form action={sendClientMessageAction} className="mb-4 grid gap-3 rounded-lg border border-border bg-muted p-3">
+          <input className="service-input" name="threadTitle" placeholder="عنوان چت جدید" required />
+          <input className="service-input" name="message" placeholder="اولین پیام..." required />
+          <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-extrabold text-primary-foreground" type="submit">
+            <Plus aria-hidden="true" className="size-4" />
+            ایجاد چت جدید
+          </button>
+        </form>
+        {conversations.length ? (
+          <div className="grid gap-2">
+            {conversations.map((conversation, index) => (
+              <div className={`rounded-lg border p-4 ${index === 0 ? "border-accent bg-accent/5" : "border-border bg-card"}`} key={conversation.threadId}>
+                <strong className="block text-sm text-primary">{conversation.title}</strong>
+                <span className="mt-2 block text-xs font-bold text-muted-foreground">{conversation.messages.length} پیام · {conversation.lastAt}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState description="برای شروع، یک چت جدید با تیم حقوقی ایجاد کنید." icon="message" title="هنوز گفتگویی ندارید" />
+        )}
+      </PortalCard>
+      <PortalCard className="p-5">
+        <div className="mb-5 flex items-center justify-between">
+          <h2 className="font-heading text-xl font-extrabold text-primary">{activeConversation?.title ?? "چت جدید"}</h2>
+          <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-extrabold text-emerald-700">پاسخگویی فعال</span>
+        </div>
+        {activeConversation ? (
+          <div className="grid max-h-[560px] gap-4 overflow-y-auto rounded-lg bg-muted p-4">
+            {activeConversation.messages.map((message) => (
+              <div className={`flex ${message.sender === "client" ? "justify-start" : "justify-end"}`} key={message.id}>
+                <div className={`max-w-[78%] rounded-lg border border-border bg-card p-4 shadow-sm ${message.sender === "admin" ? "border-accent/40" : ""}`}>
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="grid size-8 place-items-center rounded-lg bg-primary text-xs font-extrabold text-primary-foreground">{message.senderName.slice(0, 1)}</span>
+                    <strong className="text-xs text-primary">{message.senderName}</strong>
+                    <span className="text-xs font-bold text-muted-foreground">{message.timestamp}</span>
+                  </div>
+                  <p className="text-sm font-medium leading-8 text-muted-foreground">{message.message}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState description="از ستون گفتگوها یک چت جدید بسازید تا پیام‌ها اینجا نمایش داده شوند." icon="message" title="گفتگویی انتخاب نشده است" />
+        )}
+        <form action={sendClientMessageAction} className="mt-4 flex gap-2 rounded-lg border border-border p-3">
+          <input name="threadId" type="hidden" value={activeConversation?.threadId ?? "general"} />
+          <input name="threadTitle" type="hidden" value={activeConversation?.title ?? "گفتگوی پشتیبانی"} />
+          <input className="min-w-0 flex-1 bg-transparent text-sm font-bold outline-none" name="message" placeholder="ارسال پیام..." required />
+          <button className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-extrabold text-accent-foreground" type="submit"><Send aria-hidden="true" className="size-4" />ارسال</button>
+        </form>
+      </PortalCard>
+    </div>
+  );
 }

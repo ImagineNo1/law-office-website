@@ -1,6 +1,6 @@
 export type PublishStatus = "draft" | "published";
 export type MessageStatus = "unread" | "read" | "archived";
-export type UserRole = "admin" | "editor";
+export type UserRole = "super_admin" | "admin" | "user";
 export type UserStatus = "active" | "disabled";
 
 export type Article = {
