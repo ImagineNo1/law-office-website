@@ -1,82 +1,24 @@
 import type { Metadata } from "next";
+import { AdminModal } from "@/components/admin/AdminModal";
+import { AdminDataTable, AdminEmptyState, AdminPageHeader, AdminStatusBadge } from "@/components/admin/AdminUi";
 import { AdminShell } from "@/components/admin/AdminShell";
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Input } from "@/components/ui/Input";
-import { saveUserAction } from "@/lib/admin-actions";
-import { getUsers } from "@/lib/cms";
+import { saveClientUserAction, saveUserAction } from "@/lib/admin-actions";
+import { getAdminUsers } from "@/lib/admin-db";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { title: "مدیریت کاربران" };
+type AdminUserRow = Awaited<ReturnType<typeof getAdminUsers>>["admins"][number];
+type ClientUserRow = Awaited<ReturnType<typeof getAdminUsers>>["clients"][number];
 
-export const metadata: Metadata = {
-  title: "مدیریت کاربران",
-};
+function AdminUserForm({ user }: { user?: AdminUserRow }) {
+  return <form action={saveUserAction} className="grid gap-4"><input name="id" type="hidden" value={user?.id ?? ""} /><label className="grid gap-2 text-sm font-black text-navy"><span>نام</span><input className="service-input" defaultValue={user?.fullName} name="fullName" required /></label><label className="grid gap-2 text-sm font-black text-navy"><span>ایمیل</span><input className="service-input" defaultValue={user?.email} name="email" required type="email" /></label><label className="grid gap-2 text-sm font-black text-navy"><span>{user ? "رمز جدید (اختیاری)" : "رمز عبور"}</span><input className="service-input" name="password" required={!user} type="password" /></label><div className="grid gap-4 md:grid-cols-2"><label className="grid gap-2 text-sm font-black text-navy"><span>نقش</span><select className="service-input" defaultValue={user?.role ?? "editor"} name="role"><option value="admin">مدیر</option><option value="editor">نویسنده</option></select></label><label className="grid gap-2 text-sm font-black text-navy"><span>وضعیت</span><select className="service-input" defaultValue={user?.status ?? "active"} name="status"><option value="active">فعال</option><option value="disabled">غیرفعال</option></select></label></div><button className="rounded-xl bg-gold px-5 py-3 text-sm font-black text-white" type="submit">ذخیره</button></form>;
+}
+
+function ClientUserForm({ user }: { user: ClientUserRow }) {
+  return <form action={saveClientUserAction} className="grid gap-4"><input name="id" type="hidden" value={user.id} /><label className="grid gap-2 text-sm font-black text-navy"><span>نام</span><input className="service-input" defaultValue={user.fullName} name="fullName" required /></label><div className="grid gap-4 md:grid-cols-2"><label className="grid gap-2 text-sm font-black text-navy"><span>شماره تماس</span><input className="service-input" defaultValue={user.phone} name="phone" required /></label><label className="grid gap-2 text-sm font-black text-navy"><span>ایمیل</span><input className="service-input" defaultValue={user.email} name="email" type="email" /></label></div><div className="grid gap-4 md:grid-cols-2"><label className="grid gap-2 text-sm font-black text-navy"><span>کد ملی</span><input className="service-input" defaultValue={user.nationalCode} name="nationalCode" /></label><label className="grid gap-2 text-sm font-black text-navy"><span>وضعیت</span><select className="service-input" defaultValue={user.status} name="status"><option value="active">فعال</option><option value="blocked">مسدود</option></select></label></div><p className="rounded-xl bg-slate-50 p-3 text-sm font-bold text-muted">بازنشانی رمز عبور مشتری در این نسخه غیرفعال است.</p><button className="rounded-xl bg-gold px-5 py-3 text-sm font-black text-white" type="submit">ذخیره</button></form>;
+}
 
 export default async function AdminUsersPage() {
-  const users = await getUsers();
-
-  return (
-    <AdminShell title="کاربران" description="مدیریت دسترسی مدیران و نویسندگان">
-      <div className="grid gap-6 xl:grid-cols-[1fr_380px]">
-        <Card className="p-5">
-          <h1 className="mb-5 text-xl font-black text-foreground">فهرست کاربران</h1>
-          <div className="grid gap-4">
-            {users.map((user) => (
-              <details className="rounded-2xl border border-border bg-surface p-4" key={user.id}>
-                <summary className="cursor-pointer font-black text-foreground">
-                  {user.fullName} <span className="text-sm text-muted">({user.email})</span>
-                </summary>
-                <form action={saveUserAction} className="mt-4 grid gap-4">
-                  <input name="id" type="hidden" value={user.id} />
-                  <Input defaultValue={user.fullName} label="نام" name="fullName" required />
-                  <Input defaultValue={user.email} label="ایمیل" name="email" required type="email" />
-                  <Input label="رمز جدید (اختیاری)" name="password" type="password" />
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <label className="grid gap-2 text-sm font-medium text-foreground">
-                      <span>نقش</span>
-                      <select className="h-11 rounded-xl border border-border bg-background px-3" defaultValue={user.role} name="role">
-                        <option value="admin">admin</option>
-                        <option value="editor">editor</option>
-                      </select>
-                    </label>
-                    <label className="grid gap-2 text-sm font-medium text-foreground">
-                      <span>وضعیت</span>
-                      <select className="h-11 rounded-xl border border-border bg-background px-3" defaultValue={user.status} name="status">
-                        <option value="active">فعال</option>
-                        <option value="disabled">غیرفعال</option>
-                      </select>
-                    </label>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Badge tone={user.status === "active" ? "green" : "muted"}>
-                      {user.status === "active" ? "فعال" : "غیرفعال"}
-                    </Badge>
-                    <Button type="submit">ذخیره کاربر</Button>
-                  </div>
-                </form>
-              </details>
-            ))}
-          </div>
-        </Card>
-        <Card className="p-5">
-          <h2 className="mb-5 text-xl font-black text-foreground">ایجاد کاربر</h2>
-          <form action={saveUserAction} className="grid gap-4">
-            <Input label="نام" name="fullName" required />
-            <Input label="ایمیل" name="email" required type="email" />
-            <Input label="رمز عبور" name="password" required type="password" />
-            <label className="grid gap-2 text-sm font-medium text-foreground">
-              <span>نقش</span>
-              <select className="h-11 rounded-xl border border-border bg-background px-3" name="role">
-                <option value="editor">editor</option>
-                <option value="admin">admin</option>
-              </select>
-            </label>
-            <input name="status" type="hidden" value="active" />
-            <Button type="submit">ایجاد کاربر</Button>
-          </form>
-        </Card>
-      </div>
-    </AdminShell>
-  );
+  const { admins, clients } = await getAdminUsers();
+  return <AdminShell title="کاربران" description="مدیریت مدیران، نویسندگان و مشتریان"><div className="grid gap-6"><AdminPageHeader title="کاربران" description="کاربران مدیریتی و مشتریان به صورت جداگانه نمایش داده می‌شوند؛ رمزها نمایش داده نمی‌شوند." action={<AdminModal buttonLabel="افزودن کاربر مدیریتی" title="افزودن کاربر مدیریتی"><AdminUserForm /></AdminModal>} />{admins.length ? <AdminDataTable headers={["نام", "ایمیل", "نقش", "وضعیت", "ایجاد", "عملیات"]}>{admins.map((user) => <tr className="border-t border-border" key={user.id}><td className="px-5 py-4 font-black text-navy">{user.fullName}</td><td className="px-5 py-4 font-bold text-muted">{user.email}</td><td className="px-5 py-4 font-bold text-muted">{user.role === "admin" ? "مدیر" : "نویسنده"}</td><td className="px-5 py-4"><AdminStatusBadge status={user.status} /></td><td className="px-5 py-4 font-bold text-muted">{user.createdAtText}</td><td className="px-5 py-4"><AdminModal buttonLabel="ویرایش" title={`ویرایش ${user.fullName}`}><AdminUserForm user={user} /></AdminModal></td></tr>)}</AdminDataTable> : <AdminEmptyState title="کاربر مدیریتی ثبت نشده است" description="از دکمه افزودن کاربر مدیریتی استفاده کنید." />}<section className="grid gap-3"><h2 className="text-xl font-black text-navy">مشتریان</h2>{clients.length ? <AdminDataTable headers={["نام", "تماس", "ایمیل", "وضعیت", "آخرین ورود", "عملیات"]}>{clients.map((user) => <tr className="border-t border-border" key={user.id}><td className="px-5 py-4 font-black text-navy">{user.fullName}</td><td className="px-5 py-4 font-bold text-muted">{user.phone}</td><td className="px-5 py-4 font-bold text-muted">{user.email || "ثبت نشده"}</td><td className="px-5 py-4"><AdminStatusBadge status={user.status} /></td><td className="px-5 py-4 font-bold text-muted">{user.lastLoginAtText}</td><td className="px-5 py-4"><AdminModal buttonLabel="ویرایش" title={`ویرایش ${user.fullName}`}><ClientUserForm user={user} /></AdminModal></td></tr>)}</AdminDataTable> : <AdminEmptyState title="مشتری ثبت نشده است" description="مشتریان پس از ثبت‌نام در پورتال اینجا دیده می‌شوند." />}</section></div></AdminShell>;
 }

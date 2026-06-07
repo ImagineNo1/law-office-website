@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { connectDb } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 import { FAQ } from "@/models/FAQ";
 
 function requireText(formData: FormData, key: string) {
@@ -18,6 +19,7 @@ function oneOf<T extends readonly string[]>(value: string, values: T, fallback: 
 }
 
 export async function saveFaqAction(formData: FormData) {
+  await requireAdmin();
   await connectDb();
   const id = String(formData.get("id") ?? "").trim();
   const payload = {
@@ -41,6 +43,7 @@ export async function saveFaqAction(formData: FormData) {
 }
 
 export async function archiveFaqAction(formData: FormData) {
+  await requireAdmin();
   await connectDb();
   const id = requireText(formData, "id");
   await FAQ.findByIdAndUpdate(id, { status: "archived" }, { runValidators: true });
@@ -48,6 +51,7 @@ export async function archiveFaqAction(formData: FormData) {
 }
 
 export async function deleteFaqAction(formData: FormData) {
+  await requireAdmin();
   await connectDb();
   const id = requireText(formData, "id");
   await FAQ.findByIdAndDelete(id);

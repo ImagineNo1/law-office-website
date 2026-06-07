@@ -32,6 +32,7 @@ const clientPaymentSchema = new Schema(
 
 const clientProfileSchema = new Schema(
   {
+    clientId: { type: String, index: true, trim: true },
     userId: { type: Schema.Types.ObjectId, ref: "User", index: true },
     avatar: { type: String, default: "", trim: true },
     fullName: { type: String, required: true, trim: true },

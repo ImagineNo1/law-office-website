@@ -32,6 +32,7 @@ const messageSchema = new Schema(
 
 const serviceRequestSchema = new Schema(
   {
+    clientId: { type: String, index: true, default: "", trim: true },
     requestNumber: { type: String, required: true, unique: true, trim: true },
     fullName: { type: String, required: true, trim: true },
     phone: { type: String, required: true, trim: true },

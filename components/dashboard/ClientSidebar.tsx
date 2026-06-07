@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { clientLogoutAction } from "@/app/auth-actions";
 import { LegalLogo } from "@/components/site/LegalLogo";
 
 const links = [
@@ -32,7 +33,7 @@ export function ClientSidebar() {
         </span>
       </Link>
       <nav className="grid gap-2">
-        {links.map((link, index) => {
+        {links.map((link) => {
           const active = activePath(pathname, link.href);
           return (
             <Link className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm font-black transition ${active ? "bg-white/10 text-gold shadow-inner ring-1 ring-gold/30" : "text-slate-200 hover:bg-white/8 hover:text-white"}`} href={link.href} key={link.href}>
@@ -42,17 +43,17 @@ export function ClientSidebar() {
                 </svg>
                 {link.label}
               </span>
-              {index === 4 ? <span className="grid size-6 place-items-center rounded-full bg-gold text-xs text-white">۲</span> : null}
             </Link>
           );
         })}
       </nav>
-      <div className="mt-16 rounded-2xl bg-white/8 p-5">
-        <p className="text-sm font-black text-white">نیاز به راهنمایی دارید؟</p>
-        <p className="mt-2 text-xs leading-6 text-slate-300">درخواست مشاوره جدید را از فرم اصلی ثبت کنید.</p>
-        <Link className="mt-4 flex items-center justify-center rounded-xl border border-gold px-4 py-3 text-sm font-black text-gold" href="/requests/new">
+      <div className="mt-12 grid gap-3 rounded-2xl bg-white/8 p-5">
+        <Link className="flex items-center justify-center rounded-xl border border-gold px-4 py-3 text-sm font-black text-gold" href="/requests/new">
           ثبت درخواست
         </Link>
+        <form action={clientLogoutAction}>
+          <button className="w-full rounded-xl border border-white/15 px-4 py-3 text-sm font-black text-slate-200" type="submit">خروج</button>
+        </form>
       </div>
     </aside>
   );

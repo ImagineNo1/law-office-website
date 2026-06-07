@@ -6,4 +6,3 @@ export { ServicesExperience } from "@/components/platform/services/ServicesExper
 export { RequestFormExperience } from "@/components/platform/services/RequestFormExperience";
 export { ContractsExperience } from "@/components/platform/contracts/ContractsExperience";
 export { LegalFormsExperience } from "@/components/platform/legal-forms/LegalFormsExperience";
-export { AdminCrmSidebar } from "@/components/platform/crm/AdminCrmSidebar";

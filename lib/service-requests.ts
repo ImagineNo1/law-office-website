@@ -248,6 +248,7 @@ export async function getServiceRequestById(id: string) {
 }
 
 export async function createServiceRequest(input: {
+  clientId?: string;
   fullName: string;
   phone: string;
   email?: string;

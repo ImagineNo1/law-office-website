@@ -1,102 +1,29 @@
 import type { Metadata } from "next";
+import { AdminConfirmDialog } from "@/components/admin/AdminConfirmDialog";
+import { AdminModal } from "@/components/admin/AdminModal";
+import { AdminDataTable, AdminEmptyState, AdminPageHeader, AdminStatusBadge } from "@/components/admin/AdminUi";
 import { AdminShell } from "@/components/admin/AdminShell";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
-import { deleteContractAction, saveContractAction } from "@/lib/admin-actions";
-import { contractCategories } from "@/lib/contract-data";
-import { getAllContracts } from "@/lib/cms";
+import { archiveContractAction, deleteContractAction, saveContractAction } from "@/lib/admin-actions";
+import { getAdminContracts } from "@/lib/admin-db";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { title: "مدیریت قراردادها" };
 
-export const metadata: Metadata = {
-  title: "مدیریت قراردادها",
-};
+type ContractRow = Awaited<ReturnType<typeof getAdminContracts>>[number];
+const lines = (items?: string[]) => (items ?? []).join("\n");
+const faqLines = (items?: { question: string; answer: string }[]) => (items ?? []).map((item) => `${item.question} | ${item.answer}`).join("\n");
 
-function listValue(items?: string[]) {
-  return (items ?? []).join("\n");
+function Input({ defaultValue, label, name, required = false, type = "text" }: { defaultValue?: string | number; label: string; name: string; required?: boolean; type?: string }) {
+  return <label className="grid gap-2 text-sm font-black text-navy"><span>{label}</span><input className="service-input" defaultValue={defaultValue} name={name} required={required} type={type} /></label>;
 }
-
-function faqValue(items?: { question: string; answer: string }[]) {
-  return (items ?? []).map((item) => `${item.question} | ${item.answer}`).join("\n");
+function Area({ defaultValue, label, name, required = false }: { defaultValue?: string; label: string; name: string; required?: boolean }) {
+  return <label className="grid gap-2 text-sm font-black text-navy"><span>{label}</span><textarea className="service-input min-h-28 py-3" defaultValue={defaultValue} name={name} required={required} /></label>;
 }
-
-function ContractFields({ contract }: { contract?: Awaited<ReturnType<typeof getAllContracts>>[number] }) {
-  return (
-    <>
-      <Input defaultValue={contract?.title} label="عنوان قرارداد" name="title" required />
-      <div className="grid gap-4 md:grid-cols-4">
-        <Input defaultValue={contract?.slug} label="اسلاگ" name="slug" />
-        <Input defaultValue={contract?.order} label="ترتیب" name="order" type="number" />
-        <Input defaultValue={contract?.priceLabel} label="قیمت" name="priceLabel" placeholder="۱,۹۰۰,۰۰۰ تومان" />
-        <label className="grid gap-2 text-sm font-medium text-foreground">
-          <span>وضعیت</span>
-          <select className="h-11 rounded-xl border border-border bg-background px-3" defaultValue={contract?.status ?? "published"} name="status">
-            <option value="published">منتشر شده</option>
-            <option value="draft">پیش‌نویس</option>
-          </select>
-        </label>
-      </div>
-      <label className="grid gap-2 text-sm font-medium text-foreground">
-        <span>دسته‌بندی</span>
-        <select className="h-11 rounded-xl border border-border bg-background px-3" defaultValue={contract?.category ?? "ملکی"} name="category">
-          {contractCategories.map((category) => <option key={category} value={category}>{category}</option>)}
-        </select>
-      </label>
-      <Textarea defaultValue={contract?.excerpt} label="خلاصه کارت" name="excerpt" required />
-      <Textarea defaultValue={contract?.content} label="محتوای معرفی" name="content" />
-      <div className="grid gap-4 md:grid-cols-2">
-        <Input defaultValue={contract?.heroImage} label="آدرس تصویر" name="heroImage" placeholder="/contracts/sample.jpg" />
-        <Input defaultValue={contract?.sampleFileUrl} label="آدرس فایل نمونه" name="sampleFileUrl" placeholder="/samples/sample.pdf" />
-      </div>
-      <Textarea defaultValue={listValue(contract?.useCases)} label="موارد کاربرد، هر خط یک مورد" name="useCases" />
-      <Textarea defaultValue={listValue(contract?.benefits)} label="مزایا، هر خط یک مورد" name="benefits" />
-      <Textarea defaultValue={listValue(contract?.requiredDocuments)} label="مدارک مورد نیاز، هر خط یک مورد" name="requiredDocuments" />
-      <Textarea defaultValue={faqValue(contract?.faqItems)} label="سوالات متداول، فرمت هر خط: سوال | پاسخ" name="faqItems" />
-      <Textarea defaultValue={listValue(contract?.relatedContracts)} label="قراردادهای مرتبط، اسلاگ هر قرارداد در یک خط" name="relatedContracts" />
-      <div className="grid gap-4 md:grid-cols-2">
-        <Input defaultValue={contract?.seoTitle} label="عنوان سئو" name="seoTitle" />
-        <Input defaultValue={contract?.seoDescription} label="توضیحات سئو" name="seoDescription" />
-      </div>
-    </>
-  );
+function ContractForm({ contract }: { contract?: ContractRow }) {
+  return <form action={saveContractAction} className="grid gap-4"><input name="id" type="hidden" value={contract?.id ?? ""} /><Input defaultValue={contract?.title} label="عنوان" name="title" required /><div className="grid gap-4 md:grid-cols-3"><Input defaultValue={contract?.slug} label="اسلاگ" name="slug" /><Input defaultValue={contract?.category} label="دسته‌بندی" name="category" required /><Input defaultValue={contract?.order} label="ترتیب" name="order" type="number" /></div><div className="grid gap-4 md:grid-cols-3"><Input defaultValue={contract?.priceLabel} label="قیمت" name="priceLabel" /><Input defaultValue={contract?.sampleFileUrl} label="فایل نمونه" name="sampleFileUrl" /><label className="grid gap-2 text-sm font-black text-navy"><span>وضعیت</span><select className="service-input" defaultValue={contract?.status ?? "draft"} name="status"><option value="published">منتشر شده</option><option value="draft">پیش‌نویس</option></select></label></div><Area defaultValue={contract?.excerpt} label="خلاصه" name="excerpt" required /><Area defaultValue={contract?.content} label="محتوا" name="content" /><Area defaultValue={lines(contract?.benefits)} label="مزایا؛ هر خط یک مورد" name="benefits" /><Area defaultValue={lines(contract?.useCases)} label="موارد کاربرد؛ هر خط یک مورد" name="useCases" /><Area defaultValue={lines(contract?.requiredDocuments)} label="مدارک مورد نیاز؛ هر خط یک مورد" name="requiredDocuments" /><Area defaultValue={faqLines(contract?.faqItems)} label="سوالات متداول؛ سوال | پاسخ" name="faqItems" /><button className="rounded-xl bg-gold px-5 py-3 text-sm font-black text-white" type="submit">ذخیره</button></form>;
 }
 
 export default async function AdminContractsPage() {
-  const contracts = await getAllContracts();
-
-  return (
-    <AdminShell title="مدیریت قراردادها" description="افزودن، ویرایش، انتشار و مدیریت بانک قراردادها">
-      <div className="grid gap-6">
-        <Card className="p-5">
-          <h2 className="mb-5 text-xl font-black text-foreground">افزودن قرارداد</h2>
-          <form action={saveContractAction} className="grid gap-4">
-            <ContractFields />
-            <Button type="submit">ذخیره قرارداد</Button>
-          </form>
-        </Card>
-
-        <Card className="p-5">
-          <h2 className="mb-5 text-xl font-black text-foreground">فهرست قراردادها</h2>
-          <div className="grid gap-4">
-            {contracts.length ? contracts.map((contract) => (
-              <details className="rounded-2xl border border-border bg-surface p-4" key={contract.id || contract.slug}>
-                <summary className="cursor-pointer font-black text-foreground">{contract.order}. {contract.title} <span className="text-sm text-muted">({contract.category} / {contract.status})</span></summary>
-                <form action={saveContractAction} className="mt-4 grid gap-4">
-                  <input name="id" type="hidden" value={contract.id} />
-                  <ContractFields contract={contract} />
-                  <Button type="submit">ذخیره تغییرات</Button>
-                </form>
-                <form action={deleteContractAction} className="mt-3">
-                  <input name="id" type="hidden" value={contract.id} />
-                  <Button type="submit" variant="outline">حذف قرارداد</Button>
-                </form>
-              </details>
-            )) : <p className="rounded-2xl bg-soft-gray p-4 text-sm font-bold text-muted">هنوز قراردادی در پایگاه داده ثبت نشده است. محتوای نمونه در سایت نمایش داده می‌شود.</p>}
-          </div>
-        </Card>
-      </div>
-    </AdminShell>
-  );
+  const contracts = await getAdminContracts();
+  return <AdminShell title="قراردادها" description="مدیریت بانک قراردادها"><div className="grid gap-6"><AdminPageHeader title="قراردادها" description="قراردادهای ثبت‌شده در MongoDB؛ بدون داده نمایشی." action={<AdminModal buttonLabel="افزودن قرارداد" title="افزودن قرارداد"><ContractForm /></AdminModal>} />{contracts.length ? <AdminDataTable headers={["عنوان", "دسته", "وضعیت", "قیمت", "به‌روزرسانی", "عملیات"]}>{contracts.map((contract) => <tr className="border-t border-border" key={contract.id}><td className="px-5 py-4 font-black text-navy">{contract.title}</td><td className="px-5 py-4 font-bold text-muted">{contract.category}</td><td className="px-5 py-4"><AdminStatusBadge status={contract.status} /></td><td className="px-5 py-4 font-bold text-muted">{contract.priceLabel || "ثبت نشده"}</td><td className="px-5 py-4 font-bold text-muted">{contract.updatedAtText}</td><td className="px-5 py-4"><div className="flex flex-wrap gap-2"><AdminModal buttonLabel="ویرایش" title={`ویرایش ${contract.title}`}><ContractForm contract={contract} /></AdminModal><AdminConfirmDialog buttonLabel="آرشیو" action={<form action={archiveContractAction}><input name="id" type="hidden" value={contract.id} /><button className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-black text-white">آرشیو</button></form>} /><AdminConfirmDialog action={<form action={deleteContractAction}><input name="id" type="hidden" value={contract.id} /><button className="rounded-xl bg-red-600 px-5 py-2.5 text-sm font-black text-white">حذف</button></form>} /></div></td></tr>)}</AdminDataTable> : <AdminEmptyState title="هنوز قراردادی ثبت نشده است" description="اولین قرارداد را از دکمه افزودن قرارداد ایجاد کنید." />}</div></AdminShell>;
 }

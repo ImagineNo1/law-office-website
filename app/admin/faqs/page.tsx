@@ -1,118 +1,22 @@
 import type { Metadata } from "next";
-import { AdminCrmShell } from "@/components/platform/crm/AdminCrmShell";
 import { archiveFaqAction, deleteFaqAction, saveFaqAction } from "@/app/admin/faqs/actions";
-import { connectDb } from "@/lib/db";
-import { getPlatformFaqs } from "@/lib/platform-db";
-import { FAQ } from "@/models/FAQ";
+import { AdminConfirmDialog } from "@/components/admin/AdminConfirmDialog";
+import { AdminModal } from "@/components/admin/AdminModal";
+import { AdminDataTable, AdminEmptyState, AdminPageHeader, AdminStatusBadge } from "@/components/admin/AdminUi";
+import { AdminShell } from "@/components/admin/AdminShell";
+import { getAdminFaqs } from "@/lib/admin-db";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "مدیریت سوالات متداول" };
+type FaqRow = Awaited<ReturnType<typeof getAdminFaqs>>[number];
+const pageTypeLabels: Record<string, string> = { general: "عمومی", service: "خدمت", contract: "قرارداد", "legal-form": "فرم حقوقی" };
 
-type AdminFaq = {
-  id: string;
-  question: string;
-  answer: string;
-  category: string;
-  pageType: "general" | "service" | "contract" | "legal-form";
-  pageSlug: string;
-  status: "draft" | "published" | "archived";
-  order: number;
-};
-
-async function getAdminFaqs(): Promise<AdminFaq[]> {
-  if (!process.env.MONGODB_URI) {
-    const faqs = await getPlatformFaqs();
-    return faqs.map((faq, index) => ({ ...faq, status: "published", order: index + 1 }));
-  }
-  await connectDb();
-  const docs = await FAQ.find().sort({ pageType: 1, order: 1, createdAt: -1 }).lean();
-  return docs.map((doc) => ({
-    id: String(doc._id),
-    question: String(doc.question),
-    answer: String(doc.answer),
-    category: String(doc.category || "عمومی"),
-    pageType: doc.pageType,
-    pageSlug: String(doc.pageSlug || ""),
-    status: doc.status,
-    order: Number(doc.order || 0),
-  }));
+function FaqForm({ faq }: { faq?: FaqRow }) {
+  return <form action={saveFaqAction} className="grid gap-4"><input name="id" type="hidden" value={faq?.id ?? ""} /><label className="grid gap-2 text-sm font-black text-navy"><span>سوال</span><input className="service-input" defaultValue={faq?.question} name="question" required /></label><label className="grid gap-2 text-sm font-black text-navy"><span>پاسخ</span><textarea className="service-input min-h-28 py-3" defaultValue={faq?.answer} name="answer" required /></label><div className="grid gap-4 md:grid-cols-4"><label className="grid gap-2 text-sm font-black text-navy"><span>نوع صفحه</span><select className="service-input" defaultValue={faq?.pageType ?? "general"} name="pageType"><option value="general">عمومی</option><option value="service">خدمت</option><option value="contract">قرارداد</option><option value="legal-form">فرم حقوقی</option></select></label><label className="grid gap-2 text-sm font-black text-navy"><span>اسلاگ صفحه</span><input className="service-input" defaultValue={faq?.pageSlug} name="pageSlug" /></label><label className="grid gap-2 text-sm font-black text-navy"><span>دسته</span><input className="service-input" defaultValue={faq?.category} name="category" /></label><label className="grid gap-2 text-sm font-black text-navy"><span>ترتیب</span><input className="service-input" defaultValue={faq?.order ?? 0} name="order" type="number" /></label></div><label className="grid gap-2 text-sm font-black text-navy"><span>وضعیت</span><select className="service-input" defaultValue={faq?.status ?? "published"} name="status"><option value="published">منتشر شده</option><option value="draft">پیش‌نویس</option><option value="archived">آرشیو شده</option></select></label><button className="rounded-xl bg-gold px-5 py-3 text-sm font-black text-white" type="submit">ذخیره</button></form>;
 }
 
-function Fields({ faq }: { faq?: AdminFaq }) {
-  return (
-    <>
-      <input name="id" type="hidden" value={faq?.id ?? ""} />
-      <div className="grid gap-3 md:grid-cols-4">
-        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold md:col-span-2" defaultValue={faq?.question} name="question" placeholder="سوال" required />
-        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={faq?.category} name="category" placeholder="دسته" />
-        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={faq?.order ?? 0} name="order" type="number" />
-      </div>
-      <textarea className="min-h-24 rounded-xl border border-slate-200 p-4 text-sm font-bold" defaultValue={faq?.answer} name="answer" placeholder="پاسخ" required />
-      <div className="grid gap-3 md:grid-cols-3">
-        <select className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={faq?.pageType ?? "general"} name="pageType">
-          <option value="general">عمومی</option>
-          <option value="service">خدمت</option>
-          <option value="contract">قرارداد</option>
-          <option value="legal-form">فرم حقوقی</option>
-        </select>
-        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={faq?.pageSlug} name="pageSlug" placeholder="page slug" />
-        <select className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={faq?.status ?? "published"} name="status">
-          <option value="published">منتشر شده</option>
-          <option value="draft">پیش نویس</option>
-          <option value="archived">آرشیو شده</option>
-        </select>
-      </div>
-    </>
-  );
-}
-
-export default async function AdminFaqsPage({
-  searchParams,
-}: {
-  searchParams?: Promise<{ pageType?: string; pageSlug?: string }>;
-}) {
-  const params = await searchParams;
-  const allFaqs = await getAdminFaqs();
-  const faqs = allFaqs.filter((faq) => {
-    if (params?.pageType && faq.pageType !== params.pageType) return false;
-    if (params?.pageSlug && faq.pageSlug !== params.pageSlug) return false;
-    return true;
-  });
-  return (
-    <AdminCrmShell>
-      <h1 className="text-3xl font-black">مدیریت سوالات متداول</h1>
-      <form className="mt-6 flex flex-wrap gap-3 rounded-2xl bg-white p-4 shadow-[0_18px_45px_rgba(11,23,42,.06)]">
-        <select className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={params?.pageType ?? ""} name="pageType">
-          <option value="">همه pageType ها</option>
-          <option value="general">عمومی</option>
-          <option value="service">خدمت</option>
-          <option value="contract">قرارداد</option>
-          <option value="legal-form">فرم حقوقی</option>
-        </select>
-        <input className="h-11 rounded-xl border border-slate-200 px-4 text-sm font-bold" defaultValue={params?.pageSlug ?? ""} name="pageSlug" placeholder="pageSlug" />
-        <button className="h-11 rounded-xl bg-[#0B172A] px-5 text-sm font-black text-white">فیلتر</button>
-      </form>
-      <div className="mt-6 grid gap-6">
-        <section className="rounded-2xl bg-white p-5 shadow-[0_18px_45px_rgba(11,23,42,.06)]">
-          <h2 className="mb-4 text-xl font-black">افزودن سوال</h2>
-          <form action={saveFaqAction} className="grid gap-4">
-            <Fields />
-            <button className="h-11 rounded-xl bg-[#0B172A] px-5 text-sm font-black text-white">ذخیره سوال</button>
-          </form>
-        </section>
-        <section className="grid gap-4">
-          {faqs.length ? faqs.map((faq) => (
-            <details className="rounded-2xl bg-white p-5 shadow-[0_18px_45px_rgba(11,23,42,.06)]" key={faq.id}>
-              <summary className="cursor-pointer font-black">{faq.question} <span className="text-xs text-[#66758A]">({faq.pageType}/{faq.status})</span></summary>
-              <form action={saveFaqAction} className="mt-4 grid gap-4"><Fields faq={faq} /><button className="h-11 rounded-xl bg-[#C9973F] px-5 text-sm font-black text-white">ذخیره تغییرات</button></form>
-              <div className="mt-3 flex gap-2">
-                <form action={archiveFaqAction}><input name="id" type="hidden" value={faq.id} /><button className="h-10 rounded-xl border border-slate-200 px-4 text-sm font-black">آرشیو</button></form>
-                <form action={deleteFaqAction}><input name="id" type="hidden" value={faq.id} /><button className="h-10 rounded-xl border border-red-200 px-4 text-sm font-black text-red-600">حذف</button></form>
-              </div>
-            </details>
-          )) : <section className="rounded-2xl bg-white p-8 text-center shadow-[0_18px_45px_rgba(11,23,42,.06)]"><h2 className="text-xl font-black">سوالی ثبت نشده است</h2><p className="mt-2 text-sm font-bold text-[#66758A]">از فرم بالا اولین FAQ را ایجاد کنید.</p></section>}
-        </section>
-      </div>
-    </AdminCrmShell>
-  );
+export default async function AdminFaqsPage({ searchParams }: { searchParams?: Promise<{ pageType?: string; pageSlug?: string }> }) {
+  const params = searchParams ? await searchParams : {};
+  const faqs = await getAdminFaqs(params);
+  return <AdminShell title="سوالات متداول" description="مدیریت FAQ"><div className="grid gap-6"><AdminPageHeader title="سوالات متداول" description="سوالات متداول DB-only با امکان فیلتر بر اساس نوع صفحه و اسلاگ." action={<AdminModal buttonLabel="افزودن سوال" title="افزودن سوال"><FaqForm /></AdminModal>} /><form className="flex flex-wrap gap-3 rounded-2xl border border-border bg-white p-4 shadow-card"><select className="service-input max-w-48" defaultValue={params.pageType ?? ""} name="pageType"><option value="">همه نوع‌ها</option><option value="general">عمومی</option><option value="service">خدمت</option><option value="contract">قرارداد</option><option value="legal-form">فرم حقوقی</option></select><input className="service-input max-w-64" defaultValue={params.pageSlug ?? ""} name="pageSlug" placeholder="اسلاگ صفحه" /><button className="rounded-xl bg-navy px-5 py-2 text-sm font-black text-white">فیلتر</button></form>{faqs.length ? <AdminDataTable headers={["سوال", "نوع", "اسلاگ", "وضعیت", "ترتیب", "عملیات"]}>{faqs.map((faq) => <tr className="border-t border-border" key={faq.id}><td className="px-5 py-4 font-black text-navy">{faq.question}</td><td className="px-5 py-4 font-bold text-muted">{pageTypeLabels[faq.pageType]}</td><td className="px-5 py-4 font-bold text-muted">{faq.pageSlug || "عمومی"}</td><td className="px-5 py-4"><AdminStatusBadge status={faq.status} /></td><td className="px-5 py-4 font-bold text-muted">{faq.order}</td><td className="px-5 py-4"><div className="flex flex-wrap gap-2"><AdminModal buttonLabel="ویرایش" title="ویرایش سوال"><FaqForm faq={faq} /></AdminModal><AdminConfirmDialog buttonLabel="آرشیو" action={<form action={archiveFaqAction}><input name="id" type="hidden" value={faq.id} /><button className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-black text-white">آرشیو</button></form>} /><AdminConfirmDialog action={<form action={deleteFaqAction}><input name="id" type="hidden" value={faq.id} /><button className="rounded-xl bg-red-600 px-5 py-2.5 text-sm font-black text-white">حذف</button></form>} /></div></td></tr>)}</AdminDataTable> : <AdminEmptyState title="سوالی ثبت نشده است" description="با دکمه افزودن سوال اولین FAQ را ایجاد کنید." />}</div></AdminShell>;
 }

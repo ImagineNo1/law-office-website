@@ -27,6 +27,7 @@ const documentSchema = new Schema(
     slug: { type: String, required: true, unique: true, trim: true },
     category: { type: String, enum: documentCategories, required: true },
     status: { type: String, enum: documentStatuses, default: "draft" },
+    clientId: { type: String, default: "", index: true, trim: true },
     ownerId: { type: String, required: true, trim: true },
     fileUrl: { type: String, default: "", trim: true },
     previewImage: { type: String, default: "", trim: true },

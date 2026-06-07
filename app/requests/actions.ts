@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { getCurrentClient } from "@/lib/client-auth";
 import { getPlatformServiceBySlug } from "@/lib/platform-db";
 import { createServiceRequest } from "@/lib/service-requests";
 
@@ -20,7 +21,9 @@ export async function createServiceRequestAction(formData: FormData) {
     redirect("/requests/new?error=missing");
   }
 
+  const client = await getCurrentClient();
   const result = await createServiceRequest({
+    clientId: client?.id,
     fullName,
     phone,
     email,

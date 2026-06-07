@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { LegalFormTemplate } from "@/models/LegalFormTemplate";
 import { connectDb } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth";
 
 function requireText(formData: FormData, key: string) {
   const value = String(formData.get(key) ?? "").trim();
@@ -21,6 +22,7 @@ function statusOf(value: string) {
 }
 
 export async function saveLegalFormAction(formData: FormData) {
+  await requireAdmin();
   await connectDb();
   const id = String(formData.get("id") ?? "").trim();
   const title = requireText(formData, "title");
@@ -45,6 +47,7 @@ export async function saveLegalFormAction(formData: FormData) {
 }
 
 export async function archiveLegalFormAction(formData: FormData) {
+  await requireAdmin();
   await connectDb();
   const id = requireText(formData, "id");
   await LegalFormTemplate.findByIdAndUpdate(id, { status: "archived" }, { runValidators: true });
@@ -53,6 +56,7 @@ export async function archiveLegalFormAction(formData: FormData) {
 }
 
 export async function deleteLegalFormAction(formData: FormData) {
+  await requireAdmin();
   await connectDb();
   const id = requireText(formData, "id");
   await LegalFormTemplate.findByIdAndDelete(id);

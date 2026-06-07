@@ -16,6 +16,8 @@ import { Post } from "@/models/Post";
 import { Service } from "@/models/Service";
 import { SiteSettings } from "@/models/SiteSettings";
 import { User } from "@/models/User";
+import { ClientUser } from "@/models/ClientUser";
+import { ServiceRequest } from "@/models/ServiceRequest";
 
 function text(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -35,6 +37,10 @@ function userRole(value: string): "admin" | "editor" {
 
 function userStatus(value: string): "active" | "disabled" {
   return value === "disabled" ? "disabled" : "active";
+}
+
+function clientStatus(value: string): "active" | "blocked" {
+  return value === "blocked" ? "blocked" : "active";
 }
 
 function messageStatus(value: string): "unread" | "read" | "archived" {
@@ -271,6 +277,14 @@ export async function deleteContractAction(formData: FormData) {
   revalidatePath("/");
 }
 
+export async function archiveContractAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+  await ContractTemplate.findByIdAndUpdate(text(formData, "id"), { status: "draft" }, { runValidators: true });
+  revalidatePath("/admin/contracts");
+  revalidatePath("/contracts");
+}
+
 export async function saveServiceAction(formData: FormData) {
   await requireAdmin();
   await connectDb();
@@ -319,6 +333,14 @@ export async function deleteServiceAction(formData: FormData) {
   revalidatePath("/admin/services");
   revalidatePath("/services");
   revalidatePath("/");
+}
+
+export async function archiveServiceAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+  await Service.findByIdAndUpdate(text(formData, "id"), { status: "draft" }, { runValidators: true });
+  revalidatePath("/admin/services");
+  revalidatePath("/services");
 }
 
 export async function saveSettingsAction(formData: FormData) {
@@ -478,4 +500,67 @@ export async function saveUserAction(formData: FormData) {
   }
 
   revalidatePath("/admin/users");
+}
+
+export async function saveClientUserAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+
+  await ClientUser.findByIdAndUpdate(
+    text(formData, "id"),
+    {
+      fullName: text(formData, "fullName"),
+      phone: text(formData, "phone"),
+      email: text(formData, "email").toLowerCase(),
+      nationalCode: text(formData, "nationalCode"),
+      status: clientStatus(text(formData, "status")),
+    },
+    { runValidators: true },
+  );
+  revalidatePath("/admin/users");
+}
+
+export async function updateRequestAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+  await ServiceRequest.findByIdAndUpdate(
+    text(formData, "id"),
+    {
+      status: text(formData, "status"),
+      priority: text(formData, "priority"),
+      assignedTo: text(formData, "assignedTo"),
+    },
+    { runValidators: true },
+  );
+  revalidatePath("/admin/requests");
+  revalidatePath(`/admin/requests/${text(formData, "id")}`);
+}
+
+export async function addRequestNoteAction(formData: FormData) {
+  const user = await requireAdmin();
+  await connectDb();
+  await ServiceRequest.findByIdAndUpdate(text(formData, "id"), {
+    $push: {
+      adminNotes: {
+        author: user.fullName,
+        message: text(formData, "message"),
+      },
+    },
+  });
+  revalidatePath(`/admin/requests/${text(formData, "id")}`);
+}
+
+export async function addRequestAdminMessageAction(formData: FormData) {
+  const user = await requireAdmin();
+  await connectDb();
+  await ServiceRequest.findByIdAndUpdate(text(formData, "id"), {
+    $push: {
+      messages: {
+        sender: "admin",
+        senderName: user.fullName,
+        message: text(formData, "message"),
+      },
+    },
+  });
+  revalidatePath(`/admin/requests/${text(formData, "id")}`);
 }

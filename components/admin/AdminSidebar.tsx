@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { logoutAction } from "@/lib/admin-actions";
 
 const links = [
   { label: "پیشخوان", href: "/admin", icon: "M3 11.5 12 4l9 7.5V21h-6v-6H9v6H3v-9.5Z" },
@@ -24,7 +25,7 @@ function isActivePath(pathname: string, href: string) {
 
 function Icon({ path }: { path: string }) {
   return (
-    <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none">
+    <svg aria-hidden="true" className="size-4 shrink-0" viewBox="0 0 24 24" fill="none">
       <path d={path} stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
     </svg>
   );
@@ -34,28 +35,26 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 right-0 z-40 hidden w-56 flex-col border-l border-border bg-card lg:flex">
-      <div className="border-b border-border p-5">
+    <aside className="fixed inset-y-0 right-0 z-40 hidden w-64 flex-col border-l border-slate-200 bg-[#071326] text-white shadow-[24px_0_70px_rgba(0,0,0,0.14)] lg:flex">
+      <div className="border-b border-white/10 p-5">
         <Link className="flex items-center gap-3" href="/admin">
-          <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <svg aria-hidden="true" className="size-5" viewBox="0 0 24 24" fill="none">
-              <path d="M12 3 20 7v10l-8 4-8-4V7l8-4Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
-            </svg>
+          <span className="flex size-10 items-center justify-center rounded-xl border border-gold/40 bg-gold/10 text-gold">
+            <Icon path="M12 3 20 7v10l-8 4-8-4V7l8-4Z" />
           </span>
           <span>
-            <span className="block text-sm font-bold">موسسه حقوقی</span>
-            <span className="text-[10px] text-muted-foreground">عدالت گستر</span>
+            <span className="block text-base font-black">پنل مدیریت</span>
+            <span className="text-xs font-bold text-slate-300">موسسه حقوقی</span>
           </span>
         </Link>
       </div>
 
-      <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
         {links.map((link) => {
           const active = isActivePath(pathname, link.href);
           return (
             <Link
-              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all ${
-                active ? "bg-accent/10 font-semibold text-accent" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+              className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-black transition ${
+                active ? "bg-white/10 text-gold ring-1 ring-gold/30" : "text-slate-200 hover:bg-white/8 hover:text-white"
               }`}
               href={link.href}
               key={link.href}
@@ -67,12 +66,12 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      <div className="border-t border-border p-3">
-        <Link className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition hover:bg-muted/50 hover:text-foreground" href="/">
+      <form action={logoutAction} className="border-t border-white/10 p-3">
+        <button className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-black text-slate-200 transition hover:bg-white/8 hover:text-white" type="submit">
           <Icon path="M15 18 9 12l6-6M9 12h12M4 4v16" />
           <span>خروج</span>
-        </Link>
-      </div>
+        </button>
+      </form>
     </aside>
   );
 }

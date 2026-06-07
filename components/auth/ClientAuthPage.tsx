@@ -34,14 +34,14 @@ function Field({
 }) {
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium text-foreground" htmlFor={name}>{label}</label>
+      <label className="text-sm font-bold text-foreground" htmlFor={name}>{label}</label>
       <div className="relative">
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
           <Icon name={type === "password" ? "lock" : "mail"} />
         </span>
         <input
           autoComplete={autoComplete}
-          className="h-12 w-full rounded-lg border border-border bg-white px-4 pl-10 text-sm outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/15"
+          className="h-12 w-full rounded-lg border border-border bg-white px-4 pl-10 text-sm font-bold outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/15"
           id={name}
           name={name}
           placeholder={placeholder}
@@ -53,7 +53,15 @@ function Field({
   );
 }
 
-export function ClientAuthPage({ mode, next = "/dashboard" }: { mode: AuthMode; next?: string }) {
+export function ClientAuthPage({
+  error,
+  mode,
+  next = "/dashboard",
+}: {
+  error?: string;
+  mode: AuthMode;
+  next?: string;
+}) {
   const isLogin = mode === "login";
 
   return (
@@ -66,8 +74,8 @@ export function ClientAuthPage({ mode, next = "/dashboard" }: { mode: AuthMode; 
             </svg>
           </span>
           <span>
-            <span className="block text-lg font-bold">وکیل‌یار</span>
-            <span className="-mt-1 block text-[10px] text-muted-foreground">سامانه خدمات، قرارداد و امضا</span>
+            <span className="block text-lg font-black">وکیل‌یار</span>
+            <span className="-mt-1 block text-[10px] font-bold text-muted-foreground">سامانه خدمات، قرارداد و امضا</span>
           </span>
         </Link>
 
@@ -75,27 +83,33 @@ export function ClientAuthPage({ mode, next = "/dashboard" }: { mode: AuthMode; 
           <span className="mx-auto mb-4 flex size-12 items-center justify-center rounded-2xl bg-accent/10 text-accent">
             <Icon name={isLogin ? "login" : "signup"} />
           </span>
-          <h1 className="text-2xl font-extrabold">{isLogin ? "ورود به حساب" : "ساخت حساب کاربری"}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <h1 className="text-2xl font-black">{isLogin ? "ورود به حساب" : "ساخت حساب کاربری"}</h1>
+          <p className="mt-2 text-sm font-bold text-muted-foreground">
             {isLogin ? "برای دسترسی به داشبورد وارد شوید" : "برای استفاده از سامانه ثبت‌نام کنید"}
           </p>
         </div>
+
+        {error ? (
+          <p className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-black text-red-700">
+            {error}
+          </p>
+        ) : null}
 
         <form action={isLogin ? loginClientAction : signupClientAction} className="space-y-4">
           <input name="next" type="hidden" value={next} />
           {isLogin ? (
             <>
-              <Field autoComplete="email" label="ایمیل یا موبایل" name="identifier" placeholder="you@example.com" />
+              <Field autoComplete="username" label="ایمیل یا موبایل" name="identifier" placeholder="client@example.com" />
               <div>
                 <div className="mb-2 flex items-center justify-between">
-                  <label className="text-sm font-medium text-foreground" htmlFor="password">رمز عبور</label>
-                  <Link className="text-xs font-medium text-primary hover:underline" href="/forgot-password">
+                  <label className="text-sm font-bold text-foreground" htmlFor="password">رمز عبور</label>
+                  <Link className="text-xs font-bold text-primary hover:underline" href="/forgot-password">
                     فراموشی رمز عبور؟
                   </Link>
                 </div>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"><Icon name="lock" /></span>
-                  <input autoComplete="current-password" className="h-12 w-full rounded-lg border border-border bg-white px-4 pl-10 text-sm outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/15" id="password" name="password" placeholder="••••••••" required type="password" />
+                  <input autoComplete="current-password" className="h-12 w-full rounded-lg border border-border bg-white px-4 pl-10 text-sm font-bold outline-none transition focus:border-accent focus:ring-4 focus:ring-accent/15" id="password" name="password" placeholder="••••••••" required type="password" />
                 </div>
               </div>
             </>
@@ -103,19 +117,19 @@ export function ClientAuthPage({ mode, next = "/dashboard" }: { mode: AuthMode; 
             <>
               <Field autoComplete="name" label="نام و نام خانوادگی" name="fullName" placeholder="نام کامل" />
               <Field autoComplete="tel" label="شماره موبایل" name="phone" placeholder="0912..." type="tel" />
-              <Field autoComplete="email" label="ایمیل" name="email" placeholder="you@example.com" required={false} type="email" />
+              <Field autoComplete="email" label="ایمیل" name="email" placeholder="client@example.com" required={false} type="email" />
               <Field autoComplete="new-password" label="رمز عبور" name="password" placeholder="••••••••" type="password" />
               <Field autoComplete="new-password" label="تکرار رمز عبور" name="confirmPassword" placeholder="••••••••" type="password" />
             </>
           )}
-          <button className="h-12 w-full rounded-lg bg-primary text-sm font-medium text-primary-foreground transition hover:bg-primary/90" type="submit">
+          <button className="h-12 w-full rounded-lg bg-primary text-sm font-black text-primary-foreground transition hover:bg-primary/90" type="submit">
             {isLogin ? "ورود به حساب" : "ساخت حساب کاربری"}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-muted-foreground">
-          {isLogin ? "حساب کاربری ندارید؟ " : "قبلا ثبت‌نام کرده‌اید؟ "}
-          <Link className="font-medium text-primary hover:underline" href={`${isLogin ? "/signup" : "/login"}?next=${encodeURIComponent(next)}`}>
+        <p className="mt-6 text-center text-sm font-bold text-muted-foreground">
+          {isLogin ? "حساب کاربری ندارید؟ " : "قبلاً ثبت‌نام کرده‌اید؟ "}
+          <Link className="font-black text-primary hover:underline" href={`${isLogin ? "/signup" : "/login"}?next=${encodeURIComponent(next)}`}>
             {isLogin ? "ثبت‌نام کنید" : "وارد شوید"}
           </Link>
         </p>

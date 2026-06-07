@@ -3,6 +3,7 @@ import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
 const clientMessageSchema = new Schema(
   {
     clientId: { type: String, required: true, trim: true },
+    senderType: { type: String, enum: ["client", "admin"], required: true },
     sender: { type: String, enum: ["client", "lawyer", "admin"], required: true },
     message: { type: String, required: true, trim: true },
     readAt: { type: Date },

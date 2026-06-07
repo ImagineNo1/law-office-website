@@ -2,18 +2,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ClientPortalShell } from "@/components/dashboard/ClientPortalShell";
 import { ClientKpiCards, ContractsList, FilesTable, PortalCard, RequestsTable } from "@/components/dashboard/ClientPortalUi";
-import { getClientDashboardData } from "@/lib/client-portal";
+import { getClientDashboardSummary } from "@/lib/client-portal-db";
 
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "پیشخوان" };
 
-export default function DashboardPage() {
-  const { contracts, files, messages, payments, requests } = getClientDashboardData();
+export default async function DashboardPage() {
+  const { contracts, files, messages, payments, requests } = await getClientDashboardSummary();
   const kpis = [
     { label: "درخواست‌های من", value: requests.length, hint: "در کل", icon: "briefcase" },
     { label: "قراردادهای من", value: contracts.length, hint: "در کل", icon: "document" },
     { label: "فایل‌های من", value: files.length, hint: "در کل", icon: "folder" },
     { label: "پیام‌ها", value: messages.length, hint: "خوانده و خوانده‌نشده", icon: "document" },
-    { label: "پرداخت‌ها", value: payments.length, hint: "صورتحساب‌ها", icon: "check" },
+    { label: "پرداخت‌ها", value: payments.length, hint: "صورت‌حساب‌ها", icon: "check" },
   ];
 
   return (
