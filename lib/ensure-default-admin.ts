@@ -5,33 +5,38 @@ import { User } from "@/models/User";
 
 const DEFAULT_ADMIN_EMAIL = "admin@gmail.com";
 const DEFAULT_ADMIN_PASSWORD = "admin";
+const DEFAULT_ADMIN_NAME = "مدیر ارشد سیستم";
 
 let ensurePromise: Promise<void> | null = null;
 
 async function createDefaultAdminIfNeeded() {
-  if (process.env.NODE_ENV === "production") {
-    return;
-  }
-
   await connectDb();
 
-  const existingAdmin = await User.exists({ role: "admin" });
-  if (existingAdmin) {
+  const existingSuperAdmin = await User.exists({
+    role: "super_admin",
+    status: "active",
+  });
+
+  if (existingSuperAdmin) {
     return;
   }
 
   const passwordHash = await bcrypt.hash(DEFAULT_ADMIN_PASSWORD, 12);
 
-  await User.create({
-    fullName: "مدیر سیستم",
-    email: DEFAULT_ADMIN_EMAIL,
-    passwordHash,
-    role: "admin",
-    status: "active",
-  });
+  await User.findOneAndUpdate(
+    { email: DEFAULT_ADMIN_EMAIL },
+    {
+      fullName: DEFAULT_ADMIN_NAME,
+      email: DEFAULT_ADMIN_EMAIL,
+      passwordHash,
+      role: "super_admin",
+      status: "active",
+    },
+    { upsert: true, runValidators: true },
+  );
 
   console.warn(
-    "Default admin user created: admin@gmail.com / admin. Please change this password.",
+    "Default super admin user is ready: admin@gmail.com / admin. Please change this password after first login.",
   );
 }
 
