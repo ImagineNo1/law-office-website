@@ -10,9 +10,9 @@
   --border-hsl: 220 15% 90%;
   --muted-hsl: 220 15% 95%;
   --muted-foreground-hsl: 216 15% 50%;
-  --sidebar-background-hsl: 216 62% 8%;
-  --sidebar-accent-hsl: 216 54% 15%;
-  --sidebar-border-hsl: 216 40% 20%;
+  --sidebar-background-hsl: 0 0% 100%;
+  --sidebar-accent-hsl: 220 15% 95%;
+  --sidebar-border-hsl: 220 15% 90%;
   --chart-1-hsl: 217 91% 60%;
   --chart-2-hsl: 160 84% 39%;
   --chart-3-hsl: 38 92% 50%;
@@ -43,11 +43,11 @@
   --chart-4: var(--chart-4-hsl);
   --chart-5: var(--chart-5-hsl);
   --sidebar-background: var(--sidebar-background-hsl);
-  --sidebar-foreground: 220 15% 90%;
+  --sidebar-foreground: var(--foreground-hsl);
   --sidebar-primary: var(--accent-hsl);
   --sidebar-primary-foreground: var(--primary-hsl);
   --sidebar-accent: var(--sidebar-accent-hsl);
-  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-accent-foreground: var(--foreground-hsl);
   --sidebar-border: var(--sidebar-border-hsl);
   --sidebar-ring: var(--accent-hsl);
   --surface: hsl(var(--card-hsl));

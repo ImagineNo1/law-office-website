@@ -32,12 +32,12 @@ export function ClientSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="bg-sidebar px-4 py-6 text-sidebar-foreground shadow-[-24px_0_70px_rgba(12,27,51,0.2)] lg:sticky lg:top-0 lg:order-2 lg:min-h-screen lg:w-[306px]">
-      <Link className="mb-10 flex items-center gap-3 [&_*]:text-white" href="/dashboard">
+    <aside className="border-l border-sidebar-border bg-sidebar px-4 py-6 text-sidebar-foreground shadow-[-18px_0_55px_rgba(12,27,51,0.08)] lg:sticky lg:top-0 lg:order-2 lg:min-h-screen lg:w-[306px]">
+      <Link className="mb-10 flex items-center gap-3 text-sidebar-foreground" href="/dashboard">
         <LegalLogo compact />
         <span>
           <span className="block font-display text-2xl font-extrabold">وکیل‌یار</span>
-          <span className="text-sm font-medium text-sidebar-foreground/70">پورتال مشتری</span>
+          <span className="text-sm font-medium text-sidebar-foreground/60">پورتال مشتری</span>
         </span>
       </Link>
       <nav className="grid gap-2">
@@ -54,9 +54,9 @@ export function ClientSidebar() {
           );
         })}
       </nav>
-      <div className="mt-12 grid gap-3 rounded-lg border border-sidebar-border bg-sidebar-accent p-5">
+      <div className="mt-12 grid gap-3 rounded-lg border border-sidebar-border bg-sidebar-accent/70 p-5">
         <form action={clientLogoutAction}>
-          <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/15 px-4 py-3 text-sm font-extrabold text-sidebar-foreground transition hover:bg-white/10" type="submit">
+          <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-sidebar-border bg-white px-4 py-3 text-sm font-extrabold text-sidebar-foreground transition hover:border-sidebar-primary hover:bg-sidebar-primary/10" type="submit">
             <LogOut aria-hidden="true" className="size-4" />
             خروج
           </button>
