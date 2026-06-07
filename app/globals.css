@@ -258,16 +258,17 @@ select {
     background-color 180ms ease;
 }
 
-.admin-surface,
+.admin-surface {
+  background: #ffffff;
+}
+
 .dashboard-surface {
-  background:
-    radial-gradient(circle at 8% 6%, rgba(212, 168, 67, 0.11), transparent 24rem),
-    linear-gradient(180deg, hsl(220 20% 97%) 0%, #ffffff 100%);
+  background: #ffffff;
 }
 
 .panel-card {
   border: 1px solid hsl(var(--border-hsl));
-  background: rgba(255, 255, 255, 0.96);
+  background: #ffffff;
   box-shadow: 0 18px 45px rgba(12, 27, 51, 0.08);
 }
 

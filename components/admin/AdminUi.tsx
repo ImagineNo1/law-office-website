@@ -66,7 +66,7 @@ export function AdminEmptyState({
   title: string;
 }) {
   return (
-    <div className="rounded-lg border border-dashed border-border bg-muted p-8 text-center">
+    <div className="rounded-lg border border-dashed border-border bg-white p-8 text-center">
       <span className="mx-auto grid size-14 place-items-center rounded-lg bg-card text-accent shadow-sm">
         <Plus aria-hidden="true" className="size-6" />
       </span>
@@ -88,7 +88,7 @@ export function AdminDataTable({
     <section className="panel-card overflow-hidden rounded-lg">
       <div className="overflow-x-auto">
         <table className="admin-table w-full min-w-[860px] text-sm">
-          <thead className="bg-muted text-muted-foreground">
+          <thead className="bg-white text-muted-foreground">
             <tr>{headers.map((header) => <th className="px-5 py-4 text-right font-extrabold" key={header}>{header}</th>)}</tr>
           </thead>
           <tbody>{children}</tbody>
