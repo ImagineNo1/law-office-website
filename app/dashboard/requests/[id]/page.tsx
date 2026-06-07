@@ -36,7 +36,7 @@ export default async function DashboardRequestDetailPage({ params }: { params: P
                 {request.messages.map((message) => <article className="rounded-2xl border border-border p-4" key={message.id}><div className="flex items-center justify-between gap-3"><strong className="text-navy">{message.senderName}</strong><span className="text-xs font-bold text-muted">{formatRequestDate(message.createdAt)}</span></div><p className="mt-2 text-sm font-bold leading-8 text-muted">{message.message}</p></article>)}
               </div>
             ) : (
-              <div className="mt-5"><EmptyState description="پیام‌های مرتبط با این درخواست پس از ارسال شما یا پاسخ تیم حقوقی نمایش داده می‌شود." icon="✉" title="هنوز پیامی برای این درخواست ثبت نشده است" /></div>
+              <div className="mt-5"><EmptyState description="پیام‌های مرتبط با این درخواست پس از ارسال شما یا پاسخ تیم حقوقی نمایش داده می‌شود." icon="message" title="هنوز پیامی برای این درخواست ثبت نشده است" /></div>
             )}
             <form action={sendRequestMessageAction} className="mt-4 flex gap-2 rounded-2xl border border-border p-3">
               <input name="requestId" type="hidden" value={request.id} />

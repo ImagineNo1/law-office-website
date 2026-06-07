@@ -14,7 +14,7 @@ export async function AdminShell({
   const user = await requireAdmin();
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] text-foreground" dir="rtl">
+    <div className="admin-surface flex min-h-screen font-body text-foreground" dir="rtl">
       <AdminSidebar />
       <div className="min-w-0 flex-1 lg:mr-64">
         <AdminHeader title={title} description={description} userName={user.fullName} />
