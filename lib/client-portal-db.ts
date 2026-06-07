@@ -56,6 +56,8 @@ export type ClientMessageRecord = {
   message: string;
   timestamp: string;
   createdAt: string;
+  threadId: string;
+  threadTitle: string;
 };
 
 export type ClientActivity = {
@@ -295,6 +297,8 @@ export async function getClientMessages(client?: CurrentClient) {
     senderType?: "client" | "admin";
     sender?: "client" | "lawyer" | "admin";
     message: string;
+    threadId?: string;
+    threadTitle?: string;
     createdAt?: Date | string;
   }[]>();
   return docs.map((doc) => {
@@ -306,6 +310,8 @@ export async function getClientMessages(client?: CurrentClient) {
       message: doc.message,
       timestamp: formatRequestDate(asIso(doc.createdAt)),
       createdAt: asIso(doc.createdAt),
+      threadId: doc.threadId ?? "general",
+      threadTitle: doc.threadTitle ?? "گفتگوی پشتیبانی",
     };
   });
 }
@@ -359,14 +365,17 @@ export async function updateClientProfile(input: {
   );
 }
 
-export async function createClientMessage(message: string) {
+export async function createClientMessage(message: string, threadTitle = "گفتگوی پشتیبانی", threadId?: string) {
   const client = await requireClient();
   await connectDb();
+  const normalizedThreadId = threadId || `thread-${Date.now()}`;
   await ClientMessage.create({
     clientId: client.id,
     senderType: "client",
     sender: "client",
     message,
+    threadId: normalizedThreadId,
+    threadTitle,
   });
 }
 

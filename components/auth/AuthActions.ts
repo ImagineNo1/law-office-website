@@ -38,7 +38,7 @@ export async function loginClientAction(formData: FormData) {
     : { phone: identifier.replace(/\s+/g, "") };
 
   const user = await ClientUser.findOne(query);
-  if (!user || user.role !== "client") {
+  if (!user || !["client", "user"].includes(user.role)) {
     errorRedirect("/login", "اطلاعات وارد شده معتبر نیست", next);
   }
 

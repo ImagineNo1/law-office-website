@@ -8,7 +8,7 @@ export const CLIENT_SESSION_COOKIE = "client_session";
 
 export type ClientSession = {
   userId: string;
-  role: "client";
+  role: "client" | "user";
   type: "client";
   exp: number;
 };
@@ -18,7 +18,7 @@ export type CurrentClient = {
   fullName: string;
   phone: string;
   email: string;
-  role: "client";
+  role: "client" | "user";
   status: "active" | "blocked";
   nationalCode: string;
   avatar: string;
@@ -166,13 +166,13 @@ export async function getCurrentClient(): Promise<CurrentClient | null> {
     fullName: string;
     phone: string;
     email?: string;
-    role: "client";
+    role: "client" | "user";
     status: "active" | "blocked";
     nationalCode?: string;
     avatar?: string;
   }>();
 
-  if (!user || user.role !== "client" || user.status !== "active") return null;
+  if (!user || !["client", "user"].includes(user.role) || user.status !== "active") return null;
 
   return {
     id: String(user._id),

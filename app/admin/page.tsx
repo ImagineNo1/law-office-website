@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AdminDashboardCharts } from "@/components/admin/AdminDashboardCharts";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { AdminEmptyState, AdminPageHeader } from "@/components/admin/AdminUi";
 import { getAdminDashboardData } from "@/lib/admin-db";
@@ -26,8 +27,10 @@ export default async function AdminDashboardPage() {
   return (
     <AdminShell title="پیشخوان" description="نمای کلی داده‌های واقعی پنل مدیریت">
       <div className="grid gap-6">
-        <AdminPageHeader title="پیشخوان مدیریت" description="همه آمارها مستقیم از MongoDB خوانده می‌شوند و در نبود داده، ردیف نمایشی ساخته نمی‌شود." />
+        <AdminPageHeader title="پیشخوان مدیریت" description="نمای زنده آمار، روندها و وضعیت بخش‌های اصلی" />
         {total ? (
+          <>
+          <AdminDashboardCharts data={data} />
           <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4">
             {cards.map(([label, key, href]) => (
               <Link className="rounded-2xl border border-border bg-white p-5 shadow-card transition hover:-translate-y-0.5 hover:shadow-soft" href={href} key={key}>
@@ -36,6 +39,7 @@ export default async function AdminDashboardPage() {
               </Link>
             ))}
           </div>
+          </>
         ) : (
           <AdminEmptyState title="هنوز داده‌ای در پنل ثبت نشده است" description="با ایجاد خدمت، قرارداد، مطلب یا دریافت درخواست، آمار واقعی این بخش تکمیل می‌شود." />
         )}

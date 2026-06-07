@@ -1,14 +1,12 @@
 "use client";
 
 import {
-  Archive,
   Download,
   FileText,
   LayoutDashboard,
   LogOut,
   MessageSquare,
   PenTool,
-  Plus,
   Users,
 } from "lucide-react";
 import Link from "next/link";
@@ -20,7 +18,6 @@ const links = [
   { label: "پیشخوان", href: "/dashboard", icon: LayoutDashboard },
   { label: "درخواست‌های من", href: "/dashboard/requests", icon: FileText },
   { label: "قراردادهای من", href: "/dashboard/contracts", icon: PenTool },
-  { label: "فایل‌های من", href: "/dashboard/files", icon: Archive },
   { label: "پیام‌ها", href: "/dashboard/messages", icon: MessageSquare },
   { label: "پرداخت‌ها", href: "/dashboard/payments", icon: Download },
   { label: "پروفایل کاربری", href: "/dashboard/profile", icon: Users },
@@ -35,7 +32,7 @@ export function ClientSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="bg-sidebar px-4 py-6 text-sidebar-foreground shadow-[24px_0_70px_rgba(12,27,51,0.2)] lg:sticky lg:top-0 lg:min-h-screen lg:w-[306px]">
+    <aside className="bg-sidebar px-4 py-6 text-sidebar-foreground shadow-[-24px_0_70px_rgba(12,27,51,0.2)] lg:sticky lg:top-0 lg:order-2 lg:min-h-screen lg:w-[306px]">
       <Link className="mb-10 flex items-center gap-3 [&_*]:text-white" href="/dashboard">
         <LegalLogo compact />
         <span>
@@ -58,10 +55,6 @@ export function ClientSidebar() {
         })}
       </nav>
       <div className="mt-12 grid gap-3 rounded-lg border border-sidebar-border bg-sidebar-accent p-5">
-        <Link className="inline-flex items-center justify-center gap-2 rounded-lg bg-sidebar-primary px-4 py-3 text-sm font-extrabold text-sidebar-primary-foreground" href="/requests/new">
-          <Plus aria-hidden="true" className="size-4" />
-          ثبت درخواست
-        </Link>
         <form action={clientLogoutAction}>
           <button className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/15 px-4 py-3 text-sm font-extrabold text-sidebar-foreground transition hover:bg-white/10" type="submit">
             <LogOut aria-hidden="true" className="size-4" />

@@ -21,7 +21,7 @@ export function AdminModal({
         <ButtonIcon aria-hidden="true" className="size-4" />
         <span>{buttonLabel}</span>
       </button>
-      <dialog className="w-[min(760px,calc(100vw-32px))] rounded-lg border border-border bg-card p-0 text-right shadow-soft backdrop:bg-slate-950/40" ref={ref}>
+      <dialog className="m-auto w-[min(760px,calc(100vw-32px))] rounded-lg border border-border bg-card p-0 text-right shadow-soft backdrop:bg-slate-950/40" ref={ref}>
         <div className="border-b border-border px-5 py-4">
           <h3 className="font-heading text-xl font-extrabold text-primary">{title}</h3>
         </div>

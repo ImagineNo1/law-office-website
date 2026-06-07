@@ -6,7 +6,7 @@ const clientUserSchema = new Schema(
     phone: { type: String, required: true, unique: true, trim: true },
     email: { type: String, default: "", trim: true, lowercase: true },
     passwordHash: { type: String, required: true },
-    role: { type: String, enum: ["client"], default: "client" },
+    role: { type: String, enum: ["user", "admin", "super_admin", "client"], default: "user" },
     status: { type: String, enum: ["active", "blocked"], default: "active" },
     nationalCode: { type: String, default: "", trim: true },
     avatar: { type: String, default: "", trim: true },
