@@ -54,10 +54,10 @@ export default async function AdminLoginPage({
           </form>
         </div>
       </section>
-      <aside className="mt-8 hidden rounded-[24px] bg-[#071326] p-10 text-white shadow-soft lg:grid lg:content-center">
+      <aside className="mt-8 hidden rounded-[24px] border border-border bg-white p-10 text-navy shadow-card lg:grid lg:content-center">
         <p className="text-sm font-black text-gold">پنل امن مدیریت</p>
         <h2 className="mt-4 text-4xl font-black leading-[1.5]">مدیریت یکپارچه محتوا، درخواست‌ها و کاربران</h2>
-        <p className="mt-5 max-w-lg text-sm font-bold leading-8 text-slate-300">
+        <p className="mt-5 max-w-lg text-sm font-bold leading-8 text-muted">
           ورود مدیر فقط برای کاربران تاییدشده فعال است و پس از ورود، نشست مدیریت در کوکی امن ذخیره می‌شود.
         </p>
       </aside>

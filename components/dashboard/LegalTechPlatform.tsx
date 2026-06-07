@@ -141,7 +141,7 @@ function Shell({ children, data }: { children: React.ReactNode; data: DashboardD
 
   return (
     <div className="flex min-h-screen bg-background text-foreground" dir="rtl">
-      <aside className="fixed inset-y-0 right-0 z-40 hidden w-64 flex-col bg-sidebar text-sidebar-foreground lg:flex">
+      <aside className="fixed inset-y-0 right-0 z-40 hidden w-64 flex-col border-l border-sidebar-border bg-sidebar text-sidebar-foreground shadow-[18px_0_55px_rgba(12,27,51,0.08)] lg:flex">
         <div className="border-b border-sidebar-border p-5">
         <Link className="flex items-center gap-3" href="/dashboard">
           <span className="grid size-9 place-items-center rounded-lg bg-sidebar-primary text-sm font-bold text-sidebar-primary-foreground">و</span>
@@ -157,7 +157,7 @@ function Shell({ children, data }: { children: React.ReactNode; data: DashboardD
             return (
               <Link
                 className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 ${
-                  active ? "bg-sidebar-accent font-semibold text-sidebar-primary" : "text-sidebar-foreground/60 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                  active ? "bg-sidebar-primary font-semibold text-sidebar-primary-foreground" : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
                 }`}
                 href={item.href}
                 key={item.href}
@@ -174,10 +174,10 @@ function Shell({ children, data }: { children: React.ReactNode; data: DashboardD
             <span>فضای ذخیره‌سازی</span>
             <span className="text-sidebar-primary">{toFaNumber(usedStorage)}٪</span>
           </div>
-          <div className="mt-3 h-2 rounded-full bg-white/15">
+          <div className="mt-3 h-2 rounded-full bg-white">
             <div className="h-full rounded-full bg-sidebar-primary" style={{ width: `${usedStorage}%` }} />
           </div>
-          <p className="mt-3 text-xs text-slate-300">
+          <p className="mt-3 text-xs text-sidebar-foreground/60">
             {toFaNumber(data.storageStats.usedGb)} گیگابایت استفاده شده
           </p>
         </Card>

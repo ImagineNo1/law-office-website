@@ -39,14 +39,14 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 right-0 z-40 hidden w-64 flex-col border-l border-sidebar-border bg-sidebar text-sidebar-foreground shadow-[24px_0_70px_rgba(12,27,51,0.18)] lg:flex">
+    <aside className="fixed inset-y-0 right-0 z-40 hidden w-64 flex-col border-l border-sidebar-border bg-sidebar text-sidebar-foreground shadow-[18px_0_55px_rgba(12,27,51,0.08)] lg:flex">
       <div className="border-b border-sidebar-border p-5">
         <Link className="flex items-center gap-3" href="/admin">
           <span className="grid size-11 place-items-center rounded-lg border border-sidebar-primary/40 bg-sidebar-primary/10 text-sidebar-primary">
             <LayoutDashboard aria-hidden="true" className="size-5" />
           </span>
           <span>
-            <span className="block font-heading text-base font-extrabold text-white">پنل مدیریت</span>
+            <span className="block font-heading text-base font-extrabold text-sidebar-foreground">پنل مدیریت</span>
             <span className="text-xs font-bold text-sidebar-foreground/70">موسسه حقوقی</span>
           </span>
         </Link>
@@ -74,7 +74,7 @@ export function AdminSidebar() {
       </nav>
 
       <form action={logoutAction} className="border-t border-sidebar-border p-3">
-        <button className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-extrabold text-sidebar-foreground/82 transition hover:bg-sidebar-accent hover:text-white" type="submit">
+        <button className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-extrabold text-sidebar-foreground/82 transition hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" type="submit">
           <LogOut aria-hidden="true" className="size-5" strokeWidth={2.1} />
           <span>خروج</span>
         </button>
