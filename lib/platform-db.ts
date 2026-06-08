@@ -4,6 +4,7 @@ import { getServiceRequestById, getServiceRequests } from "@/lib/service-request
 import { ContractTemplate } from "@/models/ContractTemplate";
 import { FAQ } from "@/models/FAQ";
 import { LegalFormTemplate } from "@/models/LegalFormTemplate";
+import { Post } from "@/models/Post";
 import { Service } from "@/models/Service";
 
 export type PlatformService = {
@@ -32,9 +33,21 @@ export type PlatformContract = {
   price: string;
   downloads: number;
   rating: string;
+  heroImage?: string;
   benefits: string[];
   requiredDocuments: string[];
   faqItems: { question: string; answer: string }[];
+};
+
+export type PlatformArticle = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  category: string;
+  coverImage: string;
+  publishedAt: string;
+  href: string;
 };
 
 export type PlatformLegalForm = {
@@ -85,6 +98,7 @@ export const fallbackContracts: PlatformContract[] = recoveryContracts.map((cont
   benefits: ["قابل ویرایش", "بررسی حقوقی", "آماده امضا"],
   requiredDocuments: ["مشخصات طرفین", "مدارک هویتی", "شرایط معامله"],
   faqItems: recoveryFaqs.map(([question, answer]) => ({ question, answer })),
+  heroImage: "",
 }));
 
 export const fallbackLegalForms: PlatformLegalForm[] = legalForms.map((form) => ({
@@ -155,6 +169,7 @@ export async function getPlatformContracts(): Promise<PlatformContract[]> {
       price: String(doc.priceLabel || "رایگان"),
       downloads: Number(stats.downloads || 0),
       rating: String(stats.rating || ""),
+      heroImage: String(doc.heroImage || ""),
       benefits: doc.benefits ?? [],
       requiredDocuments: doc.requiredDocuments ?? [],
       faqItems: doc.faqItems ?? [],
@@ -165,6 +180,28 @@ export async function getPlatformContracts(): Promise<PlatformContract[]> {
 export async function getPlatformContractBySlug(slug: string) {
   const contracts = await getPlatformContracts();
   return contracts.find((contract) => contract.slug === slug) ?? contracts[0] ?? null;
+}
+
+export async function getPlatformArticles(limit = 4): Promise<PlatformArticle[]> {
+  if (!hasDatabase()) return [];
+  await connectDb();
+  const docs = await Post.find({ status: "published" })
+    .sort({ publishedAt: -1, createdAt: -1 })
+    .limit(limit)
+    .lean();
+
+  return docs.map((doc, index) => ({
+    id: idOf(doc._id, `article-${index + 1}`),
+    title: String(doc.title),
+    slug: String(doc.slug),
+    excerpt: String(doc.excerpt || ""),
+    category: String(doc.category || "مقاله"),
+    coverImage: String(doc.coverImage || ""),
+    publishedAt: doc.publishedAt
+      ? new Intl.DateTimeFormat("fa-IR", { year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(doc.publishedAt))
+      : "",
+    href: `/blog/${doc.slug}`,
+  }));
 }
 
 export async function getPlatformLegalForms(): Promise<PlatformLegalForm[]> {
