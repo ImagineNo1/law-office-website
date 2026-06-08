@@ -634,3 +634,52 @@ a {
 .hero-float {
   animation: hero-float 5.6s ease-in-out infinite;
 }
+
+.legal-article-content {
+  color: #475569;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 2.25;
+}
+
+.legal-article-content > * + * {
+  margin-top: 1.25rem;
+}
+
+.legal-article-content h2,
+.legal-article-content h3 {
+  color: #0b172a;
+  font-weight: 900;
+  line-height: 1.6;
+  margin-top: 2rem;
+}
+
+.legal-article-content h2 {
+  font-size: 1.5rem;
+}
+
+.legal-article-content h3 {
+  font-size: 1.25rem;
+}
+
+.legal-article-content ul,
+.legal-article-content ol {
+  padding-right: 1.25rem;
+}
+
+.legal-article-content li + li {
+  margin-top: 0.5rem;
+}
+
+.legal-article-content blockquote {
+  border-right: 4px solid #0f766e;
+  border-radius: 1rem;
+  background: #f0fdf4;
+  color: #0f766e;
+  padding: 1rem 1.25rem;
+}
+
+.legal-article-content a {
+  color: #047857;
+  font-weight: 900;
+}

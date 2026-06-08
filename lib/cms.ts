@@ -14,6 +14,7 @@ import { Post } from "@/models/Post";
 import { Service } from "@/models/Service";
 import { SiteSettings } from "@/models/SiteSettings";
 import { User } from "@/models/User";
+import { slugLookupVariants } from "@/lib/slug";
 import type {
   Article,
   ContractTemplate as ContractTemplateData,
@@ -419,9 +420,11 @@ export async function getPostBySlug(
   options: { includeDrafts?: boolean } = {},
 ) {
   await connectDb();
-  const query: { slug: string; status?: "published" } = options.includeDrafts
-    ? { slug }
-    : { slug, status: "published" };
+  const slugVariants = slugLookupVariants(slug);
+  const query: { slug: string | { $in: string[] }; status?: "published" } =
+    options.includeDrafts
+      ? { slug: { $in: slugVariants } }
+      : { slug: { $in: slugVariants }, status: "published" };
   const doc = await Post.findOne(query).lean();
   return doc ? toPost(doc) : null;
 }
