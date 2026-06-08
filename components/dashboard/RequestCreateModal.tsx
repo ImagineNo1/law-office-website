@@ -11,6 +11,7 @@ export function RequestCreateModal({ services }: { services: PlatformService[] }
   return (
     <>
       <button
+        data-tour="client-new-request"
         className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-extrabold text-accent-foreground shadow-sm transition hover:bg-accent/90"
         onClick={() => ref.current?.showModal()}
         type="button"

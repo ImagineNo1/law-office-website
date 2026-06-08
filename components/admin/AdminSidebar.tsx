@@ -16,20 +16,21 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { logoutAction } from "@/lib/admin-actions";
+import { TourHelpButton } from "@/components/onboarding/TourHelpButton";
 
 const links = [
-  { label: "پیشخوان", href: "/admin", icon: LayoutDashboard },
-  { label: "درخواست‌ها", href: "/admin/requests", icon: FileText },
-  { label: "خدمات", href: "/admin/services", icon: FolderOpen },
-  { label: "قراردادها", href: "/admin/contracts", icon: FileText },
-  { label: "فرم‌های حقوقی", href: "/admin/legal-forms", icon: Globe },
-  { label: "سوالات متداول", href: "/admin/faqs", icon: MessageSquare },
-  { label: "وبلاگ", href: "/admin/blog", icon: Newspaper },
-  { label: "اخبار", href: "/admin/news", icon: BarChart3 },
+  { label: "پیشخوان", href: "/admin", icon: LayoutDashboard, tour: "admin-dashboard" },
+  { label: "درخواست‌ها", href: "/admin/requests", icon: FileText, tour: "admin-requests" },
+  { label: "خدمات", href: "/admin/services", icon: FolderOpen, tour: "admin-services" },
+  { label: "قراردادها", href: "/admin/contracts", icon: FileText, tour: "admin-contracts" },
+  { label: "فرم‌های حقوقی", href: "/admin/legal-forms", icon: Globe, tour: "admin-legal-forms" },
+  { label: "سوالات متداول", href: "/admin/faqs", icon: MessageSquare, tour: "admin-faqs" },
+  { label: "وبلاگ", href: "/admin/blog", icon: Newspaper, tour: "admin-blog" },
+  { label: "اخبار", href: "/admin/news", icon: BarChart3, tour: "admin-news" },
   { label: "پیام‌ها", href: "/admin/messages", icon: MessageSquare },
-  { label: "کاربران", href: "/admin/users", icon: Users },
-  { label: "سئو", href: "/admin/seo", icon: SearchCheck },
-  { label: "تنظیمات", href: "/admin/settings", icon: Settings },
+  { label: "کاربران", href: "/admin/users", icon: Users, tour: "admin-users" },
+  { label: "سئو", href: "/admin/seo", icon: SearchCheck, tour: "admin-seo" },
+  { label: "تنظیمات", href: "/admin/settings", icon: Settings, tour: "admin-settings" },
 ];
 
 function isActivePath(pathname: string, href: string) {
@@ -41,7 +42,7 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 right-0 z-40 hidden w-64 flex-col border-l border-sidebar-border bg-sidebar text-sidebar-foreground shadow-[18px_0_55px_rgba(12,27,51,0.08)] lg:flex">
+    <aside data-tour="admin-sidebar" className="fixed inset-y-0 right-0 z-40 hidden w-64 flex-col border-l border-sidebar-border bg-sidebar text-sidebar-foreground shadow-[18px_0_55px_rgba(12,27,51,0.08)] lg:flex">
       <div className="border-b border-sidebar-border p-5">
         <Link className="flex items-center gap-3" href="/admin">
           <span className="grid size-11 place-items-center rounded-lg border border-sidebar-primary/40 bg-sidebar-primary/10 text-sidebar-primary">
@@ -65,6 +66,7 @@ export function AdminSidebar() {
                   ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
                   : "text-sidebar-foreground/82 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               }`}
+              data-tour={link.tour}
               href={link.href}
               key={link.href}
             >
@@ -75,12 +77,15 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      <form action={logoutAction} className="border-t border-sidebar-border p-3">
-        <button className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-extrabold text-sidebar-foreground/82 transition hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" type="submit">
+      <div className="border-t border-sidebar-border p-3">
+        <TourHelpButton className="mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-extrabold text-sidebar-foreground/82 transition hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" label="راهنمای پنل" tourId="admin-help" />
+        <form action={logoutAction}>
+        <button data-tour="admin-logout" className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-extrabold text-sidebar-foreground/82 transition hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" type="submit">
           <LogOut aria-hidden="true" className="size-5" strokeWidth={2.1} />
           <span>خروج</span>
         </button>
-      </form>
+        </form>
+      </div>
     </aside>
   );
 }

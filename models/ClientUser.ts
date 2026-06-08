@@ -11,6 +11,15 @@ const clientUserSchema = new Schema(
     nationalCode: { type: String, default: "", trim: true },
     avatar: { type: String, default: "", trim: true },
     lastLoginAt: { type: Date },
+    onboarding: {
+      adminTourCompleted: { type: Boolean, default: false },
+      adminTourCompletedAt: { type: Date },
+      adminTourSkippedAt: { type: Date },
+      dashboardTourCompleted: { type: Boolean, default: false },
+      dashboardTourCompletedAt: { type: Date },
+      dashboardTourSkippedAt: { type: Date },
+      lastSeenTourVersion: { type: String, default: "" },
+    },
   },
   { timestamps: true },
 );

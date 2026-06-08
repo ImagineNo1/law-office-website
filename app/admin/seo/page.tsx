@@ -68,7 +68,7 @@ function Overview({ pages, redirects }: { pages: SeoPage[]; redirects: Awaited<R
 
   return (
     <div className="grid gap-6">
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-6" data-tour="admin-seo-score">
         <MetricCard hint="از ۱۰۰" label="امتیاز میانگین سئو" value={average} />
         <MetricCard hint="صفحه" label="صفحات قابل ایندکس" value={indexable} />
         <MetricCard hint="نیاز به تنظیم" label="بدون عنوان سئو" value={missingTitle} />
@@ -114,7 +114,7 @@ function Overview({ pages, redirects }: { pages: SeoPage[]; redirects: Awaited<R
 
 function PagesTable({ compact = false, pages }: { compact?: boolean; pages: SeoPage[] }) {
   return (
-    <AdminDataTable headers={compact ? ["صفحه", "نوع", "مسیر", "امتیاز", "عملیات"] : ["عنوان صفحه", "نوع صفحه", "مسیر", "وضعیت ایندکس", "عنوان سئو", "توضیحات متا", "کلمه کلیدی", "امتیاز", "عملیات"]}>
+    <div data-tour={compact ? "admin-seo-audit" : "admin-seo-pages"}><AdminDataTable headers={compact ? ["صفحه", "نوع", "مسیر", "امتیاز", "عملیات"] : ["عنوان صفحه", "نوع صفحه", "مسیر", "وضعیت ایندکس", "عنوان سئو", "توضیحات متا", "کلمه کلیدی", "امتیاز", "عملیات"]}>
       {pages.map((page) => (
         <tr className="border-t border-border" key={`${page.model}-${page.id}-${page.path}`}>
           <td className="px-5 py-4 font-black text-navy">{page.title}</td>
@@ -133,7 +133,7 @@ function PagesTable({ compact = false, pages }: { compact?: boolean; pages: SeoP
           </td>
         </tr>
       ))}
-    </AdminDataTable>
+    </AdminDataTable></div>
   );
 }
 
@@ -209,6 +209,7 @@ export default async function AdminSeoPage({ searchParams }: { searchParams?: Pr
     <AdminShell title="مدیریت سئو" description="مدیریت و بهینه‌سازی سئوی صفحات و محتوای سایت">
       <div className="grid gap-6">
         <AdminPageHeader title="مدیریت سئو" description="برای هر صفحه عنوان، توضیحات، ایندکس، شبکه‌های اجتماعی، سایت‌مپ و اسکیما را از همین بخش مدیریت کنید." />
+        <div className="rounded-2xl border border-gold/25 bg-gold/5 p-4 text-sm font-bold leading-8 text-muted">اگر با سئو آشنا نیستید، اول بخش آموزش سئو را ببینید. <Link className="font-black text-gold" href="/admin/seo?tab=learn">مشاهده آموزش سئو</Link></div>
         <nav className="flex flex-wrap gap-2 rounded-lg border border-border bg-white p-2 shadow-card">
           {tabs.map(([key, label]) => (
             <Link className={`rounded-lg px-4 py-2 text-sm font-black ${active === key ? "bg-gold text-navy" : "text-muted hover:bg-slate-50 hover:text-navy"}`} href={`/admin/seo?tab=${key}`} key={key}>{label}</Link>

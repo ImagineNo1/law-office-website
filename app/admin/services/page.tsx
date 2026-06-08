@@ -64,6 +64,7 @@ export default async function AdminServicesPage() {
     <AdminShell title="خدمات" description="مدیریت خدمات حقوقی سایت">
       <div className="grid gap-6">
         <AdminPageHeader title="خدمات" action={<AdminModal buttonLabel="افزودن خدمت" title="افزودن خدمت"><ServiceForm /></AdminModal>} />
+        <div className="rounded-2xl border border-gold/25 bg-gold/5 p-4 text-sm font-bold leading-8 text-muted">برای نمایش بهتر در گوگل، بخش تنظیمات سئو را کامل کنید.</div>
         {services.length ? (
           <AdminDataTable headers={["عنوان", "دسته", "وضعیت", "ترتیب", "به‌روزرسانی", "عملیات"]}>
             {services.map((service) => (

@@ -38,7 +38,7 @@ export function AdminPageHeader({
         <h2 className="font-heading text-2xl font-extrabold text-primary">{title}</h2>
         {description ? <p className="mt-2 text-sm font-medium leading-8 text-muted-foreground">{description}</p> : null}
       </div>
-      {action}
+      {action ? <div data-tour="admin-create-button">{action}</div> : null}
     </div>
   );
 }
@@ -85,7 +85,7 @@ export function AdminDataTable({
   headers: string[];
 }) {
   return (
-    <section className="panel-card overflow-hidden rounded-lg">
+    <section className="panel-card overflow-hidden rounded-lg" data-tour="admin-table">
       <div className="overflow-x-auto">
         <table className="admin-table w-full min-w-[860px] text-sm">
           <thead className="bg-white text-muted-foreground">
