@@ -9,6 +9,7 @@ import {
   FaqSection,
   HelpIntentSection,
   KnowledgeCenterSection,
+  LatestMediaSection,
   LegalSupportSection,
   ProcessTimeline,
 } from "@/components/platform/home/HomeSections";
@@ -23,10 +24,12 @@ export function HomeExperience({
   articles = [],
   contracts = fallbackContracts,
   faqs = [],
+  news = [],
 }: {
   articles?: PlatformArticle[];
   contracts?: PlatformContract[];
   faqs?: PlatformFaq[];
+  news?: PlatformArticle[];
 }) {
   return (
     <PageShell>
@@ -38,6 +41,7 @@ export function HomeExperience({
       <ContractPreview contracts={contracts} />
       <LegalSupportSection />
       <KnowledgeCenterSection articles={articles} />
+      <LatestMediaSection articles={articles} news={news} />
       <FaqSection faqs={faqs} />
       <FinalCta />
       <PublicFooter />

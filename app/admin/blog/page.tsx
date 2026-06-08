@@ -62,7 +62,7 @@ export default async function AdminBlogPage() {
                   <div className="flex flex-wrap gap-2">
                     <Link
                       className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 px-4 py-2 text-xs font-black text-emerald-700 hover:bg-emerald-50"
-                      href={`/blog/${post.slug}`}
+                      href={`/blog/${post.slug}?preview=1`}
                       target="_blank"
                     >
                       <Eye aria-hidden="true" className="size-4" />

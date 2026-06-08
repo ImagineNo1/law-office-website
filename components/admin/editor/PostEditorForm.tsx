@@ -56,7 +56,7 @@ export function PostEditorForm({
           <span>وضعیت</span>
           <select
             className="service-input"
-            defaultValue={item?.status ?? "draft"}
+            defaultValue={item?.status ?? "published"}
             name="status"
           >
             <option value="published">منتشر شده</option>

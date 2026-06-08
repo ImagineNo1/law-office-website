@@ -16,7 +16,7 @@ import {
   Underline,
   Undo2,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 export function RichTextEditor({
   defaultValue = "",
@@ -25,11 +25,13 @@ export function RichTextEditor({
   defaultValue?: string;
   name?: string;
 }) {
-  const [value, setValue] = useState(defaultValue);
   const editorRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   function sync() {
-    setValue(editorRef.current?.innerHTML ?? "");
+    if (inputRef.current) {
+      inputRef.current.value = editorRef.current?.innerHTML ?? "";
+    }
   }
 
   function run(command: string, arg?: string) {
@@ -49,12 +51,18 @@ export function RichTextEditor({
   return (
     <div className="overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-card">
       <div className="sticky top-0 z-10 flex flex-wrap gap-2 border-b border-emerald-100 bg-emerald-50 p-3">
-        <button className={toolClass} onClick={() => run("bold")} type="button">
+        <button
+          className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => run("bold")}
+          type="button"
+        >
           <Bold className="size-4" />
           درشت
         </button>
         <button
           className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => run("italic")}
           type="button"
         >
@@ -63,6 +71,7 @@ export function RichTextEditor({
         </button>
         <button
           className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => run("underline")}
           type="button"
         >
@@ -71,6 +80,7 @@ export function RichTextEditor({
         </button>
         <button
           className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => run("formatBlock", "h2")}
           type="button"
         >
@@ -79,6 +89,7 @@ export function RichTextEditor({
         </button>
         <button
           className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => run("formatBlock", "h3")}
           type="button"
         >
@@ -87,6 +98,7 @@ export function RichTextEditor({
         </button>
         <button
           className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => run("insertUnorderedList")}
           type="button"
         >
@@ -95,6 +107,7 @@ export function RichTextEditor({
         </button>
         <button
           className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => run("insertOrderedList")}
           type="button"
         >
@@ -103,18 +116,25 @@ export function RichTextEditor({
         </button>
         <button
           className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => run("formatBlock", "blockquote")}
           type="button"
         >
           <Quote className="size-4" />
           نقل‌قول
         </button>
-        <button className={toolClass} onClick={addLink} type="button">
+        <button
+          className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={addLink}
+          type="button"
+        >
           <LinkIcon className="size-4" />
           لینک
         </button>
         <button
           className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => run("justifyRight")}
           type="button"
         >
@@ -123,6 +143,7 @@ export function RichTextEditor({
         </button>
         <button
           className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => run("justifyCenter")}
           type="button"
         >
@@ -131,22 +152,38 @@ export function RichTextEditor({
         </button>
         <button
           className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => run("removeFormat")}
           type="button"
         >
           <RemoveFormatting className="size-4" />
           پاک‌سازی
         </button>
-        <button className={toolClass} onClick={() => run("undo")} type="button">
+        <button
+          className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => run("undo")}
+          type="button"
+        >
           <Undo2 className="size-4" />
           برگشت
         </button>
-        <button className={toolClass} onClick={() => run("redo")} type="button">
+        <button
+          className={toolClass}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => run("redo")}
+          type="button"
+        >
           <Redo2 className="size-4" />
           جلو
         </button>
       </div>
-      <input name={name} type="hidden" value={value} />
+      <input
+        defaultValue={defaultValue}
+        name={name}
+        ref={inputRef}
+        type="hidden"
+      />
       <div
         className="prose prose-slate min-h-[460px] max-w-none p-6 text-right font-body leading-9 outline-none focus:ring-4 focus:ring-emerald-500/15"
         contentEditable

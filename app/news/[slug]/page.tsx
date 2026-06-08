@@ -10,6 +10,7 @@ export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ preview?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -25,10 +26,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export default async function NewsDetailPage({ params }: Props) {
+export default async function NewsDetailPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const { preview } = searchParams ? await searchParams : {};
   const [item, newsItems] = await Promise.all([
-    getNewsBySlug(slug),
+    getNewsBySlug(slug, { includeDrafts: preview === "1" }),
     getLatestNews(4),
   ]);
 
@@ -50,16 +52,21 @@ export default async function NewsDetailPage({ params }: Props) {
       </article>
       <section className="pb-16">
         <Container>
-        <h2 className="mb-6 text-2xl font-black text-foreground">
-          اخبار مرتبط
-        </h2>
-        <div className="grid gap-4 md:grid-cols-3">
-          {newsItems
-            .filter((news) => news.slug !== item.slug)
-            .map((news) => (
-              <ArticleCard href={`/news/${news.slug}`} item={news} key={news.slug} type="news" />
-            ))}
-        </div>
+          <h2 className="mb-6 text-2xl font-black text-foreground">
+            اخبار مرتبط
+          </h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            {newsItems
+              .filter((news) => news.slug !== item.slug)
+              .map((news) => (
+                <ArticleCard
+                  href={`/news/${news.slug}`}
+                  item={news}
+                  key={news.slug}
+                  type="news"
+                />
+              ))}
+          </div>
         </Container>
       </section>
     </PublicShell>
