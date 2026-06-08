@@ -81,6 +81,10 @@ function hasDatabase() {
   return Boolean(process.env.MONGODB_URI);
 }
 
+function canUseDemoFallback() {
+  return process.env.ALLOW_DEMO_DATA === "true";
+}
+
 function sortByOrder<T extends { order?: number }>(items: T[]) {
   return [...items].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 }
@@ -94,6 +98,7 @@ type PostLike = {
   coverImage?: string | null;
   category: string;
   status: "draft" | "published";
+  seo?: Record<string, unknown>;
   publishedAt?: DateLike;
   createdAt?: DateLike;
 };
@@ -155,6 +160,7 @@ function toPost(doc: PostLike): Article {
     publishedAt: formatDate(doc.publishedAt ?? doc.createdAt),
     readTime: "۵ دقیقه",
     status: doc.status,
+    seo: doc.seo,
   };
 }
 
@@ -168,6 +174,7 @@ function toNews(doc: NewsLike): NewsItem {
     coverImage: doc.coverImage ?? "",
     publishedAt: formatDate(doc.publishedAt ?? doc.createdAt),
     status: doc.status,
+    seo: doc.seo,
   };
 }
 
@@ -267,7 +274,7 @@ export async function getHomeContent(): Promise<HomeContentData> {
 
 export async function getPublishedContracts(limit?: number) {
   if (!hasDatabase()) {
-    return limit ? contractSamples.slice(0, limit) : contractSamples;
+    return canUseDemoFallback() ? (limit ? contractSamples.slice(0, limit) : contractSamples) : [];
   }
 
   await connectDb();
@@ -278,7 +285,7 @@ export async function getPublishedContracts(limit?: number) {
   const docs = await query.lean();
   const contracts = docs.map(toContract);
   if (!contracts.length) {
-    return limit ? contractSamples.slice(0, limit) : contractSamples;
+    return canUseDemoFallback() ? (limit ? contractSamples.slice(0, limit) : contractSamples) : [];
   }
   return contracts;
 }
@@ -295,18 +302,18 @@ export async function getAllContracts() {
 
 export async function getContractBySlug(slug: string) {
   if (!hasDatabase()) {
-    return getFallbackContract(slug);
+    return canUseDemoFallback() ? getFallbackContract(slug) : null;
   }
 
   await connectDb();
   const doc = await ContractTemplate.findOne({ slug, status: "published" }).lean();
   const contract = doc ? toContract(doc) : null;
-  return contract ?? getFallbackContract(slug);
+  return contract ?? (canUseDemoFallback() ? getFallbackContract(slug) : null);
 }
 
 export async function getPublishedServices(limit?: number) {
   if (!hasDatabase()) {
-    return limit ? serviceSamples.slice(0, limit) : serviceSamples;
+    return canUseDemoFallback() ? (limit ? serviceSamples.slice(0, limit) : serviceSamples) : [];
   }
 
   await connectDb();
@@ -333,7 +340,7 @@ export async function getPublishedServices(limit?: number) {
     !hasPhaseTwoShape ||
     services.some((service) => isMojibake(service.title) || !sampleSlugs.has(String(service.slug)))
   ) {
-    return limit ? serviceSamples.slice(0, limit) : serviceSamples;
+    return canUseDemoFallback() ? (limit ? serviceSamples.slice(0, limit) : serviceSamples) : services;
   }
   return services;
 }
@@ -349,7 +356,7 @@ export async function getServiceBySlug(slug: string) {
   const doc = await Service.findOne({ slug, status: "published" }).lean();
   const service = doc ? toService(doc) : null;
   if (!service || isMojibake(service.title)) {
-    return getFallbackService(slug);
+    return canUseDemoFallback() ? getFallbackService(slug) : null;
   }
   return service;
 }
@@ -417,6 +424,7 @@ export async function getPageContent(key: string): Promise<PageContentData | nul
     subtitle: doc.subtitle ?? "",
     content: doc.content ?? "",
     metadata: (doc.metadata ?? {}) as Record<string, unknown>,
+    seo: (doc.seo ?? {}) as Record<string, unknown>,
   };
 }
 
@@ -429,6 +437,7 @@ export async function getAllPageContent() {
     subtitle: doc.subtitle ?? "",
     content: doc.content ?? "",
     metadata: (doc.metadata ?? {}) as Record<string, unknown>,
+    seo: (doc.seo ?? {}) as Record<string, unknown>,
   }));
 }
 

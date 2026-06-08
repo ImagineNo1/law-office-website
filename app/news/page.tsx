@@ -5,12 +5,18 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { getLatestNews, getSiteSettings } from "@/lib/cms";
+import { buildMetadata, getSeoForPath } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "اخبار",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getSeoForPath("/news");
+  return buildMetadata({
+    path: "/news",
+    seo: page?.seo,
+    title: page?.title ?? "اخبار",
+  });
+}
 
 export default async function NewsPage() {
   const [settings, news] = await Promise.all([getSiteSettings(), getLatestNews()]);

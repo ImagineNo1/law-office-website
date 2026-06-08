@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   CheckCircle2,
   Clock,
@@ -97,6 +98,42 @@ export function EmptyState({
         </Link>
       ) : null}
     </div>
+  );
+}
+
+export function UnderConstructionPanel() {
+  return (
+    <section className="grid min-h-[68vh] place-items-center rounded-lg border border-border bg-white px-4 py-10 text-center shadow-sm">
+      <div className="mx-auto w-full max-w-4xl">
+        <Image
+          alt="این بخش در حال ساخت است"
+          className="mx-auto h-auto w-full max-w-3xl"
+          height={1024}
+          priority
+          src="/under-construction.png"
+          width={1536}
+        />
+      </div>
+    </section>
+  );
+}
+
+export function ComingSoonCard({ title, description, href, label }: { title: string; description: string; href?: string; label?: string }) {
+  return (
+    <PortalCard className="grid min-h-56 place-items-center border-dashed border-slate-300 p-6 text-center shadow-sm">
+      <div>
+        <span className="mx-auto grid size-14 place-items-center rounded-lg bg-slate-100 text-accent">
+          <Clock aria-hidden="true" className="size-6" />
+        </span>
+        <h3 className="mt-5 font-heading text-lg font-extrabold text-primary">{title}</h3>
+        <p className="mx-auto mt-2 max-w-sm text-sm font-medium leading-8 text-muted-foreground">{description}</p>
+        {href && label ? (
+          <Link className="mt-5 inline-flex rounded-lg border border-border bg-white px-5 py-3 text-sm font-extrabold text-primary transition hover:border-accent hover:text-accent" href={href}>
+            {label}
+          </Link>
+        ) : null}
+      </div>
+    </PortalCard>
   );
 }
 

@@ -1,6 +1,10 @@
 import Link from "next/link";
-import { fa, type PlatformContract } from "@/lib/platform-db";
+import type { PlatformContract } from "@/lib/platform-db";
 import { IconBox } from "@/components/platform/layout/PageShell";
+
+function fa(value: number | string) {
+  return new Intl.NumberFormat("fa-IR").format(Number(value) || 0);
+}
 
 export function ContractCard({ contract }: { contract: PlatformContract }) {
   return (

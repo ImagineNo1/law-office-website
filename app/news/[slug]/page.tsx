@@ -4,6 +4,7 @@ import { ArticleCard } from "@/components/site/ArticleCard";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { getLatestNews, getNewsBySlug, getSiteSettings } from "@/lib/cms";
+import { buildMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -15,10 +16,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const item = await getNewsBySlug(slug);
 
-  return {
+  return buildMetadata({
+    path: `/news/${slug}`,
+    seo: item?.seo,
     title: item?.title ?? "خبر",
     description: item?.excerpt,
-  };
+    image: item?.coverImage,
+  });
 }
 
 export default async function NewsDetailPage({ params }: Props) {

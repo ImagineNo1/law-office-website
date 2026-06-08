@@ -104,7 +104,7 @@ function hasDatabase() {
 }
 
 function canUseDemoFallback() {
-  return process.env.NODE_ENV !== "production" || process.env.ALLOW_DEMO_DATA === "true";
+  return process.env.ALLOW_DEMO_DATA === "true";
 }
 
 function idOf(value: unknown, fallback: string) {
@@ -144,19 +144,22 @@ export async function getPlatformContracts(): Promise<PlatformContract[]> {
   await connectDb();
   const docs = await ContractTemplate.find({ status: "published" }).sort({ order: 1, createdAt: -1 }).lean();
   if (!docs.length) return canUseDemoFallback() ? fallbackContracts : [];
-  return docs.map((doc, index) => ({
-    id: idOf(doc._id, `contract-${index + 1}`),
-    title: String(doc.title),
-    slug: String(doc.slug),
-    category: String(doc.category),
-    description: String(doc.excerpt || doc.content || ""),
-    price: String(doc.priceLabel || "رایگان"),
-    downloads: 120 + index * 17,
-    rating: "۴.۸",
-    benefits: doc.benefits ?? [],
-    requiredDocuments: doc.requiredDocuments ?? [],
-    faqItems: doc.faqItems ?? [],
-  }));
+  return docs.map((doc, index) => {
+    const stats = doc as typeof doc & { downloads?: number; rating?: string };
+    return {
+      id: idOf(doc._id, `contract-${index + 1}`),
+      title: String(doc.title),
+      slug: String(doc.slug),
+      category: String(doc.category),
+      description: String(doc.excerpt || doc.content || ""),
+      price: String(doc.priceLabel || "رایگان"),
+      downloads: Number(stats.downloads || 0),
+      rating: String(stats.rating || ""),
+      benefits: doc.benefits ?? [],
+      requiredDocuments: doc.requiredDocuments ?? [],
+      faqItems: doc.faqItems ?? [],
+    };
+  });
 }
 
 export async function getPlatformContractBySlug(slug: string) {

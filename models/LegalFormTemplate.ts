@@ -1,4 +1,5 @@
 import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
+import { seoSchema } from "@/models/seoFields";
 
 const legalFormTemplateSchema = new Schema(
   {
@@ -9,6 +10,7 @@ const legalFormTemplateSchema = new Schema(
     fields: { type: [String], default: [] },
     usageCount: { type: Number, default: 0 },
     status: { type: String, enum: ["draft", "published", "archived"], default: "published" },
+    seo: { type: seoSchema, default: () => ({}) },
   },
   { timestamps: true },
 );

@@ -1,7 +1,9 @@
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { SeoFields } from "@/components/admin/SeoFields";
 import { savePostAction, saveNewsAction } from "@/lib/admin-actions";
+import type { SeoData } from "@/lib/seo";
 
-type ContentRow = { id?: string; title?: string; slug?: string; excerpt?: string; content?: string; coverImage?: string | null; category?: string; status?: string };
+type ContentRow = { id?: string; title?: string; slug?: string; excerpt?: string; content?: string; coverImage?: string | null; category?: string; status?: string; seo?: Partial<SeoData> };
 
 export function PostEditorForm({ item, type }: { item?: ContentRow; type: "post" | "news" }) {
   const action = type === "post" ? savePostAction : saveNewsAction;
@@ -17,6 +19,7 @@ export function PostEditorForm({ item, type }: { item?: ContentRow; type: "post"
         <label className="grid gap-2 text-sm font-black text-navy md:col-span-3"><span>خلاصه</span><textarea className="service-input min-h-24 py-3" defaultValue={item?.excerpt} name="excerpt" required /></label>
       </div>
       <RichTextEditor defaultValue={item?.content ?? ""} />
+      <SeoFields seo={item?.seo} title={String(item?.title ?? "")} />
       <button className="rounded-xl bg-gold px-6 py-4 text-sm font-black text-white shadow-card" type="submit">ذخیره محتوا</button>
     </form>
   );

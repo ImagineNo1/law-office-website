@@ -1,4 +1,5 @@
 import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
+import { seoSchema } from "@/models/seoFields";
 
 const postSchema = new Schema(
   {
@@ -10,6 +11,7 @@ const postSchema = new Schema(
     category: { type: String, required: true },
     status: { type: String, enum: ["draft", "published"], default: "draft" },
     publishedAt: { type: Date },
+    seo: { type: seoSchema, default: () => ({}) },
   },
   { timestamps: true },
 );

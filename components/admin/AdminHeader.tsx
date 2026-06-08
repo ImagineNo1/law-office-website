@@ -1,6 +1,4 @@
-import { ThemeToggle } from "@/components/site/ThemeToggle";
-import { logoutAction } from "@/lib/admin-actions";
-import { LogOut, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 
 export function AdminHeader({
   description,
@@ -21,13 +19,6 @@ export function AdminHeader({
         <Settings aria-hidden="true" className="size-4" />
         مدیر سیستم
       </span>
-      <ThemeToggle />
-      <form action={logoutAction}>
-        <button className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-extrabold text-muted-foreground transition hover:bg-white hover:text-primary" type="submit">
-          <LogOut aria-hidden="true" className="size-4" />
-          <span>خروج</span>
-        </button>
-      </form>
       <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-xs font-extrabold text-primary-foreground">
         {userName.slice(0, 1)}
       </span>

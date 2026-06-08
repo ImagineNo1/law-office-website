@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  BookOpenText,
   Download,
   FileText,
   LayoutDashboard,
@@ -17,6 +18,7 @@ import { LegalLogo } from "@/components/site/LegalLogo";
 const links = [
   { label: "پیشخوان", href: "/dashboard", icon: LayoutDashboard },
   { label: "درخواست‌های من", href: "/dashboard/requests", icon: FileText },
+  { label: "بانک قراردادها", href: "/dashboard/contract-bank", icon: BookOpenText },
   { label: "قراردادهای من", href: "/dashboard/contracts", icon: PenTool },
   { label: "پیام‌ها", href: "/dashboard/messages", icon: MessageSquare },
   { label: "پرداخت‌ها", href: "/dashboard/payments", icon: Download },

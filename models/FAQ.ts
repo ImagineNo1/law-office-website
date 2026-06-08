@@ -1,4 +1,5 @@
 import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
+import { seoSchema } from "@/models/seoFields";
 
 const faqSchema = new Schema(
   {
@@ -14,6 +15,7 @@ const faqSchema = new Schema(
     pageSlug: { type: String, default: "", trim: true, index: true },
     status: { type: String, enum: ["draft", "published", "archived"], default: "published" },
     order: { type: Number, default: 0 },
+    seo: { type: seoSchema, default: () => ({}) },
   },
   { timestamps: true },
 );

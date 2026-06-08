@@ -1,8 +1,7 @@
 import { PageShell, Container } from "@/components/platform/layout/PageShell";
 import { PublicHeader } from "@/components/platform/layout/PublicHeader";
 import { PublicFooter } from "@/components/platform/layout/PublicFooter";
-import { ContractSidebar } from "@/components/platform/contracts/ContractSidebar";
-import { ContractBank } from "@/components/platform/contracts/ContractBank";
+import { ContractsExplorer } from "@/components/platform/contracts/ContractsExplorer";
 import { fallbackContracts, type PlatformContract } from "@/lib/platform-db";
 
 export function ContractsExperience({ contracts = fallbackContracts }: { contracts?: PlatformContract[] }) {
@@ -19,9 +18,8 @@ export function ContractsExperience({ contracts = fallbackContracts }: { contrac
         </Container>
       </section>
       <section className="py-8">
-        <Container className="grid gap-6 lg:grid-cols-[300px_1fr]">
-          <ContractSidebar contracts={contracts} />
-          <ContractBank contracts={contracts} />
+        <Container>
+          <ContractsExplorer contracts={contracts} />
         </Container>
       </section>
       <PublicFooter />

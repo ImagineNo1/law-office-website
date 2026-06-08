@@ -3,8 +3,7 @@ import { PublicHeader } from "@/components/platform/layout/PublicHeader";
 import { PublicFooter } from "@/components/platform/layout/PublicFooter";
 import { fallbackServices, type PlatformFaq, type PlatformService } from "@/lib/platform-db";
 import { ServiceHero } from "@/components/platform/services/ServiceHero";
-import { ServiceFilters } from "@/components/platform/services/ServiceFilters";
-import { ServiceCard } from "@/components/platform/services/ServiceCard";
+import { ServicesExplorer } from "@/components/platform/services/ServicesExplorer";
 import { ServiceDetailPanels } from "@/components/platform/services/ServiceDetailPanels";
 import { ServiceRequestPanel } from "@/components/platform/services/ServiceRequestPanel";
 import { ServiceFaq } from "@/components/platform/services/ServiceFaq";
@@ -90,19 +89,7 @@ export function ServicesExperience({
             </>
           ) : (
             <>
-              <ServiceFilters />
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {services.map((item) => (
-                  <ServiceCard
-                    desc={item.description}
-                    key={item.slug}
-                    sla={item.sla}
-                    slug={item.slug}
-                    tag={item.tag}
-                    title={item.title}
-                  />
-                ))}
-              </div>
+              <ServicesExplorer services={services} />
             </>
           )}
         </Container>

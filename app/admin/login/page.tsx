@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { loginAction } from "@/lib/admin-actions";
 import { ensureDefaultAdmin } from "@/lib/ensure-default-admin";
@@ -22,7 +23,7 @@ export default async function AdminLoginPage({
   const { error } = searchParams ? await searchParams : {};
 
   return (
-    <main className="grid min-h-screen bg-background px-4 py-10 lg:grid-cols-[1fr_0.9fr]" dir="rtl">
+    <main className="grid min-h-screen place-items-center bg-background px-4 py-10" dir="rtl">
       <section className="flex items-center justify-center">
         <div className="w-full max-w-md rounded-2xl border border-border/50 bg-white p-8 shadow-xl shadow-primary/5">
           <div className="mb-8 text-center">
@@ -52,15 +53,11 @@ export default async function AdminLoginPage({
               ورود به پنل مدیریت
             </button>
           </form>
+          <Link className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-lg border border-border bg-white text-sm font-black text-navy transition hover:border-accent hover:text-accent" href="/">
+            بازگشت به صفحه اصلی
+          </Link>
         </div>
       </section>
-      <aside className="mt-8 hidden rounded-[24px] border border-border bg-white p-10 text-navy shadow-card lg:grid lg:content-center">
-        <p className="text-sm font-black text-gold">پنل امن مدیریت</p>
-        <h2 className="mt-4 text-4xl font-black leading-[1.5]">مدیریت یکپارچه محتوا، درخواست‌ها و کاربران</h2>
-        <p className="mt-5 max-w-lg text-sm font-bold leading-8 text-muted">
-          ورود مدیر فقط برای کاربران تاییدشده فعال است و پس از ورود، نشست مدیریت در کوکی امن ذخیره می‌شود.
-        </p>
-      </aside>
     </main>
   );
 }

@@ -3,6 +3,7 @@ import { AdminShell } from "@/components/admin/AdminShell";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
+import { SeoFields } from "@/components/admin/SeoFields";
 import { Textarea } from "@/components/ui/Textarea";
 import { saveHomeContentAction, savePageContentAction } from "@/lib/admin-actions";
 import { getAllPageContent, getHomeContent } from "@/lib/cms";
@@ -86,6 +87,7 @@ export default async function AdminPagesPage() {
                   <Input defaultValue={page?.title} label="عنوان" name="title" required />
                   <Input defaultValue={page?.subtitle} label="زیرعنوان" name="subtitle" />
                   <Textarea defaultValue={page?.content} label="محتوا" name="content" />
+                  <SeoFields seo={page?.seo} title={String(page?.title ?? pageLabels[key])} />
                   <Button type="submit">ذخیره محتوا</Button>
                 </form>
               </Card>

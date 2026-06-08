@@ -3,12 +3,18 @@ import { ServiceCard } from "@/components/site/ServiceCard";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { getHomeContent, getPageContent, getPublishedServices, getSiteSettings } from "@/lib/cms";
+import { buildMetadata, getSeoForPath } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "معرفی موسسه",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getSeoForPath("/institute");
+  return buildMetadata({
+    path: "/institute",
+    seo: page?.seo,
+    title: page?.title ?? "معرفی موسسه",
+  });
+}
 
 export default async function InstitutePage() {
   const [settings, homeContent, page, services] = await Promise.all([

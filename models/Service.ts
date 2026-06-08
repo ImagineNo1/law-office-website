@@ -1,4 +1,5 @@
 import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
+import { seoSchema } from "@/models/seoFields";
 
 const serviceSchema = new Schema(
   {
@@ -25,6 +26,7 @@ const serviceSchema = new Schema(
     icon: { type: String, default: "scale" },
     order: { type: Number, default: 0 },
     status: { type: String, enum: ["draft", "published"], default: "draft" },
+    seo: { type: seoSchema, default: () => ({}) },
   },
   { timestamps: true },
 );

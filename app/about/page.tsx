@@ -4,12 +4,18 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { Card } from "@/components/ui/Card";
 import { getHomeContent, getPageContent, getSiteSettings } from "@/lib/cms";
+import { buildMetadata, getSeoForPath } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "درباره ما",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getSeoForPath("/about");
+  return buildMetadata({
+    path: "/about",
+    seo: page?.seo,
+    title: page?.title ?? "درباره ما",
+  });
+}
 
 export default async function AboutPage() {
   const [settings, homeContent, page] = await Promise.all([

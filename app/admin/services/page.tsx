@@ -3,6 +3,7 @@ import { AdminConfirmDialog } from "@/components/admin/AdminConfirmDialog";
 import { AdminModal } from "@/components/admin/AdminModal";
 import { AdminDataTable, AdminEmptyState, AdminPageHeader, AdminStatusBadge } from "@/components/admin/AdminUi";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { SeoFields } from "@/components/admin/SeoFields";
 import { archiveServiceAction, deleteServiceAction, saveServiceAction } from "@/lib/admin-actions";
 import { getAdminServices } from "@/lib/admin-db";
 
@@ -50,6 +51,7 @@ function ServiceForm({ service }: { service?: ServiceRow }) {
       <TextArea defaultValue={lines(service?.requiredDocuments)} label="مدارک مورد نیاز؛ هر خط یک مورد" name="requiredDocuments" />
       <TextArea defaultValue={lines(service?.heroFeatures)} label="ویژگی‌های هیرو؛ هر خط یک مورد" name="heroFeatures" />
       <TextArea defaultValue={faqLines(service?.faqItems)} label="سوالات متداول؛ سوال | پاسخ" name="faqItems" />
+      <SeoFields seo={service?.seo} title={String(service?.title ?? "")} />
       <button className="rounded-xl bg-gold px-5 py-3 text-sm font-black text-white" type="submit">ذخیره</button>
     </form>
   );
@@ -61,7 +63,7 @@ export default async function AdminServicesPage() {
   return (
     <AdminShell title="خدمات" description="مدیریت خدمات حقوقی سایت">
       <div className="grid gap-6">
-        <AdminPageHeader title="خدمات" description="خدمات را از پایگاه داده مدیریت کنید؛ اگر رکوردی وجود نداشته باشد، داده نمایشی نمایش داده نمی‌شود." action={<AdminModal buttonLabel="افزودن خدمت" title="افزودن خدمت"><ServiceForm /></AdminModal>} />
+        <AdminPageHeader title="خدمات" action={<AdminModal buttonLabel="افزودن خدمت" title="افزودن خدمت"><ServiceForm /></AdminModal>} />
         {services.length ? (
           <AdminDataTable headers={["عنوان", "دسته", "وضعیت", "ترتیب", "به‌روزرسانی", "عملیات"]}>
             {services.map((service) => (

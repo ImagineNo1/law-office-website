@@ -19,7 +19,7 @@ export default async function AdminSettingsPage() {
   return (
     <AdminShell title="تنظیمات سایت" description="اطلاعات عمومی، تماس، شبکه های اجتماعی و سئو">
       <Card className="p-5">
-        <h1 className="mb-5 text-xl font-black text-foreground">تنظیمات سایت</h1>
+        <h2 className="mb-5 text-xl font-black text-foreground">تنظیمات سایت</h2>
         <form action={saveSettingsAction} className="grid gap-4">
           <Input defaultValue={settings.siteTitle} label="عنوان سایت" name="siteTitle" required />
           <Input defaultValue={settings.logoText} label="متن لوگو / نام موسسه" name="logoText" />

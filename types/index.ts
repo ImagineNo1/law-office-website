@@ -14,6 +14,7 @@ export type Article = {
   publishedAt: string;
   readTime?: string;
   status: PublishStatus;
+  seo?: Record<string, unknown>;
 };
 
 export type NewsItem = {
@@ -25,6 +26,7 @@ export type NewsItem = {
   coverImage?: string;
   publishedAt: string;
   status: PublishStatus;
+  seo?: Record<string, unknown>;
 };
 
 export type Service = {
@@ -141,6 +143,7 @@ export type PageContentData = {
   subtitle?: string;
   content?: string;
   metadata?: Record<string, unknown>;
+  seo?: Record<string, unknown>;
 };
 
 export type MessageData = {

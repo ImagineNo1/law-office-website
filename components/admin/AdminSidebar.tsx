@@ -9,6 +9,7 @@ import {
   LogOut,
   MessageSquare,
   Newspaper,
+  SearchCheck,
   Settings,
   Users,
 } from "lucide-react";
@@ -27,6 +28,7 @@ const links = [
   { label: "اخبار", href: "/admin/news", icon: BarChart3 },
   { label: "پیام‌ها", href: "/admin/messages", icon: MessageSquare },
   { label: "کاربران", href: "/admin/users", icon: Users },
+  { label: "سئو", href: "/admin/seo", icon: SearchCheck },
   { label: "تنظیمات", href: "/admin/settings", icon: Settings },
 ];
 

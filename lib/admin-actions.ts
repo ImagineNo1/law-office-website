@@ -8,7 +8,9 @@ import { connectDb } from "@/lib/db";
 import { ensureDefaultAdmin } from "@/lib/ensure-default-admin";
 import { slugFromTitle } from "@/lib/slug";
 import { ContractTemplate } from "@/models/ContractTemplate";
+import { FAQ } from "@/models/FAQ";
 import { HomeContent } from "@/models/HomeContent";
+import { LegalFormTemplate } from "@/models/LegalFormTemplate";
 import { Message } from "@/models/Message";
 import { News } from "@/models/News";
 import { PageContent } from "@/models/PageContent";
@@ -19,6 +21,9 @@ import { User } from "@/models/User";
 import { ClientUser } from "@/models/ClientUser";
 import { ClientMessage } from "@/models/ClientMessage";
 import { ServiceRequest } from "@/models/ServiceRequest";
+import { SEOSettings } from "@/models/SEOSettings";
+import { SEORedirect } from "@/models/SEORedirect";
+import { scoreSeo } from "@/lib/seo";
 
 function text(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -91,6 +96,58 @@ function parseFaqItems(value: string) {
     .filter((item) => item.question && item.answer);
 }
 
+function parseCsv(value: string) {
+  return value.split(",").map((item) => item.trim()).filter(Boolean);
+}
+
+function parseJsonObject(value: string) {
+  if (!value) return {};
+  try {
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function boolValue(formData: FormData, key: string, fallback = false) {
+  const value = formData.get(key);
+  if (value === null) return fallback;
+  return value === "on" || value === "true" || value === "1";
+}
+
+const sitemapFrequencies = ["always", "hourly", "daily", "weekly", "monthly", "yearly", "never"] as const;
+
+function sitemapFrequency(value: string, fallback: (typeof sitemapFrequencies)[number]) {
+  return sitemapFrequencies.includes(value as (typeof sitemapFrequencies)[number]) ? value as (typeof sitemapFrequencies)[number] : fallback;
+}
+
+function seoPayload(formData: FormData) {
+  const seo = {
+    metaTitle: text(formData, "seo.metaTitle"),
+    metaDescription: text(formData, "seo.metaDescription"),
+    keywords: parseCsv(text(formData, "seo.keywords")),
+    focusKeyword: text(formData, "seo.focusKeyword"),
+    canonicalUrl: text(formData, "seo.canonicalUrl"),
+    robotsIndex: boolValue(formData, "seo.robotsIndex", true),
+    robotsFollow: boolValue(formData, "seo.robotsFollow", true),
+    ogTitle: text(formData, "seo.ogTitle"),
+    ogDescription: text(formData, "seo.ogDescription"),
+    ogImage: text(formData, "seo.ogImage"),
+    twitterTitle: text(formData, "seo.twitterTitle"),
+    twitterDescription: text(formData, "seo.twitterDescription"),
+    twitterImage: text(formData, "seo.twitterImage"),
+    imageAlt: text(formData, "seo.imageAlt"),
+    schemaType: text(formData, "seo.schemaType"),
+    schemaJson: parseJsonObject(text(formData, "seo.schemaJson")),
+    sitemapInclude: boolValue(formData, "seo.sitemapInclude", true),
+    sitemapPriority: Math.max(0, Math.min(1, Number(text(formData, "seo.sitemapPriority")) || 0.7)),
+    sitemapChangeFrequency: sitemapFrequency(text(formData, "seo.sitemapChangeFrequency"), "weekly"),
+  };
+  const { score, issues } = scoreSeo(seo, text(formData, "path"), text(formData, "title"));
+  return { ...seo, seoScore: score, seoNotes: issues };
+}
+
 function revalidatePublicContent() {
   [
     "/",
@@ -160,6 +217,7 @@ export async function savePostAction(formData: FormData) {
     category: text(formData, "category") || "عمومی",
     status: publishedStatus(text(formData, "status")),
     publishedAt: optionalDate(text(formData, "publishedAt")),
+    seo: seoPayload(formData),
   };
 
   if (!payload.title || !payload.excerpt || !payload.content) {
@@ -201,6 +259,7 @@ export async function saveNewsAction(formData: FormData) {
     coverImage: text(formData, "coverImage"),
     status: publishedStatus(text(formData, "status")),
     publishedAt: optionalDate(text(formData, "publishedAt")),
+    seo: seoPayload(formData),
   };
 
   if (!payload.title || !payload.excerpt || !payload.content) {
@@ -234,6 +293,7 @@ export async function saveContractAction(formData: FormData) {
 
   const id = text(formData, "id");
   const title = text(formData, "title");
+  const seo = seoPayload(formData);
   const payload = {
     title,
     slug: text(formData, "slug") || slugFromTitle(title),
@@ -250,8 +310,9 @@ export async function saveContractAction(formData: FormData) {
     relatedContracts: parseLines(text(formData, "relatedContracts")),
     status: publishedStatus(text(formData, "status")),
     order: Number(text(formData, "order")) || 0,
-    seoTitle: text(formData, "seoTitle"),
-    seoDescription: text(formData, "seoDescription"),
+    seoTitle: text(formData, "seoTitle") || seo.metaTitle,
+    seoDescription: text(formData, "seoDescription") || seo.metaDescription,
+    seo,
   };
 
   if (!payload.title || !payload.excerpt || !payload.category) {
@@ -293,6 +354,7 @@ export async function saveServiceAction(formData: FormData) {
 
   const id = text(formData, "id");
   const title = text(formData, "title");
+  const seo = seoPayload(formData);
   const payload = {
     title,
     slug: text(formData, "slug") || slugFromTitle(title),
@@ -309,6 +371,7 @@ export async function saveServiceAction(formData: FormData) {
     icon: text(formData, "icon") || "scale",
     order: Number(text(formData, "order")) || 0,
     status: publishedStatus(text(formData, "status")),
+    seo,
   };
 
   if (!payload.title || !payload.excerpt) {
@@ -375,6 +438,108 @@ export async function saveSettingsAction(formData: FormData) {
   revalidatePath("/admin/settings");
 }
 
+export async function saveSeoAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+
+  const id = text(formData, "id");
+  const model = text(formData, "model");
+  const type = text(formData, "type");
+  const path = text(formData, "path");
+  const title = text(formData, "title");
+  const seo = seoPayload(formData);
+
+  if (model === "Service") {
+    await Service.findByIdAndUpdate(id, { seo }, { runValidators: true });
+  } else if (model === "ContractTemplate") {
+    await ContractTemplate.findByIdAndUpdate(id, { seo, seoTitle: seo.metaTitle, seoDescription: seo.metaDescription }, { runValidators: true });
+  } else if (model === "LegalFormTemplate") {
+    await LegalFormTemplate.findByIdAndUpdate(id, { seo }, { runValidators: true });
+  } else if (model === "Post") {
+    await Post.findByIdAndUpdate(id, { seo }, { runValidators: true });
+  } else if (model === "News") {
+    await News.findByIdAndUpdate(id, { seo }, { runValidators: true });
+  } else if (model === "FAQ") {
+    await FAQ.findByIdAndUpdate(id, { seo }, { runValidators: true });
+  } else {
+    const key = type === "home" ? "home" : id;
+    await PageContent.findOneAndUpdate(
+      { key },
+      { key, title: title || key, seo },
+      { upsert: true, runValidators: true },
+    );
+  }
+
+  revalidatePublicContent();
+  revalidatePath(path || "/");
+  revalidatePath("/admin/seo");
+}
+
+export async function saveSeoSettingsAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+
+  await SEOSettings.findOneAndUpdate(
+    { key: "seo" },
+    {
+      key: "seo",
+      siteName: text(formData, "siteName"),
+      defaultMetaTitle: text(formData, "defaultMetaTitle"),
+      defaultMetaDescription: text(formData, "defaultMetaDescription"),
+      defaultOgImage: text(formData, "defaultOgImage"),
+      canonicalBaseUrl: text(formData, "canonicalBaseUrl") || "https://vakilyar.vercel.app",
+      robotsTxt: text(formData, "robotsTxt"),
+      googleSearchConsoleVerification: text(formData, "googleSearchConsoleVerification"),
+      organizationName: text(formData, "organizationName"),
+      phone: text(formData, "phone"),
+      address: text(formData, "address"),
+      logo: text(formData, "logo"),
+      socialProfiles: parseLines(text(formData, "socialProfiles")),
+      organizationSchema: parseJsonObject(text(formData, "organizationSchema")),
+      localBusinessSchema: parseJsonObject(text(formData, "localBusinessSchema")),
+    },
+    { upsert: true, runValidators: true },
+  );
+
+  revalidatePublicContent();
+  revalidatePath("/admin/seo");
+}
+
+export async function saveSeoRedirectAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+  const id = text(formData, "id");
+  const sourcePath = text(formData, "sourcePath");
+  const targetPath = text(formData, "targetPath");
+  const statusCode = Number(text(formData, "statusCode")) || 301;
+
+  if (!sourcePath.startsWith("/") || (!targetPath.startsWith("/") && !targetPath.startsWith("https://")) || sourcePath === targetPath) {
+    throw new Error("مسیر ریدایرکت معتبر نیست.");
+  }
+
+  const payload = {
+    sourcePath,
+    targetPath,
+    statusCode,
+    enabled: boolValue(formData, "enabled", true),
+  };
+
+  if (id) {
+    await SEORedirect.findByIdAndUpdate(id, payload, { runValidators: true });
+  } else {
+    await SEORedirect.findOneAndUpdate({ sourcePath }, payload, { upsert: true, runValidators: true });
+  }
+
+  revalidatePath("/admin/seo");
+}
+
+export async function deleteSeoRedirectAction(formData: FormData) {
+  await requireAdmin();
+  await connectDb();
+  await SEORedirect.findByIdAndDelete(text(formData, "id"));
+  revalidatePath("/admin/seo");
+}
+
 export async function saveHomeContentAction(formData: FormData) {
   await requireAdmin();
   await connectDb();
@@ -425,6 +590,7 @@ export async function savePageContentAction(formData: FormData) {
       subtitle: text(formData, "subtitle"),
       content: text(formData, "content"),
       metadata: {},
+      seo: seoPayload(formData),
     },
     { upsert: true, runValidators: true },
   );

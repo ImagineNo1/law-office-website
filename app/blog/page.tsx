@@ -5,12 +5,18 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
 import { getLatestPosts, getSiteSettings } from "@/lib/cms";
+import { buildMetadata, getSeoForPath } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "وبلاگ",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getSeoForPath("/blog");
+  return buildMetadata({
+    path: "/blog",
+    seo: page?.seo,
+    title: page?.title ?? "وبلاگ",
+  });
+}
 
 export default async function BlogPage() {
   const [settings, posts] = await Promise.all([

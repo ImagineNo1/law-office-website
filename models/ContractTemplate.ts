@@ -1,4 +1,5 @@
 import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
+import { seoSchema } from "@/models/seoFields";
 
 const contractTemplateSchema = new Schema(
   {
@@ -27,6 +28,7 @@ const contractTemplateSchema = new Schema(
     order: { type: Number, default: 0 },
     seoTitle: { type: String, default: "", trim: true },
     seoDescription: { type: String, default: "", trim: true },
+    seo: { type: seoSchema, default: () => ({}) },
   },
   { timestamps: true },
 );

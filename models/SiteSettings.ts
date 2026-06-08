@@ -1,4 +1,5 @@
 import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
+import { seoSchema } from "@/models/seoFields";
 
 const siteSettingsSchema = new Schema(
   {
@@ -17,6 +18,7 @@ const siteSettingsSchema = new Schema(
     },
     seoTitle: { type: String },
     seoDescription: { type: String },
+    seo: { type: seoSchema, default: () => ({}) },
   },
   { timestamps: true },
 );

@@ -1,4 +1,5 @@
 import mongoose, { Schema, type InferSchemaType, type Model } from "mongoose";
+import { seoSchema } from "@/models/seoFields";
 
 const pageContentSchema = new Schema(
   {
@@ -7,6 +8,7 @@ const pageContentSchema = new Schema(
     subtitle: { type: String },
     content: { type: String },
     metadata: { type: Schema.Types.Mixed },
+    seo: { type: seoSchema, default: () => ({}) },
   },
   { timestamps: true },
 );

@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { Badge } from "@/components/ui/Badge";
 import { getLatestPosts, getPostBySlug, getSiteSettings } from "@/lib/cms";
+import { buildMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -16,10 +17,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 
-  return {
+  return buildMetadata({
+    path: `/blog/${slug}`,
+    seo: post?.seo,
     title: post?.title ?? "مقاله",
     description: post?.excerpt,
-  };
+    image: post?.coverImage,
+  });
 }
 
 export default async function BlogDetailPage({ params }: Props) {

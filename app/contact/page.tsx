@@ -7,12 +7,18 @@ import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { submitContactMessageAction } from "@/lib/admin-actions";
 import { getPageContent, getSiteSettings } from "@/lib/cms";
+import { buildMetadata, getSeoForPath } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "ارتباط با ما",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getSeoForPath("/contact");
+  return buildMetadata({
+    path: "/contact",
+    seo: page?.seo,
+    title: page?.title ?? "ارتباط با ما",
+  });
+}
 
 export default async function ContactPage({
   searchParams,

@@ -6,14 +6,29 @@ import { ContractDetailHero } from "@/components/platform/contracts/ContractDeta
 import { ContractPricingPanel } from "@/components/platform/contracts/ContractPricingPanel";
 import { ContractTabs } from "@/components/platform/contracts/ContractTabs";
 import { RelatedContracts } from "@/components/platform/contracts/RelatedContracts";
+import { buildMetadata, getSeoForPath } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "جزئیات قرارداد" };
+type Props = {
+  params: Promise<{ category: string; slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { category, slug } = await params;
+  const [contract, page] = await Promise.all([
+    getPlatformContractBySlug(slug),
+    getSeoForPath(`/contracts/${category}/${slug}`),
+  ]);
+  return buildMetadata({
+    path: `/contracts/${category}/${slug}`,
+    seo: page?.seo,
+    title: page?.title ?? contract?.title ?? "جزئیات قرارداد",
+    description: contract?.description,
+  });
+}
 
 export default async function ContractDetailPage({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+}: Props) {
   const { slug } = await params;
   const [contract, contracts] = await Promise.all([getPlatformContractBySlug(slug), getPlatformContracts()]);
   const related = contracts.filter((item) => item.slug !== contract?.slug && item.category === contract?.category);

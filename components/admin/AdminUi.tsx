@@ -29,14 +29,14 @@ export function AdminPageHeader({
   title,
 }: {
   action?: React.ReactNode;
-  description: string;
+  description?: string;
   title: string;
 }) {
   return (
     <div className="panel-card flex flex-col gap-4 rounded-lg p-5 lg:flex-row lg:items-center lg:justify-between">
       <div>
         <h2 className="font-heading text-2xl font-extrabold text-primary">{title}</h2>
-        <p className="mt-2 text-sm font-medium leading-8 text-muted-foreground">{description}</p>
+        {description ? <p className="mt-2 text-sm font-medium leading-8 text-muted-foreground">{description}</p> : null}
       </div>
       {action}
     </div>
