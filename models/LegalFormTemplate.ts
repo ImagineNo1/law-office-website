@@ -9,13 +9,19 @@ const legalFormTemplateSchema = new Schema(
     description: { type: String, default: "", trim: true },
     fields: { type: [String], default: [] },
     usageCount: { type: Number, default: 0 },
-    status: { type: String, enum: ["draft", "published", "archived"], default: "published" },
+    status: {
+      type: String,
+      enum: ["draft", "published", "archived"],
+      default: "published",
+    },
     seo: { type: seoSchema, default: () => ({}) },
   },
   { timestamps: true },
 );
 
-export type LegalFormTemplateDocument = InferSchemaType<typeof legalFormTemplateSchema>;
+export type LegalFormTemplateDocument = InferSchemaType<
+  typeof legalFormTemplateSchema
+>;
 
 export const LegalFormTemplate: Model<LegalFormTemplateDocument> =
   mongoose.models.LegalFormTemplate ??

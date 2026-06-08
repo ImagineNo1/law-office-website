@@ -7,7 +7,14 @@ const activityEventSchema = new Schema(
     description: { type: String, default: "", trim: true },
     type: {
       type: String,
-      enum: ["request", "document", "signature", "payment", "message", "security"],
+      enum: [
+        "request",
+        "document",
+        "signature",
+        "payment",
+        "message",
+        "security",
+      ],
       default: "request",
     },
   },

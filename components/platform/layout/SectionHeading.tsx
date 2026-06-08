@@ -10,7 +10,7 @@ export function SectionHeading({
   return (
     <div className="mb-7">
       {eyebrow ? (
-        <span className="inline-flex rounded-full border border-[#C9973F]/30 bg-[#C9973F]/10 px-4 py-2 text-xs font-black text-[#C9973F]">
+        <span className="inline-flex rounded-full border border-[#0F766E]/30 bg-[#0F766E]/10 px-4 py-2 text-xs font-black text-[#0F766E]">
           {eyebrow}
         </span>
       ) : null}

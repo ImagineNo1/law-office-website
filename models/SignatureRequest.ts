@@ -16,7 +16,9 @@ const signatureRequestSchema = new Schema(
   { timestamps: true },
 );
 
-export type SignatureRequestDocument = InferSchemaType<typeof signatureRequestSchema>;
+export type SignatureRequestDocument = InferSchemaType<
+  typeof signatureRequestSchema
+>;
 
 export const SignatureRequest: Model<SignatureRequestDocument> =
   mongoose.models.SignatureRequest ??

@@ -1,31 +1,322 @@
 import type { Metadata } from "next";
 import { AdminConfirmDialog } from "@/components/admin/AdminConfirmDialog";
 import { AdminModal } from "@/components/admin/AdminModal";
-import { AdminDataTable, AdminEmptyState, AdminPageHeader, AdminStatusBadge } from "@/components/admin/AdminUi";
+import {
+  AdminDataTable,
+  AdminEmptyState,
+  AdminPageHeader,
+  AdminStatusBadge,
+} from "@/components/admin/AdminUi";
 import { AdminShell } from "@/components/admin/AdminShell";
-import { deleteClientUserAction, deleteUserAction, saveClientUserAction, saveUserAction } from "@/lib/admin-actions";
+import {
+  deleteClientUserAction,
+  deleteUserAction,
+  saveClientUserAction,
+  saveUserAction,
+} from "@/lib/admin-actions";
 import { getAdminUsers } from "@/lib/admin-db";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "مدیریت کاربران" };
 type AdminUserRow = Awaited<ReturnType<typeof getAdminUsers>>["admins"][number];
-type ClientUserRow = Awaited<ReturnType<typeof getAdminUsers>>["clients"][number];
+type ClientUserRow = Awaited<
+  ReturnType<typeof getAdminUsers>
+>["clients"][number];
 
-const roleLabels: Record<string, string> = { super_admin: "سوپر ادمین", admin: "ادمین", user: "کاربر عادی", client: "کاربر عادی" };
+const roleLabels: Record<string, string> = {
+  super_admin: "سوپر ادمین",
+  admin: "ادمین",
+  user: "کاربر عادی",
+  client: "کاربر عادی",
+};
 
 function RoleSelect({ value = "user" }: { value?: string }) {
-  return <label className="grid gap-2 text-sm font-black text-navy"><span>سطح دسترسی</span><select className="service-input" defaultValue={value === "client" ? "user" : value} name="role"><option value="user">کاربر عادی</option><option value="admin">ادمین</option><option value="super_admin">سوپر ادمین</option></select></label>;
+  return (
+    <label className="grid gap-2 text-sm font-black text-navy">
+      <span>سطح دسترسی</span>
+      <select
+        className="service-input"
+        defaultValue={value === "client" ? "user" : value}
+        name="role"
+      >
+        <option value="user">کاربر عادی</option>
+        <option value="admin">ادمین</option>
+        <option value="super_admin">سوپر ادمین</option>
+      </select>
+    </label>
+  );
 }
 
 function AdminUserForm({ user }: { user?: AdminUserRow }) {
-  return <form action={saveUserAction} className="grid gap-4"><input name="id" type="hidden" value={user?.id ?? ""} /><label className="grid gap-2 text-sm font-black text-navy"><span>نام</span><input className="service-input" defaultValue={user?.fullName} name="fullName" required /></label><label className="grid gap-2 text-sm font-black text-navy"><span>ایمیل</span><input className="service-input" defaultValue={user?.email} name="email" required type="email" /></label><label className="grid gap-2 text-sm font-black text-navy"><span>{user ? "رمز جدید (اختیاری)" : "رمز عبور"}</span><input className="service-input" name="password" required={!user} type="password" /></label><div className="grid gap-4 md:grid-cols-2"><RoleSelect value={user?.role} /><label className="grid gap-2 text-sm font-black text-navy"><span>وضعیت</span><select className="service-input" defaultValue={user?.status ?? "active"} name="status"><option value="active">فعال</option><option value="disabled">غیرفعال</option></select></label></div><button className="rounded-xl bg-gold px-5 py-3 text-sm font-black text-white" type="submit">ذخیره</button></form>;
+  return (
+    <form action={saveUserAction} className="grid gap-4">
+      <input name="id" type="hidden" value={user?.id ?? ""} />
+      <label className="grid gap-2 text-sm font-black text-navy">
+        <span>نام</span>
+        <input
+          className="service-input"
+          defaultValue={user?.fullName}
+          name="fullName"
+          required
+        />
+      </label>
+      <label className="grid gap-2 text-sm font-black text-navy">
+        <span>ایمیل</span>
+        <input
+          className="service-input"
+          defaultValue={user?.email}
+          name="email"
+          required
+          type="email"
+        />
+      </label>
+      <label className="grid gap-2 text-sm font-black text-navy">
+        <span>{user ? "رمز جدید (اختیاری)" : "رمز عبور"}</span>
+        <input
+          className="service-input"
+          name="password"
+          required={!user}
+          type="password"
+        />
+      </label>
+      <div className="grid gap-4 md:grid-cols-2">
+        <RoleSelect value={user?.role} />
+        <label className="grid gap-2 text-sm font-black text-navy">
+          <span>وضعیت</span>
+          <select
+            className="service-input"
+            defaultValue={user?.status ?? "active"}
+            name="status"
+          >
+            <option value="active">فعال</option>
+            <option value="disabled">غیرفعال</option>
+          </select>
+        </label>
+      </div>
+      <button
+        className="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-black text-white"
+        type="submit"
+      >
+        ذخیره
+      </button>
+    </form>
+  );
 }
 
 function ClientUserForm({ user }: { user?: ClientUserRow }) {
-  return <form action={saveClientUserAction} className="grid gap-4"><input name="id" type="hidden" value={user?.id ?? ""} /><label className="grid gap-2 text-sm font-black text-navy"><span>نام</span><input className="service-input" defaultValue={user?.fullName} name="fullName" required /></label><div className="grid gap-4 md:grid-cols-2"><label className="grid gap-2 text-sm font-black text-navy"><span>شماره تماس</span><input className="service-input" defaultValue={user?.phone} name="phone" required /></label><label className="grid gap-2 text-sm font-black text-navy"><span>ایمیل</span><input className="service-input" defaultValue={user?.email} name="email" type="email" /></label></div><div className="grid gap-4 md:grid-cols-2"><label className="grid gap-2 text-sm font-black text-navy"><span>کد ملی</span><input className="service-input" defaultValue={user?.nationalCode} name="nationalCode" /></label><RoleSelect value={user?.role} /></div><div className="grid gap-4 md:grid-cols-2"><label className="grid gap-2 text-sm font-black text-navy"><span>وضعیت</span><select className="service-input" defaultValue={user?.status ?? "active"} name="status"><option value="active">فعال</option><option value="blocked">مسدود</option></select></label><label className="grid gap-2 text-sm font-black text-navy"><span>{user ? "رمز جدید (اختیاری)" : "رمز عبور"}</span><input className="service-input" name="password" required={!user} type="password" /></label></div><button className="rounded-xl bg-gold px-5 py-3 text-sm font-black text-white" type="submit">ذخیره</button></form>;
+  return (
+    <form action={saveClientUserAction} className="grid gap-4">
+      <input name="id" type="hidden" value={user?.id ?? ""} />
+      <label className="grid gap-2 text-sm font-black text-navy">
+        <span>نام</span>
+        <input
+          className="service-input"
+          defaultValue={user?.fullName}
+          name="fullName"
+          required
+        />
+      </label>
+      <div className="grid gap-4 md:grid-cols-2">
+        <label className="grid gap-2 text-sm font-black text-navy">
+          <span>شماره تماس</span>
+          <input
+            className="service-input"
+            defaultValue={user?.phone}
+            name="phone"
+            required
+          />
+        </label>
+        <label className="grid gap-2 text-sm font-black text-navy">
+          <span>ایمیل</span>
+          <input
+            className="service-input"
+            defaultValue={user?.email}
+            name="email"
+            type="email"
+          />
+        </label>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2">
+        <label className="grid gap-2 text-sm font-black text-navy">
+          <span>کد ملی</span>
+          <input
+            className="service-input"
+            defaultValue={user?.nationalCode}
+            name="nationalCode"
+          />
+        </label>
+        <RoleSelect value={user?.role} />
+      </div>
+      <div className="grid gap-4 md:grid-cols-2">
+        <label className="grid gap-2 text-sm font-black text-navy">
+          <span>وضعیت</span>
+          <select
+            className="service-input"
+            defaultValue={user?.status ?? "active"}
+            name="status"
+          >
+            <option value="active">فعال</option>
+            <option value="blocked">مسدود</option>
+          </select>
+        </label>
+        <label className="grid gap-2 text-sm font-black text-navy">
+          <span>{user ? "رمز جدید (اختیاری)" : "رمز عبور"}</span>
+          <input
+            className="service-input"
+            name="password"
+            required={!user}
+            type="password"
+          />
+        </label>
+      </div>
+      <button
+        className="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-black text-white"
+        type="submit"
+      >
+        ذخیره
+      </button>
+    </form>
+  );
 }
 
 export default async function AdminUsersPage() {
   const { admins, clients } = await getAdminUsers();
-  return <AdminShell title="کاربران" description="مدیریت همه کاربران و سطح دسترسی"><div className="grid gap-6"><AdminPageHeader title="کاربران" description="لیست همه کاربران سایت با امکان افزودن، ویرایش، حذف و تعیین دسترسی ادمین، سوپر ادمین یا کاربر عادی." action={<div className="flex flex-wrap gap-2"><AdminModal buttonLabel="افزودن کاربر مدیریتی" title="افزودن کاربر مدیریتی"><AdminUserForm /></AdminModal><AdminModal buttonLabel="افزودن کاربر عادی" title="افزودن کاربر عادی"><ClientUserForm /></AdminModal></div>} />{admins.length ? <AdminDataTable headers={["نام", "ایمیل", "نقش", "وضعیت", "ایجاد", "عملیات"]}>{admins.map((user) => <tr className="border-t border-border" key={user.id}><td className="px-5 py-4 font-black text-navy">{user.fullName}</td><td className="px-5 py-4 font-bold text-muted">{user.email}</td><td className="px-5 py-4 font-bold text-muted">{roleLabels[user.role]}</td><td className="px-5 py-4"><AdminStatusBadge status={user.status} /></td><td className="px-5 py-4 font-bold text-muted">{user.createdAtText}</td><td className="px-5 py-4"><div className="flex flex-wrap gap-2"><AdminModal buttonLabel="ویرایش" title={`ویرایش ${user.fullName}`}><AdminUserForm user={user} /></AdminModal><AdminConfirmDialog action={<form action={deleteUserAction}><input name="id" type="hidden" value={user.id} /><button className="rounded-xl bg-red-600 px-5 py-2.5 text-sm font-black text-white">حذف</button></form>} /></div></td></tr>)}</AdminDataTable> : <AdminEmptyState title="کاربر مدیریتی ثبت نشده است" description="از دکمه افزودن کاربر مدیریتی استفاده کنید." />}<section className="grid gap-3"><h2 className="text-xl font-black text-navy">کاربران عادی سایت</h2>{clients.length ? <AdminDataTable headers={["نام", "تماس", "ایمیل", "نقش", "وضعیت", "آخرین ورود", "عملیات"]}>{clients.map((user) => <tr className="border-t border-border" key={user.id}><td className="px-5 py-4 font-black text-navy">{user.fullName}</td><td className="px-5 py-4 font-bold text-muted">{user.phone}</td><td className="px-5 py-4 font-bold text-muted">{user.email || "ثبت نشده"}</td><td className="px-5 py-4 font-bold text-muted">{roleLabels[user.role]}</td><td className="px-5 py-4"><AdminStatusBadge status={user.status} /></td><td className="px-5 py-4 font-bold text-muted">{user.lastLoginAtText}</td><td className="px-5 py-4"><div className="flex flex-wrap gap-2"><AdminModal buttonLabel="ویرایش" title={`ویرایش ${user.fullName}`}><ClientUserForm user={user} /></AdminModal><AdminConfirmDialog action={<form action={deleteClientUserAction}><input name="id" type="hidden" value={user.id} /><button className="rounded-xl bg-red-600 px-5 py-2.5 text-sm font-black text-white">حذف</button></form>} /></div></td></tr>)}</AdminDataTable> : <AdminEmptyState title="کاربری ثبت نشده است" description="کاربران پس از ثبت‌نام یا افزودن دستی در اینجا دیده می‌شوند." />}</section></div></AdminShell>;
+  return (
+    <AdminShell title="کاربران" description="مدیریت همه کاربران و سطح دسترسی">
+      <div className="grid gap-6">
+        <AdminPageHeader
+          title="کاربران"
+          description="لیست همه کاربران سایت با امکان افزودن، ویرایش، حذف و تعیین دسترسی ادمین، سوپر ادمین یا کاربر عادی."
+          action={
+            <div className="flex flex-wrap gap-2">
+              <AdminModal
+                buttonLabel="افزودن کاربر مدیریتی"
+                title="افزودن کاربر مدیریتی"
+              >
+                <AdminUserForm />
+              </AdminModal>
+              <AdminModal
+                buttonLabel="افزودن کاربر عادی"
+                title="افزودن کاربر عادی"
+              >
+                <ClientUserForm />
+              </AdminModal>
+            </div>
+          }
+        />
+        {admins.length ? (
+          <AdminDataTable
+            headers={["نام", "ایمیل", "نقش", "وضعیت", "ایجاد", "عملیات"]}
+          >
+            {admins.map((user) => (
+              <tr className="border-t border-border" key={user.id}>
+                <td className="px-5 py-4 font-black text-navy">
+                  {user.fullName}
+                </td>
+                <td className="px-5 py-4 font-bold text-muted">{user.email}</td>
+                <td className="px-5 py-4 font-bold text-muted">
+                  {roleLabels[user.role]}
+                </td>
+                <td className="px-5 py-4">
+                  <AdminStatusBadge status={user.status} />
+                </td>
+                <td className="px-5 py-4 font-bold text-muted">
+                  {user.createdAtText}
+                </td>
+                <td className="px-5 py-4">
+                  <div className="flex flex-wrap gap-2">
+                    <AdminModal
+                      buttonLabel="ویرایش"
+                      title={`ویرایش ${user.fullName}`}
+                    >
+                      <AdminUserForm user={user} />
+                    </AdminModal>
+                    <AdminConfirmDialog
+                      action={
+                        <form action={deleteUserAction}>
+                          <input name="id" type="hidden" value={user.id} />
+                          <button className="rounded-xl bg-red-600 px-5 py-2.5 text-sm font-black text-white">
+                            حذف
+                          </button>
+                        </form>
+                      }
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </AdminDataTable>
+        ) : (
+          <AdminEmptyState
+            title="کاربر مدیریتی ثبت نشده است"
+            description="از دکمه افزودن کاربر مدیریتی استفاده کنید."
+          />
+        )}
+        <section className="grid gap-3">
+          <h2 className="text-xl font-black text-navy">کاربران عادی سایت</h2>
+          {clients.length ? (
+            <AdminDataTable
+              headers={[
+                "نام",
+                "تماس",
+                "ایمیل",
+                "نقش",
+                "وضعیت",
+                "آخرین ورود",
+                "عملیات",
+              ]}
+            >
+              {clients.map((user) => (
+                <tr className="border-t border-border" key={user.id}>
+                  <td className="px-5 py-4 font-black text-navy">
+                    {user.fullName}
+                  </td>
+                  <td className="px-5 py-4 font-bold text-muted">
+                    {user.phone}
+                  </td>
+                  <td className="px-5 py-4 font-bold text-muted">
+                    {user.email || "ثبت نشده"}
+                  </td>
+                  <td className="px-5 py-4 font-bold text-muted">
+                    {roleLabels[user.role]}
+                  </td>
+                  <td className="px-5 py-4">
+                    <AdminStatusBadge status={user.status} />
+                  </td>
+                  <td className="px-5 py-4 font-bold text-muted">
+                    {user.lastLoginAtText}
+                  </td>
+                  <td className="px-5 py-4">
+                    <div className="flex flex-wrap gap-2">
+                      <AdminModal
+                        buttonLabel="ویرایش"
+                        title={`ویرایش ${user.fullName}`}
+                      >
+                        <ClientUserForm user={user} />
+                      </AdminModal>
+                      <AdminConfirmDialog
+                        action={
+                          <form action={deleteClientUserAction}>
+                            <input name="id" type="hidden" value={user.id} />
+                            <button className="rounded-xl bg-red-600 px-5 py-2.5 text-sm font-black text-white">
+                              حذف
+                            </button>
+                          </form>
+                        }
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </AdminDataTable>
+          ) : (
+            <AdminEmptyState
+              title="کاربری ثبت نشده است"
+              description="کاربران پس از ثبت‌نام یا افزودن دستی در اینجا دیده می‌شوند."
+            />
+          )}
+        </section>
+      </div>
+    </AdminShell>
+  );
 }

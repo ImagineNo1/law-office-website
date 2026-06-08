@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { RequestFormExperience } from "@/components/platform/services/RequestFormExperience";
-import { getPlatformServices } from "@/lib/platform-db";
+import { redirect } from "next/navigation";
 import { buildMetadata, getSeoForPath } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -12,7 +11,6 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function NewRequestPage() {
-  const services = await getPlatformServices();
-  return <RequestFormExperience services={services} />;
+export default function NewRequestPage() {
+  redirect("/dashboard/requests?new=1");
 }

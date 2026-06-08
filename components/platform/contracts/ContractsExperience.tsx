@@ -1,9 +1,16 @@
 import { Container } from "@/components/platform/layout/PageShell";
-import { PublicPageHero, PublicShell } from "@/components/platform/layout/PublicShell";
+import {
+  PublicPageHero,
+  PublicShell,
+} from "@/components/platform/layout/PublicShell";
 import { ContractsExplorer } from "@/components/platform/contracts/ContractsExplorer";
 import { fallbackContracts, type PlatformContract } from "@/lib/platform-db";
 
-export function ContractsExperience({ contracts = fallbackContracts }: { contracts?: PlatformContract[] }) {
+export function ContractsExperience({
+  contracts = fallbackContracts,
+}: {
+  contracts?: PlatformContract[];
+}) {
   return (
     <PublicShell>
       <PublicPageHero

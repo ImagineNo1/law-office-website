@@ -7,11 +7,16 @@ const messageSchema = new Schema(
     email: { type: String, trim: true },
     subject: { type: String, required: true },
     message: { type: String, required: true },
-    status: { type: String, enum: ["unread", "read", "archived"], default: "unread" },
+    status: {
+      type: String,
+      enum: ["unread", "read", "archived"],
+      default: "unread",
+    },
   },
   { timestamps: true },
 );
 
 export type MessageDocument = InferSchemaType<typeof messageSchema>;
 
-export const Message: Model<MessageDocument> = mongoose.models.Message ?? mongoose.model("Message", messageSchema);
+export const Message: Model<MessageDocument> =
+  mongoose.models.Message ?? mongoose.model("Message", messageSchema);

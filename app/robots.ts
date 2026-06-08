@@ -6,4 +6,3 @@ export const dynamic = "force-dynamic";
 export default async function robots(): Promise<MetadataRoute.Robots> {
   return getRobots();
 }
-

@@ -6,5 +6,9 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "پرداخت‌ها" };
 
 export default async function DashboardPaymentsPage() {
-  return <ClientPortalShell title="پرداخت‌ها"><UnderConstructionPanel /></ClientPortalShell>;
+  return (
+    <ClientPortalShell title="پرداخت‌ها">
+      <UnderConstructionPanel />
+    </ClientPortalShell>
+  );
 }

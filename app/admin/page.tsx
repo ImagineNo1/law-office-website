@@ -25,23 +25,38 @@ export default async function AdminDashboardPage() {
   const total = Object.values(data).reduce((sum, value) => sum + value, 0);
 
   return (
-    <AdminShell title="پیشخوان" description="نمای کلی داده‌های واقعی پنل مدیریت">
+    <AdminShell
+      title="پیشخوان"
+      description="نمای کلی داده‌های واقعی پنل مدیریت"
+    >
       <div className="grid gap-6">
-        <AdminPageHeader title="پیشخوان مدیریت" description="نمای زنده آمار، روندها و وضعیت بخش‌های اصلی" />
+        <AdminPageHeader
+          title="پیشخوان مدیریت"
+          description="نمای زنده آمار، روندها و وضعیت بخش‌های اصلی"
+        />
         {total ? (
           <>
-          <AdminDashboardCharts data={data} />
-          <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4">
-            {cards.map(([label, key, href]) => (
-              <Link className="rounded-2xl border border-border bg-white p-5 shadow-card transition hover:-translate-y-0.5 hover:shadow-soft" href={href} key={key}>
-                <p className="text-sm font-black text-muted">{label}</p>
-                <strong className="mt-4 block text-4xl font-black tabular-nums text-navy">{new Intl.NumberFormat("fa-IR").format(data[key])}</strong>
-              </Link>
-            ))}
-          </div>
+            <AdminDashboardCharts data={data} />
+            <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4">
+              {cards.map(([label, key, href]) => (
+                <Link
+                  className="rounded-2xl border border-border bg-white p-5 shadow-card transition hover:-translate-y-0.5 hover:shadow-soft"
+                  href={href}
+                  key={key}
+                >
+                  <p className="text-sm font-black text-muted">{label}</p>
+                  <strong className="mt-4 block text-4xl font-black tabular-nums text-navy">
+                    {new Intl.NumberFormat("fa-IR").format(data[key])}
+                  </strong>
+                </Link>
+              ))}
+            </div>
           </>
         ) : (
-          <AdminEmptyState title="هنوز داده‌ای در پنل ثبت نشده است" description="با ایجاد خدمت، قرارداد، مطلب یا دریافت درخواست، آمار واقعی این بخش تکمیل می‌شود." />
+          <AdminEmptyState
+            title="هنوز داده‌ای در پنل ثبت نشده است"
+            description="با ایجاد خدمت، قرارداد، مطلب یا دریافت درخواست، آمار واقعی این بخش تکمیل می‌شود."
+          />
         )}
       </div>
     </AdminShell>

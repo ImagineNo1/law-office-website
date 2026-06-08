@@ -73,7 +73,9 @@ function ToggleShell({
       <span className="absolute left-2 grid size-5 place-items-center opacity-70">
         <MoonIcon />
       </span>
-      <span className={`absolute right-1 z-10 grid size-8 place-items-center rounded-full bg-[#0f172a] text-white shadow-[0_8px_18px_rgba(15,23,42,0.22)] transition-transform duration-300 ease-out dark:bg-[#c9a24a] ${isDark ? "-translate-x-[30px]" : "translate-x-0"}`}>
+      <span
+        className={`absolute right-1 z-10 grid size-8 place-items-center rounded-full bg-[#0f172a] text-white shadow-[0_8px_18px_rgba(15,23,42,0.22)] transition-transform duration-300 ease-out dark:bg-[#c9a24a] ${isDark ? "-translate-x-[30px]" : "translate-x-0"}`}
+      >
         {isDark ? <MoonIcon /> : <SunIcon />}
       </span>
     </button>

@@ -13,7 +13,10 @@ function requireText(formData: FormData, key: string) {
 }
 
 function lines(value: FormDataEntryValue | null) {
-  return String(value ?? "").split("\n").map((item) => item.trim()).filter(Boolean);
+  return String(value ?? "")
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 function text(formData: FormData, key: string) {
@@ -21,14 +24,19 @@ function text(formData: FormData, key: string) {
 }
 
 function csv(value: string) {
-  return value.split(",").map((item) => item.trim()).filter(Boolean);
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 function jsonObject(value: string) {
   if (!value) return {};
   try {
     const parsed = JSON.parse(value);
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? parsed
+      : {};
   } catch {
     return {};
   }
@@ -40,10 +48,20 @@ function checked(formData: FormData, key: string, fallback = false) {
   return value === "on" || value === "true" || value === "1";
 }
 
-const frequencies = ["always", "hourly", "daily", "weekly", "monthly", "yearly", "never"] as const;
+const frequencies = [
+  "always",
+  "hourly",
+  "daily",
+  "weekly",
+  "monthly",
+  "yearly",
+  "never",
+] as const;
 
 function frequencyOf(value: string, fallback: (typeof frequencies)[number]) {
-  return frequencies.includes(value as (typeof frequencies)[number]) ? value as (typeof frequencies)[number] : fallback;
+  return frequencies.includes(value as (typeof frequencies)[number])
+    ? (value as (typeof frequencies)[number])
+    : fallback;
 }
 
 function seoPayload(formData: FormData) {
@@ -65,17 +83,29 @@ function seoPayload(formData: FormData) {
     schemaType: text(formData, "seo.schemaType"),
     schemaJson: jsonObject(text(formData, "seo.schemaJson")),
     sitemapInclude: checked(formData, "seo.sitemapInclude", true),
-    sitemapPriority: Math.max(0, Math.min(1, Number(text(formData, "seo.sitemapPriority")) || 0.7)),
-    sitemapChangeFrequency: frequencyOf(text(formData, "seo.sitemapChangeFrequency"), "weekly"),
+    sitemapPriority: Math.max(
+      0,
+      Math.min(1, Number(text(formData, "seo.sitemapPriority")) || 0.7),
+    ),
+    sitemapChangeFrequency: frequencyOf(
+      text(formData, "seo.sitemapChangeFrequency"),
+      "weekly",
+    ),
   };
-  const { score, issues } = scoreSeo(seo, `/legal-forms/${text(formData, "slug")}`, text(formData, "title"));
+  const { score, issues } = scoreSeo(
+    seo,
+    `/legal-forms/${text(formData, "slug")}`,
+    text(formData, "title"),
+  );
   return { ...seo, seoScore: score, seoNotes: issues };
 }
 
 const statuses = ["draft", "published", "archived"] as const;
 
 function statusOf(value: string) {
-  return statuses.includes(value as (typeof statuses)[number]) ? value as (typeof statuses)[number] : "published";
+  return statuses.includes(value as (typeof statuses)[number])
+    ? (value as (typeof statuses)[number])
+    : "published";
 }
 
 export async function saveLegalFormAction(formData: FormData) {
@@ -83,8 +113,9 @@ export async function saveLegalFormAction(formData: FormData) {
   await connectDb();
   const id = String(formData.get("id") ?? "").trim();
   const title = requireText(formData, "title");
-  const slug = requireText(formData, "slug");
-  const category = requireText(formData, "category");
+  const slug = text(formData, "slug") || title.trim().replace(/\s+/g, "-");
+  const category =
+    text(formData, "category") || text(formData, "categoryPreset") || "عمومی";
   const payload = {
     title,
     slug,
@@ -96,7 +127,9 @@ export async function saveLegalFormAction(formData: FormData) {
     seo: seoPayload(formData),
   };
   if (id) {
-    await LegalFormTemplate.findByIdAndUpdate(id, payload, { runValidators: true });
+    await LegalFormTemplate.findByIdAndUpdate(id, payload, {
+      runValidators: true,
+    });
   } else {
     await LegalFormTemplate.create(payload);
   }
@@ -108,7 +141,11 @@ export async function archiveLegalFormAction(formData: FormData) {
   await requireAdmin();
   await connectDb();
   const id = requireText(formData, "id");
-  await LegalFormTemplate.findByIdAndUpdate(id, { status: "archived" }, { runValidators: true });
+  await LegalFormTemplate.findByIdAndUpdate(
+    id,
+    { status: "archived" },
+    { runValidators: true },
+  );
   revalidatePath("/admin/legal-forms");
   revalidatePath("/legal-forms");
 }

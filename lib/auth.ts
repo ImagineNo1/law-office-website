@@ -32,7 +32,10 @@ function signPart(value: string, secret: string) {
   return crypto.createHmac("sha256", secret).update(value).digest("base64url");
 }
 
-export function signJwt(payload: JwtPayload, expiresInSeconds = 60 * 60 * 24 * 7) {
+export function signJwt(
+  payload: JwtPayload,
+  expiresInSeconds = 60 * 60 * 24 * 7,
+) {
   const secret = getJwtSecret();
   const now = Math.floor(Date.now() / 1000);
   const header = { alg: "HS256", typ: "JWT" };
@@ -45,7 +48,9 @@ export function signJwt(payload: JwtPayload, expiresInSeconds = 60 * 60 * 24 * 7
   return `${unsigned}.${signature}`;
 }
 
-export function verifyJwt<T extends JwtPayload = JwtPayload>(token: string): T | null {
+export function verifyJwt<T extends JwtPayload = JwtPayload>(
+  token: string,
+): T | null {
   const secret = getJwtSecret();
   const [header, payload, signature] = token.split(".");
 
@@ -110,7 +115,11 @@ export async function getCurrentUser() {
     .select("fullName email role status")
     .lean();
 
-  if (!user || user.status !== "active" || !["admin", "super_admin"].includes(user.role)) {
+  if (
+    !user ||
+    user.status !== "active" ||
+    !["admin", "super_admin"].includes(user.role)
+  ) {
     return null;
   }
 

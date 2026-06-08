@@ -1,6 +1,10 @@
 import { contractSamples, getFallbackContract } from "@/lib/contract-data";
 import { connectDb } from "@/lib/db";
-import { getFallbackService, isMojibake, serviceSamples } from "@/lib/service-data";
+import {
+  getFallbackService,
+  isMojibake,
+  serviceSamples,
+} from "@/lib/service-data";
 import { ContractTemplate } from "@/models/ContractTemplate";
 import { HomeContent } from "@/models/HomeContent";
 import { Message } from "@/models/Message";
@@ -105,7 +109,6 @@ type PostLike = {
 
 type NewsLike = Omit<PostLike, "category">;
 
-
 type ContractLike = {
   _id?: unknown;
   title: string;
@@ -178,7 +181,6 @@ function toNews(doc: NewsLike): NewsItem {
   };
 }
 
-
 function toContract(doc: ContractLike): ContractTemplateData {
   return {
     id: String(doc._id ?? ""),
@@ -240,7 +242,8 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
   return {
     siteTitle: settings.siteTitle ?? defaultSettings.siteTitle,
     siteDescription: settings.siteDescription ?? "",
-    logoText: settings.logoText ?? settings.siteTitle ?? defaultSettings.logoText,
+    logoText:
+      settings.logoText ?? settings.siteTitle ?? defaultSettings.logoText,
     phone: settings.phone ?? "",
     email: settings.email ?? "",
     address: settings.address ?? "",
@@ -271,21 +274,31 @@ export async function getHomeContent(): Promise<HomeContentData> {
   };
 }
 
-
 export async function getPublishedContracts(limit?: number) {
   if (!hasDatabase()) {
-    return canUseDemoFallback() ? (limit ? contractSamples.slice(0, limit) : contractSamples) : [];
+    return canUseDemoFallback()
+      ? limit
+        ? contractSamples.slice(0, limit)
+        : contractSamples
+      : [];
   }
 
   await connectDb();
-  const query = ContractTemplate.find({ status: "published" }).sort({ order: 1, createdAt: -1 });
+  const query = ContractTemplate.find({ status: "published" }).sort({
+    order: 1,
+    createdAt: -1,
+  });
   if (limit) {
     query.limit(limit);
   }
   const docs = await query.lean();
   const contracts = docs.map(toContract);
   if (!contracts.length) {
-    return canUseDemoFallback() ? (limit ? contractSamples.slice(0, limit) : contractSamples) : [];
+    return canUseDemoFallback()
+      ? limit
+        ? contractSamples.slice(0, limit)
+        : contractSamples
+      : [];
   }
   return contracts;
 }
@@ -296,7 +309,9 @@ export async function getAllContracts() {
   }
 
   await connectDb();
-  const docs = await ContractTemplate.find().sort({ order: 1, createdAt: -1 }).lean();
+  const docs = await ContractTemplate.find()
+    .sort({ order: 1, createdAt: -1 })
+    .lean();
   return docs.map(toContract);
 }
 
@@ -306,18 +321,28 @@ export async function getContractBySlug(slug: string) {
   }
 
   await connectDb();
-  const doc = await ContractTemplate.findOne({ slug, status: "published" }).lean();
+  const doc = await ContractTemplate.findOne({
+    slug,
+    status: "published",
+  }).lean();
   const contract = doc ? toContract(doc) : null;
   return contract ?? (canUseDemoFallback() ? getFallbackContract(slug) : null);
 }
 
 export async function getPublishedServices(limit?: number) {
   if (!hasDatabase()) {
-    return canUseDemoFallback() ? (limit ? serviceSamples.slice(0, limit) : serviceSamples) : [];
+    return canUseDemoFallback()
+      ? limit
+        ? serviceSamples.slice(0, limit)
+        : serviceSamples
+      : [];
   }
 
   await connectDb();
-  const query = Service.find({ status: "published" }).sort({ order: 1, createdAt: -1 });
+  const query = Service.find({ status: "published" }).sort({
+    order: 1,
+    createdAt: -1,
+  });
   if (limit) {
     query.limit(limit);
   }
@@ -338,9 +363,16 @@ export async function getPublishedServices(limit?: number) {
   if (
     !services.length ||
     !hasPhaseTwoShape ||
-    services.some((service) => isMojibake(service.title) || !sampleSlugs.has(String(service.slug)))
+    services.some(
+      (service) =>
+        isMojibake(service.title) || !sampleSlugs.has(String(service.slug)),
+    )
   ) {
-    return canUseDemoFallback() ? (limit ? serviceSamples.slice(0, limit) : serviceSamples) : services;
+    return canUseDemoFallback()
+      ? limit
+        ? serviceSamples.slice(0, limit)
+        : serviceSamples
+      : services;
   }
   return services;
 }
@@ -376,13 +408,21 @@ export async function getLatestPosts(limit?: number) {
 
 export async function getAllPosts() {
   await connectDb();
-  const docs = await Post.find().sort({ publishedAt: -1, createdAt: -1 }).lean();
+  const docs = await Post.find()
+    .sort({ publishedAt: -1, createdAt: -1 })
+    .lean();
   return docs.map(toPost);
 }
 
-export async function getPostBySlug(slug: string) {
+export async function getPostBySlug(
+  slug: string,
+  options: { includeDrafts?: boolean } = {},
+) {
   await connectDb();
-  const doc = await Post.findOne({ slug, status: "published" }).lean();
+  const query: { slug: string; status?: "published" } = options.includeDrafts
+    ? { slug }
+    : { slug, status: "published" };
+  const doc = await Post.findOne(query).lean();
   return doc ? toPost(doc) : null;
 }
 
@@ -401,17 +441,27 @@ export async function getLatestNews(limit?: number) {
 
 export async function getAllNews() {
   await connectDb();
-  const docs = await News.find().sort({ publishedAt: -1, createdAt: -1 }).lean();
+  const docs = await News.find()
+    .sort({ publishedAt: -1, createdAt: -1 })
+    .lean();
   return docs.map(toNews);
 }
 
-export async function getNewsBySlug(slug: string) {
+export async function getNewsBySlug(
+  slug: string,
+  options: { includeDrafts?: boolean } = {},
+) {
   await connectDb();
-  const doc = await News.findOne({ slug, status: "published" }).lean();
+  const query: { slug: string; status?: "published" } = options.includeDrafts
+    ? { slug }
+    : { slug, status: "published" };
+  const doc = await News.findOne(query).lean();
   return doc ? toNews(doc) : null;
 }
 
-export async function getPageContent(key: string): Promise<PageContentData | null> {
+export async function getPageContent(
+  key: string,
+): Promise<PageContentData | null> {
   await connectDb();
   const doc = await PageContent.findOne({ key }).lean();
   if (!doc) {

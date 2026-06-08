@@ -26,7 +26,10 @@ export function PublicPageHero({
   title: string;
 }) {
   return (
-    <section className="border-b border-slate-200 bg-white py-12 sm:py-16" dir="rtl">
+    <section
+      className="border-b border-slate-200 bg-white py-12 sm:py-16"
+      dir="rtl"
+    >
       <Container>
         <div className="max-w-4xl">
           <span className="inline-flex rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-sm font-black text-accent">
@@ -38,7 +41,9 @@ export function PublicPageHero({
           <p className="mt-5 max-w-3xl text-base font-bold leading-9 text-muted-foreground sm:text-lg">
             {description}
           </p>
-          {actions ? <div className="mt-7 flex flex-wrap gap-3">{actions}</div> : null}
+          {actions ? (
+            <div className="mt-7 flex flex-wrap gap-3">{actions}</div>
+          ) : null}
         </div>
       </Container>
     </section>

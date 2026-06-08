@@ -6,7 +6,11 @@ export const metadata: Metadata = {
   title: "داشبورد مشتری",
 };
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const headersList = await headers();
   const pathname = headersList.get("x-next-pathname") || "/dashboard";
   await requireClient(pathname);

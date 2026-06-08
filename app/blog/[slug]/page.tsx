@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ preview?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -26,10 +27,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export default async function BlogDetailPage({ params }: Props) {
+export default async function BlogDetailPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  const { preview } = searchParams ? await searchParams : {};
   const [post, posts] = await Promise.all([
-    getPostBySlug(slug),
+    getPostBySlug(slug, { includeDrafts: preview === "1" }),
     getLatestPosts(4),
   ]);
 
@@ -58,14 +60,18 @@ export default async function BlogDetailPage({ params }: Props) {
       </article>
       <section className="pb-16">
         <Container>
-        <h2 className="mb-6 text-2xl font-black text-foreground">
-          مقالات مرتبط
-        </h2>
-        <div className="grid gap-4 md:grid-cols-3">
-          {related.map((item) => (
-            <ArticleCard href={`/blog/${item.slug}`} item={item} key={item.slug} />
-          ))}
-        </div>
+          <h2 className="mb-6 text-2xl font-black text-foreground">
+            مقالات مرتبط
+          </h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            {related.map((item) => (
+              <ArticleCard
+                href={`/blog/${item.slug}`}
+                item={item}
+                key={item.slug}
+              />
+            ))}
+          </div>
         </Container>
       </section>
     </PublicShell>

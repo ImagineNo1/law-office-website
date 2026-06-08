@@ -12,8 +12,12 @@ export function AdminHeader({
   return (
     <header className="sticky top-0 z-30 flex min-h-16 items-center gap-3 border-b border-border bg-white px-4">
       <div className="hidden min-w-0 flex-1 lg:block">
-        <h1 className="truncate font-heading text-xl font-extrabold text-primary">{title}</h1>
-        <p className="mt-1 truncate text-xs font-bold leading-6 text-muted-foreground">{description ?? title}</p>
+        <h1 className="truncate font-heading text-xl font-extrabold text-primary">
+          {title}
+        </h1>
+        <p className="mt-1 truncate text-xs font-bold leading-6 text-muted-foreground">
+          {description ?? title}
+        </p>
       </div>
       <span className="hidden items-center gap-2 rounded-full border border-border bg-white px-3 py-1.5 text-xs font-extrabold text-muted-foreground sm:flex">
         <Settings aria-hidden="true" className="size-4" />

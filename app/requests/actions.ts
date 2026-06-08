@@ -11,14 +11,20 @@ export async function createServiceRequestAction(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim();
   const serviceSlug = String(formData.get("serviceSlug") ?? "general").trim();
   const selectedService = await getPlatformServiceBySlug(serviceSlug);
-  const serviceTitle = String(selectedService?.title ?? formData.get("serviceTitle") ?? formData.get("serviceType") ?? "مشاوره حقوقی").trim();
+  const serviceTitle = String(
+    selectedService?.title ??
+      formData.get("serviceTitle") ??
+      formData.get("serviceType") ??
+      "مشاوره حقوقی",
+  ).trim();
   const subject = String(formData.get("subject") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const attachment = formData.get("attachment");
-  const attachmentName = attachment instanceof File && attachment.name ? attachment.name : "";
+  const attachmentName =
+    attachment instanceof File && attachment.name ? attachment.name : "";
 
   if (!fullName || !phone || !subject || !description) {
-    redirect("/requests/new?error=missing");
+    redirect("/dashboard/requests?new=1");
   }
 
   const client = await getCurrentClient();
@@ -34,5 +40,7 @@ export async function createServiceRequestAction(formData: FormData) {
     attachmentName,
   });
 
-  redirect(`/requests/success?requestNumber=${encodeURIComponent(result.requestNumber)}`);
+  redirect(
+    `/requests/success?requestNumber=${encodeURIComponent(result.requestNumber)}`,
+  );
 }

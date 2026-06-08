@@ -5,9 +5,19 @@ import { getCurrentClient } from "@/lib/client-auth";
 
 export const metadata: Metadata = { title: "ثبت‌نام مشتری" };
 
-export default async function SignupPage({ searchParams }: { searchParams?: Promise<{ error?: string; next?: string }> }) {
+export default async function SignupPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ error?: string; next?: string }>;
+}) {
   const client = await getCurrentClient();
   if (client) redirect("/dashboard");
   const params = searchParams ? await searchParams : undefined;
-  return <ClientAuthPage error={params?.error} mode="signup" next={params?.next || "/dashboard"} />;
+  return (
+    <ClientAuthPage
+      error={params?.error}
+      mode="signup"
+      next={params?.next || "/dashboard"}
+    />
+  );
 }

@@ -101,7 +101,9 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
   const [megaOpen, setMegaOpen] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
   const phone =
-    settings.phone && !/[ØÙÛ]/.test(settings.phone) && settings.phone.includes("۰۲۱")
+    settings.phone &&
+    !/[ØÙÛ]/.test(settings.phone) &&
+    settings.phone.includes("۰۲۱")
       ? settings.phone
       : "۰۲۱-۱۲۳۴۵۶۷۸";
 
@@ -128,20 +130,28 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
           href="/"
           onClick={() => setMobileOpen(false)}
         >
-          <LegalLogo text={settings.logoText || settings.siteTitle || "موسسه حقوقی عدالت گستر"} />
+          <LegalLogo
+            text={
+              settings.logoText ||
+              settings.siteTitle ||
+              "موسسه حقوقی عدالت گستر"
+            }
+          />
         </Link>
 
         <nav className="hidden items-center gap-1 text-sm font-black text-navy lg:flex">
           {navItems.map((item) => {
             const active =
-              item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+              item.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(item.href);
 
             return (
               <Link
                 className={`rounded-full px-4 py-2.5 transition ${
                   active
-                    ? "bg-gold/10 text-gold"
-                    : "hover:bg-soft-gray hover:text-gold"
+                    ? "bg-emerald-500/10 text-emerald-700"
+                    : "hover:bg-soft-gray hover:text-emerald-700"
                 }`}
                 href={item.href}
                 key={item.label}
@@ -158,13 +168,13 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
         <div className="flex shrink-0 items-center gap-2">
           <button
             aria-label="جستجو"
-            className="grid size-11 place-items-center rounded-full border border-border bg-white text-navy transition hover:border-gold hover:text-gold"
+            className="grid size-11 place-items-center rounded-full border border-border bg-white text-navy transition hover:border-emerald-500 hover:text-emerald-700"
             type="button"
           >
             <SearchIcon />
           </button>
           <Link
-            className="hidden min-h-11 items-center gap-2 rounded-full bg-gold px-4 text-sm font-black text-[#1b1305] shadow-[0_14px_32px_rgba(201,151,63,0.24)] transition hover:bg-gold-light md:inline-flex"
+            className="hidden min-h-11 items-center gap-2 rounded-full bg-emerald-700 px-4 text-sm font-black text-[#ffffff] shadow-[0_14px_32px_rgba(201,151,63,0.24)] transition hover:bg-emerald-600 md:inline-flex"
             href="/contact"
           >
             <PhoneIcon />
@@ -173,7 +183,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
           <button
             aria-expanded={mobileOpen}
             aria-label="باز کردن منوی سایت"
-            className="grid size-11 place-items-center rounded-full border border-border bg-white text-navy transition hover:border-gold hover:text-gold lg:hidden"
+            className="grid size-11 place-items-center rounded-full border border-border bg-white text-navy transition hover:border-emerald-500 hover:text-emerald-700 lg:hidden"
             onClick={() => setMobileOpen((value) => !value)}
             type="button"
           >
@@ -204,18 +214,18 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
                 key={group.key}
               >
                 <Link
-                  className="mb-4 flex items-center justify-between text-base font-black text-navy transition hover:text-gold"
+                  className="mb-4 flex items-center justify-between text-base font-black text-navy transition hover:text-emerald-700"
                   href={group.href}
                   onClick={() => setMegaOpen(false)}
                   prefetch={false}
                 >
                   {group.title}
-                  <span className="h-px w-10 bg-gold/55" />
+                  <span className="h-px w-10 bg-emerald-500/55" />
                 </Link>
                 <div className="grid gap-3">
                   {group.items.map(([label, href]) => (
                     <Link
-                      className="rounded-xl px-3 py-2 text-sm font-bold text-muted transition hover:bg-gold/10 hover:text-gold"
+                      className="rounded-xl px-3 py-2 text-sm font-bold text-muted transition hover:bg-emerald-500/10 hover:text-emerald-700"
                       href={href}
                       key={label}
                       onClick={() => setMegaOpen(false)}
@@ -237,7 +247,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
             <nav className="grid gap-1 text-sm font-black text-navy">
               {navItems.map((item) => (
                 <Link
-                  className="rounded-xl px-4 py-3 transition hover:bg-gold/10 hover:text-gold"
+                  className="rounded-xl px-4 py-3 transition hover:bg-emerald-500/10 hover:text-emerald-700"
                   href={item.href}
                   key={item.label}
                   onClick={() => setMobileOpen(false)}
@@ -249,7 +259,10 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
             </nav>
             <div className="mt-3 grid gap-3 border-t border-border pt-3">
               {megaGroups.map((group) => (
-                <details className="rounded-xl bg-soft-gray px-4 py-3" key={group.key}>
+                <details
+                  className="rounded-xl bg-soft-gray px-4 py-3"
+                  key={group.key}
+                >
                   <summary className="cursor-pointer text-sm font-black text-navy">
                     {group.title}
                   </summary>

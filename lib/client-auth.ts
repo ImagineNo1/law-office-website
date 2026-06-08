@@ -24,7 +24,8 @@ export type CurrentClient = {
   avatar: string;
 };
 
-type ClientJwtPayload = ClientSession & Record<string, string | number | boolean>;
+type ClientJwtPayload = ClientSession &
+  Record<string, string | number | boolean>;
 
 function base64Url(input: Buffer | string) {
   return Buffer.from(input).toString("base64url");
@@ -37,18 +38,29 @@ function signPart(value: string, secret: string) {
 function getClientSessionSecret() {
   const secret = process.env.CLIENT_SESSION_SECRET || process.env.JWT_SECRET;
   if (secret) return secret;
-  return process.env.NODE_ENV === "production" ? null : "development-client-session-secret";
+  return process.env.NODE_ENV === "production"
+    ? null
+    : "development-client-session-secret";
 }
 
-function signClientJwt(payload: Omit<ClientSession, "exp">, expiresInSeconds = 60 * 60 * 24 * 7) {
+function signClientJwt(
+  payload: Omit<ClientSession, "exp">,
+  expiresInSeconds = 60 * 60 * 24 * 7,
+) {
   const secret = getClientSessionSecret();
   if (!secret) {
-    throw new Error("CLIENT_SESSION_SECRET or JWT_SECRET is required in production.");
+    throw new Error(
+      "CLIENT_SESSION_SECRET or JWT_SECRET is required in production.",
+    );
   }
 
   const now = Math.floor(Date.now() / 1000);
   const header = { alg: "HS256", typ: "JWT" };
-  const body: ClientJwtPayload = { ...payload, iat: now, exp: now + expiresInSeconds };
+  const body: ClientJwtPayload = {
+    ...payload,
+    iat: now,
+    exp: now + expiresInSeconds,
+  };
   const encodedHeader = base64Url(JSON.stringify(header));
   const encodedPayload = base64Url(JSON.stringify(body));
   const unsigned = `${encodedHeader}.${encodedPayload}`;
@@ -75,20 +87,32 @@ function verifyClientJwt(token: string) {
     return null;
   }
 
-  const decoded = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as ClientJwtPayload;
+  const decoded = JSON.parse(
+    Buffer.from(payload, "base64url").toString("utf8"),
+  ) as ClientJwtPayload;
   if (decoded.exp < Math.floor(Date.now() / 1000)) return null;
-  if (decoded.type !== "client" || decoded.role !== "client" || !decoded.userId) return null;
+  if (decoded.type !== "client" || decoded.role !== "client" || !decoded.userId)
+    return null;
 
   return decoded;
 }
 
 function canUseDemoClient() {
-  return process.env.NODE_ENV !== "production" && process.env.ALLOW_DEMO_CLIENT === "true";
+  return (
+    process.env.NODE_ENV !== "production" &&
+    process.env.ALLOW_DEMO_CLIENT === "true"
+  );
 }
 
-export function safeClientNext(value: FormDataEntryValue | string | null | undefined) {
+export function safeClientNext(
+  value: FormDataEntryValue | string | null | undefined,
+) {
   const next = typeof value === "string" && value ? value : "/dashboard";
-  if (!next.startsWith("/") || next.startsWith("//") || next.startsWith("/admin")) {
+  if (
+    !next.startsWith("/") ||
+    next.startsWith("//") ||
+    next.startsWith("/admin")
+  ) {
     return "/dashboard";
   }
   return next;
@@ -172,7 +196,12 @@ export async function getCurrentClient(): Promise<CurrentClient | null> {
     avatar?: string;
   }>();
 
-  if (!user || !["client", "user"].includes(user.role) || user.status !== "active") return null;
+  if (
+    !user ||
+    !["client", "user"].includes(user.role) ||
+    user.status !== "active"
+  )
+    return null;
 
   return {
     id: String(user._id),

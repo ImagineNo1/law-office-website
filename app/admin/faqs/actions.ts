@@ -14,24 +14,43 @@ function requireText(formData: FormData, key: string) {
 
 const pageTypes = ["general", "service", "contract", "legal-form"] as const;
 const statuses = ["draft", "published", "archived"] as const;
-const frequencies = ["always", "hourly", "daily", "weekly", "monthly", "yearly", "never"] as const;
+const frequencies = [
+  "always",
+  "hourly",
+  "daily",
+  "weekly",
+  "monthly",
+  "yearly",
+  "never",
+] as const;
 
 function text(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
 }
 
 function csv(value: string) {
-  return value.split(",").map((item) => item.trim()).filter(Boolean);
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 function jsonObject(value: string) {
   if (!value) return {};
   try {
     const parsed = JSON.parse(value);
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? parsed
+      : {};
   } catch {
     return {};
   }
+}
+
+function categoryValue(formData: FormData, fallback: string) {
+  return (
+    text(formData, "category") || text(formData, "categoryPreset") || fallback
+  );
 }
 
 function checked(formData: FormData, key: string, fallback = false) {
@@ -41,7 +60,9 @@ function checked(formData: FormData, key: string, fallback = false) {
 }
 
 function frequencyOf(value: string, fallback: (typeof frequencies)[number]) {
-  return frequencies.includes(value as (typeof frequencies)[number]) ? value as (typeof frequencies)[number] : fallback;
+  return frequencies.includes(value as (typeof frequencies)[number])
+    ? (value as (typeof frequencies)[number])
+    : fallback;
 }
 
 function seoPayload(formData: FormData) {
@@ -66,15 +87,25 @@ function seoPayload(formData: FormData) {
     schemaType: text(formData, "seo.schemaType"),
     schemaJson: jsonObject(text(formData, "seo.schemaJson")),
     sitemapInclude: checked(formData, "seo.sitemapInclude", true),
-    sitemapPriority: Math.max(0, Math.min(1, Number(text(formData, "seo.sitemapPriority")) || 0.5)),
-    sitemapChangeFrequency: frequencyOf(text(formData, "seo.sitemapChangeFrequency"), "monthly"),
+    sitemapPriority: Math.max(
+      0,
+      Math.min(1, Number(text(formData, "seo.sitemapPriority")) || 0.5),
+    ),
+    sitemapChangeFrequency: frequencyOf(
+      text(formData, "seo.sitemapChangeFrequency"),
+      "monthly",
+    ),
   };
   const { score, issues } = scoreSeo(seo, path, text(formData, "question"));
   return { ...seo, seoScore: score, seoNotes: issues };
 }
 
-function oneOf<T extends readonly string[]>(value: string, values: T, fallback: T[number]): T[number] {
-  return values.includes(value) ? value as T[number] : fallback;
+function oneOf<T extends readonly string[]>(
+  value: string,
+  values: T,
+  fallback: T[number],
+): T[number] {
+  return values.includes(value) ? (value as T[number]) : fallback;
 }
 
 export async function saveFaqAction(formData: FormData) {
@@ -84,10 +115,18 @@ export async function saveFaqAction(formData: FormData) {
   const payload = {
     question: requireText(formData, "question"),
     answer: requireText(formData, "answer"),
-    category: String(formData.get("category") ?? "عمومی").trim() || "عمومی",
-    pageType: oneOf(String(formData.get("pageType") ?? "general"), pageTypes, "general"),
+    category: categoryValue(formData, "عمومی"),
+    pageType: oneOf(
+      String(formData.get("pageType") ?? "general"),
+      pageTypes,
+      "general",
+    ),
     pageSlug: String(formData.get("pageSlug") ?? "").trim(),
-    status: oneOf(String(formData.get("status") ?? "published"), statuses, "published"),
+    status: oneOf(
+      String(formData.get("status") ?? "published"),
+      statuses,
+      "published",
+    ),
     order: Number(formData.get("order") ?? 0),
     seo: seoPayload(formData),
   };
@@ -106,7 +145,11 @@ export async function archiveFaqAction(formData: FormData) {
   await requireAdmin();
   await connectDb();
   const id = requireText(formData, "id");
-  await FAQ.findByIdAndUpdate(id, { status: "archived" }, { runValidators: true });
+  await FAQ.findByIdAndUpdate(
+    id,
+    { status: "archived" },
+    { runValidators: true },
+  );
   revalidatePath("/admin/faqs");
 }
 

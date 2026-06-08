@@ -8,6 +8,7 @@ const newsSchema = new Schema(
     excerpt: { type: String, required: true },
     content: { type: String, required: true },
     coverImage: { type: String },
+    category: { type: String, default: "عمومی", trim: true },
     status: { type: String, enum: ["draft", "published"], default: "draft" },
     publishedAt: { type: Date },
     seo: { type: seoSchema, default: () => ({}) },
@@ -17,4 +18,5 @@ const newsSchema = new Schema(
 
 export type NewsDocument = InferSchemaType<typeof newsSchema>;
 
-export const News: Model<NewsDocument> = mongoose.models.News ?? mongoose.model("News", newsSchema);
+export const News: Model<NewsDocument> =
+  mongoose.models.News ?? mongoose.model("News", newsSchema);

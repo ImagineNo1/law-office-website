@@ -1,6 +1,14 @@
 import { Schema } from "mongoose";
 
-export const changeFrequencies = ["always", "hourly", "daily", "weekly", "monthly", "yearly", "never"] as const;
+export const changeFrequencies = [
+  "always",
+  "hourly",
+  "daily",
+  "weekly",
+  "monthly",
+  "yearly",
+  "never",
+] as const;
 
 export const seoSchema = new Schema(
   {
@@ -22,10 +30,13 @@ export const seoSchema = new Schema(
     schemaJson: { type: Schema.Types.Mixed, default: {} },
     sitemapInclude: { type: Boolean, default: true },
     sitemapPriority: { type: Number, default: 0.7, min: 0, max: 1 },
-    sitemapChangeFrequency: { type: String, enum: changeFrequencies, default: "weekly" },
+    sitemapChangeFrequency: {
+      type: String,
+      enum: changeFrequencies,
+      default: "weekly",
+    },
     seoScore: { type: Number, default: 0, min: 0, max: 100 },
     seoNotes: { type: [String], default: [] },
   },
   { _id: false },
 );
-

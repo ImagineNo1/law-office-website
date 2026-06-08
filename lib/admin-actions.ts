@@ -3,7 +3,12 @@
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { clearAdminCookie, requireAdmin, setAdminCookie, signJwt } from "@/lib/auth";
+import {
+  clearAdminCookie,
+  requireAdmin,
+  setAdminCookie,
+  signJwt,
+} from "@/lib/auth";
 import { connectDb } from "@/lib/db";
 import { ensureDefaultAdmin } from "@/lib/ensure-default-admin";
 import { slugFromTitle } from "@/lib/slug";
@@ -27,6 +32,30 @@ import { scoreSeo } from "@/lib/seo";
 
 function text(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
+}
+
+function categoryValue(formData: FormData, fallback: string) {
+  return (
+    text(formData, "category") || text(formData, "categoryPreset") || fallback
+  );
+}
+
+async function uploadedImageDataUrl(formData: FormData, key: string) {
+  const file = formData.get(key);
+  if (!(file instanceof File) || !file.name || file.size === 0) return "";
+  if (!file.type.startsWith("image/")) return "";
+  const buffer = Buffer.from(await file.arrayBuffer());
+  return `data:${file.type};base64,${buffer.toString("base64")}`;
+}
+
+async function imageValue(
+  formData: FormData,
+  textKey: string,
+  fileKey: string,
+) {
+  return (
+    (await uploadedImageDataUrl(formData, fileKey)) || text(formData, textKey)
+  );
 }
 
 function optionalDate(value: string) {
@@ -72,8 +101,12 @@ function parseStats(value: string) {
   return value
     .split("\n")
     .map((line, index) => {
-      const [valueText = "", label = "", icon = "scale", order = String(index)] =
-        line.split("|").map((part) => part.trim());
+      const [
+        valueText = "",
+        label = "",
+        icon = "scale",
+        order = String(index),
+      ] = line.split("|").map((part) => part.trim());
       return { value: valueText, label, icon, order: Number(order) || index };
     })
     .filter((item) => item.value && item.label);
@@ -90,21 +123,28 @@ function parseFaqItems(value: string) {
   return value
     .split("\n")
     .map((line) => {
-      const [question = "", answer = ""] = line.split("|").map((part) => part.trim());
+      const [question = "", answer = ""] = line
+        .split("|")
+        .map((part) => part.trim());
       return { question, answer };
     })
     .filter((item) => item.question && item.answer);
 }
 
 function parseCsv(value: string) {
-  return value.split(",").map((item) => item.trim()).filter(Boolean);
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 function parseJsonObject(value: string) {
   if (!value) return {};
   try {
     const parsed = JSON.parse(value);
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? parsed
+      : {};
   } catch {
     return {};
   }
@@ -116,10 +156,25 @@ function boolValue(formData: FormData, key: string, fallback = false) {
   return value === "on" || value === "true" || value === "1";
 }
 
-const sitemapFrequencies = ["always", "hourly", "daily", "weekly", "monthly", "yearly", "never"] as const;
+const sitemapFrequencies = [
+  "always",
+  "hourly",
+  "daily",
+  "weekly",
+  "monthly",
+  "yearly",
+  "never",
+] as const;
 
-function sitemapFrequency(value: string, fallback: (typeof sitemapFrequencies)[number]) {
-  return sitemapFrequencies.includes(value as (typeof sitemapFrequencies)[number]) ? value as (typeof sitemapFrequencies)[number] : fallback;
+function sitemapFrequency(
+  value: string,
+  fallback: (typeof sitemapFrequencies)[number],
+) {
+  return sitemapFrequencies.includes(
+    value as (typeof sitemapFrequencies)[number],
+  )
+    ? (value as (typeof sitemapFrequencies)[number])
+    : fallback;
 }
 
 function seoPayload(formData: FormData) {
@@ -141,10 +196,20 @@ function seoPayload(formData: FormData) {
     schemaType: text(formData, "seo.schemaType"),
     schemaJson: parseJsonObject(text(formData, "seo.schemaJson")),
     sitemapInclude: boolValue(formData, "seo.sitemapInclude", true),
-    sitemapPriority: Math.max(0, Math.min(1, Number(text(formData, "seo.sitemapPriority")) || 0.7)),
-    sitemapChangeFrequency: sitemapFrequency(text(formData, "seo.sitemapChangeFrequency"), "weekly"),
+    sitemapPriority: Math.max(
+      0,
+      Math.min(1, Number(text(formData, "seo.sitemapPriority")) || 0.7),
+    ),
+    sitemapChangeFrequency: sitemapFrequency(
+      text(formData, "seo.sitemapChangeFrequency"),
+      "weekly",
+    ),
   };
-  const { score, issues } = scoreSeo(seo, text(formData, "path"), text(formData, "title"));
+  const { score, issues } = scoreSeo(
+    seo,
+    text(formData, "path"),
+    text(formData, "title"),
+  );
   return { ...seo, seoScore: score, seoNotes: issues };
 }
 
@@ -213,8 +278,8 @@ export async function savePostAction(formData: FormData) {
     slug,
     excerpt: text(formData, "excerpt"),
     content: text(formData, "content"),
-    coverImage: text(formData, "coverImage"),
-    category: text(formData, "category") || "عمومی",
+    coverImage: await imageValue(formData, "coverImage", "coverImageFile"),
+    category: categoryValue(formData, "عمومی"),
     status: publishedStatus(text(formData, "status")),
     publishedAt: optionalDate(text(formData, "publishedAt")),
     seo: seoPayload(formData),
@@ -233,6 +298,7 @@ export async function savePostAction(formData: FormData) {
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
   revalidatePath("/");
+  redirect("/admin/blog");
 }
 
 export async function deletePostAction(formData: FormData) {
@@ -256,7 +322,8 @@ export async function saveNewsAction(formData: FormData) {
     slug,
     excerpt: text(formData, "excerpt"),
     content: text(formData, "content"),
-    coverImage: text(formData, "coverImage"),
+    coverImage: await imageValue(formData, "coverImage", "coverImageFile"),
+    category: categoryValue(formData, "عمومی"),
     status: publishedStatus(text(formData, "status")),
     publishedAt: optionalDate(text(formData, "publishedAt")),
     seo: seoPayload(formData),
@@ -275,6 +342,7 @@ export async function saveNewsAction(formData: FormData) {
   revalidatePath("/admin/news");
   revalidatePath("/news");
   revalidatePath("/");
+  redirect("/admin/news");
 }
 
 export async function deleteNewsAction(formData: FormData) {
@@ -286,7 +354,6 @@ export async function deleteNewsAction(formData: FormData) {
   revalidatePath("/");
 }
 
-
 export async function saveContractAction(formData: FormData) {
   await requireAdmin();
   await connectDb();
@@ -297,12 +364,16 @@ export async function saveContractAction(formData: FormData) {
   const payload = {
     title,
     slug: text(formData, "slug") || slugFromTitle(title),
-    category: text(formData, "category") || "ملکی",
+    category: categoryValue(formData, "ملکی"),
     excerpt: text(formData, "excerpt"),
     content: text(formData, "content"),
     heroImage: text(formData, "heroImage"),
     priceLabel: text(formData, "priceLabel"),
-    sampleFileUrl: text(formData, "sampleFileUrl"),
+    sampleFileUrl: await imageValue(
+      formData,
+      "sampleFileUrl",
+      "sampleFileUrlFile",
+    ),
     useCases: parseLines(text(formData, "useCases")),
     benefits: parseLines(text(formData, "benefits")),
     requiredDocuments: parseLines(text(formData, "requiredDocuments")),
@@ -320,7 +391,9 @@ export async function saveContractAction(formData: FormData) {
   }
 
   if (id) {
-    await ContractTemplate.findByIdAndUpdate(id, payload, { runValidators: true });
+    await ContractTemplate.findByIdAndUpdate(id, payload, {
+      runValidators: true,
+    });
   } else {
     await ContractTemplate.create(payload);
   }
@@ -343,7 +416,11 @@ export async function deleteContractAction(formData: FormData) {
 export async function archiveContractAction(formData: FormData) {
   await requireAdmin();
   await connectDb();
-  await ContractTemplate.findByIdAndUpdate(text(formData, "id"), { status: "draft" }, { runValidators: true });
+  await ContractTemplate.findByIdAndUpdate(
+    text(formData, "id"),
+    { status: "draft" },
+    { runValidators: true },
+  );
   revalidatePath("/admin/contracts");
   revalidatePath("/contracts");
 }
@@ -360,7 +437,7 @@ export async function saveServiceAction(formData: FormData) {
     slug: text(formData, "slug") || slugFromTitle(title),
     excerpt: text(formData, "excerpt"),
     content: text(formData, "content"),
-    category: text(formData, "category") || "همه خدمات",
+    category: categoryValue(formData, "همه خدمات"),
     benefits: parseLines(text(formData, "benefits")),
     processSteps: parseLines(text(formData, "processSteps")),
     requiredDocuments: parseLines(text(formData, "requiredDocuments")),
@@ -368,7 +445,7 @@ export async function saveServiceAction(formData: FormData) {
     priceLabel: text(formData, "priceLabel"),
     heroDescription: text(formData, "heroDescription"),
     heroFeatures: parseLines(text(formData, "heroFeatures")),
-    icon: text(formData, "icon") || "scale",
+    icon: (await imageValue(formData, "icon", "iconFile")) || "scale",
     order: Number(text(formData, "order")) || 0,
     status: publishedStatus(text(formData, "status")),
     seo,
@@ -403,7 +480,11 @@ export async function deleteServiceAction(formData: FormData) {
 export async function archiveServiceAction(formData: FormData) {
   await requireAdmin();
   await connectDb();
-  await Service.findByIdAndUpdate(text(formData, "id"), { status: "draft" }, { runValidators: true });
+  await Service.findByIdAndUpdate(
+    text(formData, "id"),
+    { status: "draft" },
+    { runValidators: true },
+  );
   revalidatePath("/admin/services");
   revalidatePath("/services");
 }
@@ -452,9 +533,17 @@ export async function saveSeoAction(formData: FormData) {
   if (model === "Service") {
     await Service.findByIdAndUpdate(id, { seo }, { runValidators: true });
   } else if (model === "ContractTemplate") {
-    await ContractTemplate.findByIdAndUpdate(id, { seo, seoTitle: seo.metaTitle, seoDescription: seo.metaDescription }, { runValidators: true });
+    await ContractTemplate.findByIdAndUpdate(
+      id,
+      { seo, seoTitle: seo.metaTitle, seoDescription: seo.metaDescription },
+      { runValidators: true },
+    );
   } else if (model === "LegalFormTemplate") {
-    await LegalFormTemplate.findByIdAndUpdate(id, { seo }, { runValidators: true });
+    await LegalFormTemplate.findByIdAndUpdate(
+      id,
+      { seo },
+      { runValidators: true },
+    );
   } else if (model === "Post") {
     await Post.findByIdAndUpdate(id, { seo }, { runValidators: true });
   } else if (model === "News") {
@@ -487,16 +576,22 @@ export async function saveSeoSettingsAction(formData: FormData) {
       defaultMetaTitle: text(formData, "defaultMetaTitle"),
       defaultMetaDescription: text(formData, "defaultMetaDescription"),
       defaultOgImage: text(formData, "defaultOgImage"),
-      canonicalBaseUrl: text(formData, "canonicalBaseUrl") || "https://vakilyar.vercel.app",
+      canonicalBaseUrl:
+        text(formData, "canonicalBaseUrl") || "https://vakilyar.vercel.app",
       robotsTxt: text(formData, "robotsTxt"),
-      googleSearchConsoleVerification: text(formData, "googleSearchConsoleVerification"),
+      googleSearchConsoleVerification: text(
+        formData,
+        "googleSearchConsoleVerification",
+      ),
       organizationName: text(formData, "organizationName"),
       phone: text(formData, "phone"),
       address: text(formData, "address"),
       logo: text(formData, "logo"),
       socialProfiles: parseLines(text(formData, "socialProfiles")),
       organizationSchema: parseJsonObject(text(formData, "organizationSchema")),
-      localBusinessSchema: parseJsonObject(text(formData, "localBusinessSchema")),
+      localBusinessSchema: parseJsonObject(
+        text(formData, "localBusinessSchema"),
+      ),
     },
     { upsert: true, runValidators: true },
   );
@@ -513,7 +608,11 @@ export async function saveSeoRedirectAction(formData: FormData) {
   const targetPath = text(formData, "targetPath");
   const statusCode = Number(text(formData, "statusCode")) || 301;
 
-  if (!sourcePath.startsWith("/") || (!targetPath.startsWith("/") && !targetPath.startsWith("https://")) || sourcePath === targetPath) {
+  if (
+    !sourcePath.startsWith("/") ||
+    (!targetPath.startsWith("/") && !targetPath.startsWith("https://")) ||
+    sourcePath === targetPath
+  ) {
     throw new Error("مسیر ریدایرکت معتبر نیست.");
   }
 
@@ -527,7 +626,10 @@ export async function saveSeoRedirectAction(formData: FormData) {
   if (id) {
     await SEORedirect.findByIdAndUpdate(id, payload, { runValidators: true });
   } else {
-    await SEORedirect.findOneAndUpdate({ sourcePath }, payload, { upsert: true, runValidators: true });
+    await SEORedirect.findOneAndUpdate({ sourcePath }, payload, {
+      upsert: true,
+      runValidators: true,
+    });
   }
 
   revalidatePath("/admin/seo");
@@ -610,7 +712,12 @@ export async function submitContactMessageAction(formData: FormData) {
     message: text(formData, "message"),
   };
 
-  if (!payload.fullName || !payload.phone || !payload.subject || !payload.message) {
+  if (
+    !payload.fullName ||
+    !payload.phone ||
+    !payload.subject ||
+    !payload.message
+  ) {
     throw new Error("نام، تلفن، موضوع و پیام الزامی است.");
   }
 
@@ -636,7 +743,6 @@ export async function deleteMessageAction(formData: FormData) {
   revalidatePath("/admin/messages");
   revalidatePath("/admin");
 }
-
 
 export async function sendAdminClientMessageAction(formData: FormData) {
   await requireAdmin();

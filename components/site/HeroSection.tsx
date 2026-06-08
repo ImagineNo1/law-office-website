@@ -36,7 +36,12 @@ function ClockIcon() {
   );
 }
 
-const statIcons = [<ScaleIcon key="a" />, <ScaleIcon key="b" />, <ClockIcon key="c" />, <ScaleIcon key="d" />];
+const statIcons = [
+  <ScaleIcon key="a" />,
+  <ScaleIcon key="b" />,
+  <ClockIcon key="c" />,
+  <ScaleIcon key="d" />,
+];
 
 export function HeroSection({
   hero,
@@ -47,7 +52,10 @@ export function HeroSection({
 }) {
   return (
     <section className="relative overflow-hidden bg-navy pb-20 pt-6 text-white sm:pb-24 lg:pb-28">
-      <div className="legal-hero-ornament absolute inset-0 opacity-70" aria-hidden="true" />
+      <div
+        className="legal-hero-ornament absolute inset-0 opacity-70"
+        aria-hidden="true"
+      />
       <Container className="relative">
         <div className="legal-hero-visual relative min-h-[620px] overflow-hidden rounded-[8px] border border-white/10">
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(11,23,42,0.12),rgba(11,23,42,0.72)_40%,rgba(11,23,42,0.96)_72%)]" />
@@ -55,8 +63,8 @@ export function HeroSection({
             <div className="hidden lg:block" />
             <div className="max-w-2xl text-right">
               <div className="mb-6 flex items-center gap-3">
-                <span className="h-px w-14 bg-gold" />
-                <span className="text-sm font-black text-gold">
+                <span className="h-px w-14 bg-emerald-700" />
+                <span className="text-sm font-black text-emerald-700">
                   خدمات حقوقی، قراردادها و پیگیری پرونده
                 </span>
               </div>
@@ -64,17 +72,20 @@ export function HeroSection({
                 راهکارهای حقوقی هوشمند برای مسائل پیچیده شما
               </h1>
               <p className="mt-6 max-w-xl text-pretty text-base font-bold leading-9 text-white/78 sm:text-lg">
-                ارائه خدمات تخصصی حقوقی در زمینه قراردادها، دعاوی، مشاوره و پیگیری
-                پرونده‌ها با تیمی از وکلای مجرب
+                ارائه خدمات تخصصی حقوقی در زمینه قراردادها، دعاوی، مشاوره و
+                پیگیری پرونده‌ها با تیمی از وکلای مجرب
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button href={hero.primaryCtaHref || "/contact"} className="min-h-12 px-7">
+                <Button
+                  href={hero.primaryCtaHref || "/contact"}
+                  className="min-h-12 px-7"
+                >
                   درخواست مشاوره
                 </Button>
                 <Button
                   href={hero.secondaryCtaHref || "/services"}
                   variant="outline"
-                  className="min-h-12 border-white/35 bg-transparent px-7 text-white hover:border-gold hover:text-gold"
+                  className="min-h-12 border-white/35 bg-transparent px-7 text-white hover:border-emerald-500 hover:text-emerald-700"
                 >
                   مشاهده خدمات
                 </Button>

@@ -1,7 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { TourSpotlight, type SpotlightRect } from "@/components/onboarding/TourSpotlight";
+import {
+  TourSpotlight,
+  type SpotlightRect,
+} from "@/components/onboarding/TourSpotlight";
 import { TourStepCard } from "@/components/onboarding/TourStepCard";
 import type { TourStep } from "@/components/onboarding/tour-steps";
 
@@ -48,8 +51,13 @@ function positionCard(rect: SpotlightRect): CardPosition {
   }
 
   const fitsLeft = rect.left - CARD_WIDTH - GAP > 16;
-  const fitsRight = rect.left + rect.width + CARD_WIDTH + GAP < window.innerWidth - 16;
-  const top = clamp(rect.top + rect.height / 2 - 190, 16, window.innerHeight - 430);
+  const fitsRight =
+    rect.left + rect.width + CARD_WIDTH + GAP < window.innerWidth - 16;
+  const top = clamp(
+    rect.top + rect.height / 2 - 190,
+    16,
+    window.innerHeight - 430,
+  );
 
   if (fitsLeft) {
     return { top, left: rect.left - CARD_WIDTH - GAP };
@@ -58,7 +66,10 @@ function positionCard(rect: SpotlightRect): CardPosition {
     return { top, left: rect.left + rect.width + GAP };
   }
 
-  return { top: clamp(rect.top + rect.height + GAP, 16, window.innerHeight - 430), left: clamp(rect.left, 16, window.innerWidth - CARD_WIDTH - 16) };
+  return {
+    top: clamp(rect.top + rect.height + GAP, 16, window.innerHeight - 430),
+    left: clamp(rect.left, 16, window.innerWidth - CARD_WIDTH - 16),
+  };
 }
 
 export function GuidedTour({
@@ -86,7 +97,11 @@ export function GuidedTour({
     if (!step) return;
     const target = getTarget(step.selector);
     if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
+      });
       window.setTimeout(() => setRect(rectFromElement(target)), 220);
       return;
     }
@@ -133,7 +148,9 @@ export function GuidedTour({
         previousStep();
       }
       if (event.key === "Tab") {
-        const focusable = cardRef.current?.querySelectorAll<HTMLElement>('button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        const focusable = cardRef.current?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        );
         if (!focusable?.length) return;
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
@@ -159,7 +176,10 @@ export function GuidedTour({
 
   return (
     <>
-      <div aria-hidden="true" className="fixed inset-0 z-[80] bg-slate-950/65 backdrop-blur-[1px]" />
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 z-[80] bg-slate-950/65 backdrop-blur-[1px]"
+      />
       <TourSpotlight rect={rect} />
       <TourStepCard
         cardRef={cardRef}

@@ -29,12 +29,27 @@ export type SeoData = {
   schemaJson: Record<string, unknown>;
   sitemapInclude: boolean;
   sitemapPriority: number;
-  sitemapChangeFrequency: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
+  sitemapChangeFrequency:
+    | "always"
+    | "hourly"
+    | "daily"
+    | "weekly"
+    | "monthly"
+    | "yearly"
+    | "never";
   seoScore: number;
   seoNotes: string[];
 };
 
-export type SeoPageType = "home" | "page" | "service" | "contract" | "legal-form" | "blog" | "news" | "faq";
+export type SeoPageType =
+  | "home"
+  | "page"
+  | "service"
+  | "contract"
+  | "legal-form"
+  | "blog"
+  | "news"
+  | "faq";
 
 export type SeoPage = {
   id: string;
@@ -103,18 +118,50 @@ const typeLabels: Record<SeoPageType, string> = {
 const staticPages = [
   { key: "home", title: "صفحه اصلی", path: "/", type: "home" as const },
   { key: "about", title: "درباره ما", path: "/about", type: "page" as const },
-  { key: "institute", title: "معرفی موسسه", path: "/institute", type: "page" as const },
-  { key: "contact", title: "تماس با ما", path: "/contact", type: "page" as const },
-  { key: "services", title: "خدمات حقوقی", path: "/services", type: "page" as const },
-  { key: "contracts", title: "بانک قراردادها", path: "/contracts", type: "page" as const },
-  { key: "legal-forms", title: "فرم‌های حقوقی", path: "/legal-forms", type: "page" as const },
+  {
+    key: "institute",
+    title: "معرفی موسسه",
+    path: "/institute",
+    type: "page" as const,
+  },
+  {
+    key: "contact",
+    title: "تماس با ما",
+    path: "/contact",
+    type: "page" as const,
+  },
+  {
+    key: "services",
+    title: "خدمات حقوقی",
+    path: "/services",
+    type: "page" as const,
+  },
+  {
+    key: "contracts",
+    title: "بانک قراردادها",
+    path: "/contracts",
+    type: "page" as const,
+  },
+  {
+    key: "legal-forms",
+    title: "فرم‌های حقوقی",
+    path: "/legal-forms",
+    type: "page" as const,
+  },
   { key: "blog", title: "وبلاگ", path: "/blog", type: "page" as const },
   { key: "news", title: "اخبار", path: "/news", type: "page" as const },
-  { key: "requests-new", title: "ثبت درخواست", path: "/requests/new", type: "page" as const },
+  {
+    key: "requests-new",
+    title: "ثبت درخواست",
+    path: "/requests/new",
+    type: "page" as const,
+  },
 ];
 
 function idOf(value: unknown, fallback: string) {
-  return value && typeof value === "object" && "toString" in value ? String(value) : fallback;
+  return value && typeof value === "object" && "toString" in value
+    ? String(value)
+    : fallback;
 }
 
 export function hasDatabase() {
@@ -129,20 +176,33 @@ export function normalizeSeo(input?: Partial<SeoData> | null): SeoData {
   return {
     ...defaultSeo,
     ...(input ?? {}),
-    keywords: Array.isArray(input?.keywords) ? input.keywords.filter(Boolean) : [],
-    seoNotes: Array.isArray(input?.seoNotes) ? input.seoNotes.filter(Boolean) : [],
-    schemaJson: input?.schemaJson && typeof input.schemaJson === "object" ? input.schemaJson : {},
+    keywords: Array.isArray(input?.keywords)
+      ? input.keywords.filter(Boolean)
+      : [],
+    seoNotes: Array.isArray(input?.seoNotes)
+      ? input.seoNotes.filter(Boolean)
+      : [],
+    schemaJson:
+      input?.schemaJson && typeof input.schemaJson === "object"
+        ? input.schemaJson
+        : {},
   };
 }
 
 function charIssue(value: string, min: number, max: number, label: string) {
   if (!value) return `${label} نوشته نشده است.`;
-  if (value.length < min) return `${label} کوتاه است؛ بهتر است حداقل ${min} کاراکتر باشد.`;
-  if (value.length > max) return `${label} طولانی است؛ بهتر است حداکثر ${max} کاراکتر باشد.`;
+  if (value.length < min)
+    return `${label} کوتاه است؛ بهتر است حداقل ${min} کاراکتر باشد.`;
+  if (value.length > max)
+    return `${label} طولانی است؛ بهتر است حداکثر ${max} کاراکتر باشد.`;
   return "";
 }
 
-export function scoreSeo(seoInput?: Partial<SeoData> | null, path = "", title = "") {
+export function scoreSeo(
+  seoInput?: Partial<SeoData> | null,
+  path = "",
+  title = "",
+) {
   const seo = normalizeSeo(seoInput);
   const issues = [
     charIssue(seo.metaTitle, 40, 60, "عنوان سئو"),
@@ -150,20 +210,42 @@ export function scoreSeo(seoInput?: Partial<SeoData> | null, path = "", title = 
   ].filter(Boolean);
 
   if (!seo.focusKeyword) issues.push("کلمه کلیدی اصلی انتخاب نشده است.");
-  if (seo.focusKeyword && seo.metaTitle && !seo.metaTitle.includes(seo.focusKeyword)) issues.push("کلمه کلیدی اصلی در عنوان سئو نیست.");
-  if (seo.focusKeyword && seo.metaDescription && !seo.metaDescription.includes(seo.focusKeyword)) issues.push("کلمه کلیدی اصلی در توضیحات متا نیست.");
-  if (!/^[a-z0-9\-\/]+$/i.test(path) && !path.includes("/contracts/") && !path.includes("/services/")) issues.push("مسیر صفحه بهتر است کوتاه، خوانا و بدون کاراکترهای پیچیده باشد.");
-  if (seo.canonicalUrl && !/^https?:\/\//.test(seo.canonicalUrl)) issues.push("آدرس canonical باید با http یا https شروع شود.");
+  if (
+    seo.focusKeyword &&
+    seo.metaTitle &&
+    !seo.metaTitle.includes(seo.focusKeyword)
+  )
+    issues.push("کلمه کلیدی اصلی در عنوان سئو نیست.");
+  if (
+    seo.focusKeyword &&
+    seo.metaDescription &&
+    !seo.metaDescription.includes(seo.focusKeyword)
+  )
+    issues.push("کلمه کلیدی اصلی در توضیحات متا نیست.");
+  if (
+    !/^[a-z0-9\-\/]+$/i.test(path) &&
+    !path.includes("/contracts/") &&
+    !path.includes("/services/")
+  )
+    issues.push(
+      "مسیر صفحه بهتر است کوتاه، خوانا و بدون کاراکترهای پیچیده باشد.",
+    );
+  if (seo.canonicalUrl && !/^https?:\/\//.test(seo.canonicalUrl))
+    issues.push("آدرس canonical باید با http یا https شروع شود.");
   if (!seo.ogTitle) issues.push("عنوان شبکه‌های اجتماعی نوشته نشده است.");
   if (!seo.ogDescription) issues.push("توضیح شبکه‌های اجتماعی نوشته نشده است.");
   if (!seo.ogImage) issues.push("تصویر اشتراک‌گذاری انتخاب نشده است.");
   if (!seo.imageAlt) issues.push("متن جایگزین تصویر نوشته نشده است.");
   if (!seo.schemaType) issues.push("نوع اسکیما انتخاب نشده است.");
-  if (!seo.robotsIndex && seo.sitemapInclude) issues.push("صفحه noindex نباید در سایت‌مپ باشد.");
+  if (!seo.robotsIndex && seo.sitemapInclude)
+    issues.push("صفحه noindex نباید در سایت‌مپ باشد.");
   if (!title) issues.push("عنوان صفحه مشخص نیست.");
 
   const checks = 13;
-  const score = Math.max(0, Math.min(100, Math.round(((checks - issues.length) / checks) * 100)));
+  const score = Math.max(
+    0,
+    Math.min(100, Math.round(((checks - issues.length) / checks) * 100)),
+  );
   return { score, issues };
 }
 
@@ -183,7 +265,12 @@ export function buildPath(type: SeoPageType, doc: SeoDoc) {
   return "/";
 }
 
-function toSeoPage(type: SeoPageType, model: string, doc: SeoDoc, fallbackPath?: string): SeoPage {
+function toSeoPage(
+  type: SeoPageType,
+  model: string,
+  doc: SeoDoc,
+  fallbackPath?: string,
+): SeoPage {
   const title = doc.title ?? doc.key ?? "بدون عنوان";
   const seo = normalizeSeo({
     ...(doc.seo ?? {}),
@@ -212,7 +299,8 @@ export async function getSeoSettings() {
     return {
       siteName: "وکیل‌یار",
       defaultMetaTitle: "وکیل‌یار | خدمات حقوقی، قرارداد و امضا",
-      defaultMetaDescription: "پلتفرم فارسی خدمات حقوقی، بانک قرارداد، ثبت درخواست و پیگیری پرونده برای موکلان.",
+      defaultMetaDescription:
+        "پلتفرم فارسی خدمات حقوقی، بانک قرارداد، ثبت درخواست و پیگیری پرونده برای موکلان.",
       defaultOgImage: "",
       canonicalBaseUrl: "https://vakilyar.vercel.app",
       robotsTxt: "",
@@ -224,38 +312,81 @@ export async function getSeoSettings() {
     };
   }
   await connectDb();
-  const settings = await SEOSettings.findOne({ key: "seo" }).lean<Record<string, unknown>>();
+  const settings = await SEOSettings.findOne({ key: "seo" }).lean<
+    Record<string, unknown>
+  >();
   return {
     siteName: String(settings?.siteName ?? "وکیل‌یار"),
-    defaultMetaTitle: String(settings?.defaultMetaTitle ?? "وکیل‌یار | خدمات حقوقی، قرارداد و امضا"),
-    defaultMetaDescription: String(settings?.defaultMetaDescription ?? "پلتفرم فارسی خدمات حقوقی، بانک قرارداد، ثبت درخواست و پیگیری پرونده برای موکلان."),
+    defaultMetaTitle: String(
+      settings?.defaultMetaTitle ?? "وکیل‌یار | خدمات حقوقی، قرارداد و امضا",
+    ),
+    defaultMetaDescription: String(
+      settings?.defaultMetaDescription ??
+        "پلتفرم فارسی خدمات حقوقی، بانک قرارداد، ثبت درخواست و پیگیری پرونده برای موکلان.",
+    ),
     defaultOgImage: String(settings?.defaultOgImage ?? ""),
-    canonicalBaseUrl: String(settings?.canonicalBaseUrl ?? "https://vakilyar.vercel.app").replace(/\/$/, ""),
+    canonicalBaseUrl: String(
+      settings?.canonicalBaseUrl ?? "https://vakilyar.vercel.app",
+    ).replace(/\/$/, ""),
     robotsTxt: String(settings?.robotsTxt ?? ""),
     organizationName: String(settings?.organizationName ?? "وکیل‌یار"),
     phone: String(settings?.phone ?? ""),
     address: String(settings?.address ?? ""),
     logo: String(settings?.logo ?? ""),
-    socialProfiles: Array.isArray(settings?.socialProfiles) ? settings.socialProfiles as string[] : [],
+    socialProfiles: Array.isArray(settings?.socialProfiles)
+      ? (settings.socialProfiles as string[])
+      : [],
   };
 }
 
 export async function getSeoPages(): Promise<SeoPage[]> {
-  if (!hasDatabase()) return staticPages.map((item) => toSeoPage(item.type, "PageContent", { key: item.key, title: item.title }, item.path));
+  if (!hasDatabase())
+    return staticPages.map((item) =>
+      toSeoPage(
+        item.type,
+        "PageContent",
+        { key: item.key, title: item.title },
+        item.path,
+      ),
+    );
   await connectDb();
 
-  const [pages, services, contracts, forms, posts, news, faqs] = await Promise.all([
-    PageContent.find().lean<SeoDoc[]>(),
-    Service.find({ status: "published" }).sort({ order: 1, createdAt: -1 }).lean<SeoDoc[]>(),
-    ContractTemplate.find({ status: "published" }).sort({ order: 1, createdAt: -1 }).lean<SeoDoc[]>(),
-    LegalFormTemplate.find({ status: "published" }).sort({ createdAt: -1 }).lean<SeoDoc[]>(),
-    Post.find({ status: "published" }).sort({ publishedAt: -1, createdAt: -1 }).lean<SeoDoc[]>(),
-    News.find({ status: "published" }).sort({ publishedAt: -1, createdAt: -1 }).lean<SeoDoc[]>(),
-    FAQ.find({ status: "published" }).sort({ order: 1, createdAt: -1 }).lean<SeoDoc[]>(),
-  ]);
+  const [pages, services, contracts, forms, posts, news, faqs] =
+    await Promise.all([
+      PageContent.find().lean<SeoDoc[]>(),
+      Service.find({ status: "published" })
+        .sort({ order: 1, createdAt: -1 })
+        .lean<SeoDoc[]>(),
+      ContractTemplate.find({ status: "published" })
+        .sort({ order: 1, createdAt: -1 })
+        .lean<SeoDoc[]>(),
+      LegalFormTemplate.find({ status: "published" })
+        .sort({ createdAt: -1 })
+        .lean<SeoDoc[]>(),
+      Post.find({ status: "published" })
+        .sort({ publishedAt: -1, createdAt: -1 })
+        .lean<SeoDoc[]>(),
+      News.find({ status: "published" })
+        .sort({ publishedAt: -1, createdAt: -1 })
+        .lean<SeoDoc[]>(),
+      FAQ.find({ status: "published" })
+        .sort({ order: 1, createdAt: -1 })
+        .lean<SeoDoc[]>(),
+    ]);
 
   const pageMap = new Map(pages.map((page) => [page.key, page]));
-  const staticSeoPages = staticPages.map((item) => toSeoPage(item.type, "PageContent", { ...pageMap.get(item.key), key: item.key, title: pageMap.get(item.key)?.title ?? item.title }, item.path));
+  const staticSeoPages = staticPages.map((item) =>
+    toSeoPage(
+      item.type,
+      "PageContent",
+      {
+        ...pageMap.get(item.key),
+        key: item.key,
+        title: pageMap.get(item.key)?.title ?? item.title,
+      },
+      item.path,
+    ),
+  );
 
   return [
     ...staticSeoPages,
@@ -264,7 +395,18 @@ export async function getSeoPages(): Promise<SeoPage[]> {
     ...forms.map((doc) => toSeoPage("legal-form", "LegalFormTemplate", doc)),
     ...posts.map((doc) => toSeoPage("blog", "Post", doc)),
     ...news.map((doc) => toSeoPage("news", "News", doc)),
-    ...faqs.map((doc) => toSeoPage("faq", "FAQ", { ...doc, title: doc.title ?? doc.excerpt ?? "سوال متداول", slug: doc.slug ?? doc.key ?? "" }, doc.key ? `/#${doc.key}` : undefined)),
+    ...faqs.map((doc) =>
+      toSeoPage(
+        "faq",
+        "FAQ",
+        {
+          ...doc,
+          title: doc.title ?? doc.excerpt ?? "سوال متداول",
+          slug: doc.slug ?? doc.key ?? "",
+        },
+        doc.key ? `/#${doc.key}` : undefined,
+      ),
+    ),
   ];
 }
 
@@ -291,9 +433,18 @@ export async function buildMetadata({
   const settings = await getSeoSettings();
   const normalized = normalizeSeo(seo);
   const pageTitle = normalized.metaTitle || title || settings.defaultMetaTitle;
-  const pageDescription = normalized.metaDescription || description || settings.defaultMetaDescription;
-  const canonical = normalized.canonicalUrl || `${settings.canonicalBaseUrl}${path}`;
-  const ogImage = normalized.ogImage || normalized.twitterImage || image || settings.defaultOgImage || undefined;
+  const pageDescription =
+    normalized.metaDescription ||
+    description ||
+    settings.defaultMetaDescription;
+  const canonical =
+    normalized.canonicalUrl || `${settings.canonicalBaseUrl}${path}`;
+  const ogImage =
+    normalized.ogImage ||
+    normalized.twitterImage ||
+    image ||
+    settings.defaultOgImage ||
+    undefined;
 
   return {
     title: pageTitle,
@@ -309,14 +460,19 @@ export async function buildMetadata({
       description: normalized.ogDescription || pageDescription,
       url: canonical,
       siteName: settings.siteName,
-      images: ogImage ? [{ url: ogImage, alt: normalized.imageAlt || pageTitle }] : undefined,
+      images: ogImage
+        ? [{ url: ogImage, alt: normalized.imageAlt || pageTitle }]
+        : undefined,
       locale: "fa_IR",
       type: "website",
     },
     twitter: {
       card: ogImage ? "summary_large_image" : "summary",
       title: normalized.twitterTitle || normalized.ogTitle || pageTitle,
-      description: normalized.twitterDescription || normalized.ogDescription || pageDescription,
+      description:
+        normalized.twitterDescription ||
+        normalized.ogDescription ||
+        pageDescription,
       images: ogImage ? [ogImage] : undefined,
     },
   };
@@ -326,8 +482,18 @@ export async function getSitemapEntries(): Promise<MetadataRoute.Sitemap> {
   const settings = await getSeoSettings();
   const pages = await getSeoPages();
   return pages
-    .filter((page) => page.status === "published" && page.seo.sitemapInclude && page.seo.robotsIndex)
-    .filter((page) => !page.path.startsWith("/admin") && !page.path.startsWith("/dashboard") && !["/login", "/signup"].includes(page.path))
+    .filter(
+      (page) =>
+        page.status === "published" &&
+        page.seo.sitemapInclude &&
+        page.seo.robotsIndex,
+    )
+    .filter(
+      (page) =>
+        !page.path.startsWith("/admin") &&
+        !page.path.startsWith("/dashboard") &&
+        !["/login", "/signup"].includes(page.path),
+    )
     .map((page) => ({
       url: `${settings.canonicalBaseUrl}${page.path}`,
       lastModified: page.updatedAt ? new Date(page.updatedAt) : new Date(),
@@ -338,7 +504,16 @@ export async function getSitemapEntries(): Promise<MetadataRoute.Sitemap> {
 
 export async function getRobots(): Promise<MetadataRoute.Robots> {
   const settings = await getSeoSettings();
-  const disallow = ["/admin", "/admin/", "/dashboard", "/dashboard/", "/login", "/signup", "/auth", "/api"];
+  const disallow = [
+    "/admin",
+    "/admin/",
+    "/dashboard",
+    "/dashboard/",
+    "/login",
+    "/signup",
+    "/auth",
+    "/api",
+  ];
   return {
     rules: { userAgent: "*", allow: "/", disallow },
     sitemap: `${settings.canonicalBaseUrl}/sitemap.xml`,
@@ -348,15 +523,17 @@ export async function getRobots(): Promise<MetadataRoute.Robots> {
 export async function getSeoRedirects() {
   if (!hasDatabase()) return [];
   await connectDb();
-  const docs = await SEORedirect.find().sort({ createdAt: -1 }).lean<{
-    _id: unknown;
-    sourcePath: string;
-    targetPath: string;
-    statusCode: number;
-    enabled: boolean;
-    hitCount?: number;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-  }[]>();
+  const docs = await SEORedirect.find().sort({ createdAt: -1 }).lean<
+    {
+      _id: unknown;
+      sourcePath: string;
+      targetPath: string;
+      statusCode: number;
+      enabled: boolean;
+      hitCount?: number;
+      createdAt?: Date | string;
+      updatedAt?: Date | string;
+    }[]
+  >();
   return docs.map((doc) => ({ ...doc, id: idOf(doc._id, doc.sourcePath) }));
 }

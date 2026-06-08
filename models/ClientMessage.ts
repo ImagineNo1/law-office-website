@@ -4,7 +4,11 @@ const clientMessageSchema = new Schema(
   {
     clientId: { type: String, required: true, trim: true },
     senderType: { type: String, enum: ["client", "admin"], required: true },
-    sender: { type: String, enum: ["client", "lawyer", "admin"], required: true },
+    sender: {
+      type: String,
+      enum: ["client", "lawyer", "admin"],
+      required: true,
+    },
     message: { type: String, required: true, trim: true },
     threadId: { type: String, default: "general", trim: true, index: true },
     threadTitle: { type: String, default: "گفتگوی پشتیبانی", trim: true },

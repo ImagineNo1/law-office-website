@@ -81,7 +81,12 @@ type LeanRequest = {
   priority: ServiceRequestData["priority"];
   status: RequestStatus;
   assignedTo?: string | null;
-  adminNotes?: { _id?: unknown; author: string; message: string; createdAt?: Date | string }[];
+  adminNotes?: {
+    _id?: unknown;
+    author: string;
+    message: string;
+    createdAt?: Date | string;
+  }[];
   attachments?: {
     _id?: unknown;
     filename: string;
@@ -107,11 +112,19 @@ function asIso(value: Date | string | undefined) {
 }
 
 function idOf(value: unknown, fallback: string) {
-  return value && typeof value === "object" && "toString" in value ? String(value) : fallback;
+  return value && typeof value === "object" && "toString" in value
+    ? String(value)
+    : fallback;
 }
 
 function completion(profile: ClientProfileData) {
-  const fields = [profile.fullName, profile.phone, profile.email, profile.nationalCode, profile.address];
+  const fields = [
+    profile.fullName,
+    profile.phone,
+    profile.email,
+    profile.nationalCode,
+    profile.address,
+  ];
   return Math.round((fields.filter(Boolean).length / fields.length) * 100);
 }
 
@@ -164,12 +177,16 @@ function clientRequestQuery(client: CurrentClient) {
     $or: [
       { clientId: client.id },
       { clientId: { $in: [null, ""] }, phone: client.phone },
-      ...(client.email ? [{ clientId: { $in: [null, ""] }, email: client.email }] : []),
+      ...(client.email
+        ? [{ clientId: { $in: [null, ""] }, email: client.email }]
+        : []),
     ],
   };
 }
 
-export async function getClientProfileData(client?: CurrentClient): Promise<ClientProfileData> {
+export async function getClientProfileData(
+  client?: CurrentClient,
+): Promise<ClientProfileData> {
   client ??= await requireClient();
   await connectDb();
   const profile = await ClientProfile.findOne({ clientId: client.id }).lean<{
@@ -195,18 +212,37 @@ export async function getClientProfileData(client?: CurrentClient): Promise<Clie
   return data;
 }
 
-export async function getClientRequests(client?: CurrentClient, filters?: { q?: string; status?: string }) {
+export async function getClientRequests(
+  client?: CurrentClient,
+  filters?: { q?: string; status?: string },
+) {
   client ??= await requireClient();
   await connectDb();
   const query: Record<string, unknown> = clientRequestQuery(client);
-  if (filters?.status && requestStatuses.includes(filters.status as RequestStatus)) {
+  if (
+    filters?.status &&
+    requestStatuses.includes(filters.status as RequestStatus)
+  ) {
     query.status = filters.status;
   }
   if (filters?.q) {
-    const regex = new RegExp(filters.q.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
-    query.$and = [{ $or: [{ requestNumber: regex }, { serviceTitle: regex }, { subject: regex }] }];
+    const regex = new RegExp(
+      filters.q.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+      "i",
+    );
+    query.$and = [
+      {
+        $or: [
+          { requestNumber: regex },
+          { serviceTitle: regex },
+          { subject: regex },
+        ],
+      },
+    ];
   }
-  const docs = await ServiceRequest.find(query).sort({ createdAt: -1 }).lean<LeanRequest[]>();
+  const docs = await ServiceRequest.find(query)
+    .sort({ createdAt: -1 })
+    .lean<LeanRequest[]>();
   return docs.map(toRequest);
 }
 
@@ -215,7 +251,9 @@ export async function getClientRequestById(id: string, client?: CurrentClient) {
   await connectDb();
   const ownQuery = clientRequestQuery(client);
   const identity = id.startsWith("REQ-") ? { requestNumber: id } : { _id: id };
-  const doc = await ServiceRequest.findOne({ $and: [ownQuery, identity] }).lean<LeanRequest>();
+  const doc = await ServiceRequest.findOne({
+    $and: [ownQuery, identity],
+  }).lean<LeanRequest>();
   return doc ? toRequest(doc) : null;
 }
 
@@ -228,14 +266,18 @@ export async function requireClientRequest(id: string) {
 export async function getClientContracts(client?: CurrentClient) {
   client ??= await requireClient();
   await connectDb();
-  const docs = await ClientContract.find({ clientId: client.id }).sort({ purchasedAt: -1, createdAt: -1 }).lean<{
-    _id: unknown;
-    title: string;
-    category?: string;
-    purchasedAt?: Date | string;
-    status: ClientContractRecord["status"];
-    fileUrl?: string;
-  }[]>();
+  const docs = await ClientContract.find({ clientId: client.id })
+    .sort({ purchasedAt: -1, createdAt: -1 })
+    .lean<
+      {
+        _id: unknown;
+        title: string;
+        category?: string;
+        purchasedAt?: Date | string;
+        status: ClientContractRecord["status"];
+        fileUrl?: string;
+      }[]
+    >();
   return docs.map((doc) => ({
     id: idOf(doc._id, doc.title),
     title: doc.title,
@@ -249,15 +291,19 @@ export async function getClientContracts(client?: CurrentClient) {
 export async function getClientFiles(client?: CurrentClient) {
   client ??= await requireClient();
   await connectDb();
-  const docs = await ClientFile.find({ clientId: client.id }).sort({ createdAt: -1 }).lean<{
-    _id: unknown;
-    fileName: string;
-    fileType?: string;
-    fileSize?: string;
-    fileUrl?: string;
-    previewUrl?: string;
-    createdAt?: Date | string;
-  }[]>();
+  const docs = await ClientFile.find({ clientId: client.id })
+    .sort({ createdAt: -1 })
+    .lean<
+      {
+        _id: unknown;
+        fileName: string;
+        fileType?: string;
+        fileSize?: string;
+        fileUrl?: string;
+        previewUrl?: string;
+        createdAt?: Date | string;
+      }[]
+    >();
   return docs.map((doc) => ({
     id: idOf(doc._id, doc.fileName),
     filename: doc.fileName,
@@ -272,14 +318,18 @@ export async function getClientFiles(client?: CurrentClient) {
 export async function getClientPayments(client?: CurrentClient) {
   client ??= await requireClient();
   await connectDb();
-  const docs = await Payment.find({ clientId: client.id }).sort({ createdAt: -1 }).lean<{
-    _id: unknown;
-    invoiceNumber: string;
-    amount: number;
-    status: ClientPaymentRecord["status"];
-    paidAt?: Date | string;
-    createdAt?: Date | string;
-  }[]>();
+  const docs = await Payment.find({ clientId: client.id })
+    .sort({ createdAt: -1 })
+    .lean<
+      {
+        _id: unknown;
+        invoiceNumber: string;
+        amount: number;
+        status: ClientPaymentRecord["status"];
+        paidAt?: Date | string;
+        createdAt?: Date | string;
+      }[]
+    >();
   return docs.map((doc) => ({
     id: idOf(doc._id, doc.invoiceNumber),
     invoiceNumber: doc.invoiceNumber,
@@ -292,17 +342,22 @@ export async function getClientPayments(client?: CurrentClient) {
 export async function getClientMessages(client?: CurrentClient) {
   client ??= await requireClient();
   await connectDb();
-  const docs = await ClientMessage.find({ clientId: client.id }).sort({ createdAt: 1 }).lean<{
-    _id: unknown;
-    senderType?: "client" | "admin";
-    sender?: "client" | "lawyer" | "admin";
-    message: string;
-    threadId?: string;
-    threadTitle?: string;
-    createdAt?: Date | string;
-  }[]>();
+  const docs = await ClientMessage.find({ clientId: client.id })
+    .sort({ createdAt: 1 })
+    .lean<
+      {
+        _id: unknown;
+        senderType?: "client" | "admin";
+        sender?: "client" | "lawyer" | "admin";
+        message: string;
+        threadId?: string;
+        threadTitle?: string;
+        createdAt?: Date | string;
+      }[]
+    >();
   return docs.map((doc) => {
-    const sender = doc.senderType ?? (doc.sender === "client" ? "client" : "admin");
+    const sender =
+      doc.senderType ?? (doc.sender === "client" ? "client" : "admin");
     return {
       id: idOf(doc._id, asIso(doc.createdAt)),
       sender,
@@ -318,14 +373,15 @@ export async function getClientMessages(client?: CurrentClient) {
 
 export async function getClientDashboardSummary() {
   const client = await requireClient();
-  const [profile, requests, contracts, files, payments, messages] = await Promise.all([
-    getClientProfileData(client),
-    getClientRequests(client),
-    getClientContracts(client),
-    getClientFiles(client),
-    getClientPayments(client),
-    getClientMessages(client),
-  ]);
+  const [profile, requests, contracts, files, payments, messages] =
+    await Promise.all([
+      getClientProfileData(client),
+      getClientRequests(client),
+      getClientContracts(client),
+      getClientFiles(client),
+      getClientPayments(client),
+      getClientMessages(client),
+    ]);
 
   const requestStatus = requestStatuses.map((status) => ({
     status,
@@ -365,7 +421,11 @@ export async function updateClientProfile(input: {
   );
 }
 
-export async function createClientMessage(message: string, threadTitle = "گفتگوی پشتیبانی", threadId?: string) {
+export async function createClientMessage(
+  message: string,
+  threadTitle = "گفتگوی پشتیبانی",
+  threadId?: string,
+) {
   const client = await requireClient();
   await connectDb();
   const normalizedThreadId = threadId || `thread-${Date.now()}`;
@@ -379,7 +439,10 @@ export async function createClientMessage(message: string, threadTitle = "گفت
   });
 }
 
-export async function appendClientRequestMessage(requestId: string, message: string) {
+export async function appendClientRequestMessage(
+  requestId: string,
+  message: string,
+) {
   const client = await requireClient();
   await connectDb();
   const request = await getClientRequestById(requestId, client);

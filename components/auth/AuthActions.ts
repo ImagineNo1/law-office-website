@@ -8,15 +8,21 @@ import { ClientProfile } from "@/models/ClientProfile";
 import { ClientUser } from "@/models/ClientUser";
 
 function normalizePhone(value: FormDataEntryValue | null) {
-  return String(value ?? "").replace(/\s+/g, "").trim();
+  return String(value ?? "")
+    .replace(/\s+/g, "")
+    .trim();
 }
 
 function normalizeEmail(value: FormDataEntryValue | null) {
-  return String(value ?? "").trim().toLowerCase();
+  return String(value ?? "")
+    .trim()
+    .toLowerCase();
 }
 
 function errorRedirect(path: string, message: string, next: string): never {
-  redirect(`${path}?error=${encodeURIComponent(message)}&next=${encodeURIComponent(next)}`);
+  redirect(
+    `${path}?error=${encodeURIComponent(message)}&next=${encodeURIComponent(next)}`,
+  );
 }
 
 function validEmail(email: string) {
@@ -24,7 +30,9 @@ function validEmail(email: string) {
 }
 
 export async function loginClientAction(formData: FormData) {
-  const identifier = String(formData.get("identifier") ?? "").trim().toLowerCase();
+  const identifier = String(formData.get("identifier") ?? "")
+    .trim()
+    .toLowerCase();
   const password = String(formData.get("password") ?? "");
   const next = safeClientNext(formData.get("next"));
 
@@ -65,7 +73,12 @@ export async function signupClientAction(formData: FormData) {
   const confirmPassword = String(formData.get("confirmPassword") ?? "");
   const next = safeClientNext(formData.get("next"));
 
-  if (fullName.length < 3 || phone.length < 8 || !validEmail(email) || password !== confirmPassword) {
+  if (
+    fullName.length < 3 ||
+    phone.length < 8 ||
+    !validEmail(email) ||
+    password !== confirmPassword
+  ) {
     errorRedirect("/signup", "اطلاعات وارد شده معتبر نیست", next);
   }
 

@@ -15,7 +15,7 @@
   --sidebar-border-hsl: 220 15% 90%;
   --chart-1-hsl: 217 91% 60%;
   --chart-2-hsl: 160 84% 39%;
-  --chart-3-hsl: 38 92% 50%;
+  --chart-3-hsl: 176 78% 26%;
   --chart-4-hsl: 262 83% 58%;
   --chart-5-hsl: 330 81% 60%;
   --radius: 0.75rem;
@@ -26,13 +26,13 @@
   --popover: hsl(var(--card-hsl));
   --popover-foreground: hsl(var(--foreground-hsl));
   --primary: var(--primary-hsl);
-  --primary-foreground: 40 50% 95%;
+  --primary-foreground: 0 0% 100%;
   --secondary: 220 15% 93%;
   --secondary-foreground: var(--foreground-hsl);
   --muted-token: var(--muted-hsl);
   --muted-foreground: var(--muted-foreground-hsl);
   --accent: var(--accent-hsl);
-  --accent-foreground: var(--primary-hsl);
+  --accent-foreground: 0 0% 100%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
   --input: var(--border-hsl);
@@ -45,7 +45,7 @@
   --sidebar-background: var(--sidebar-background-hsl);
   --sidebar-foreground: var(--foreground-hsl);
   --sidebar-primary: var(--accent-hsl);
-  --sidebar-primary-foreground: var(--primary-hsl);
+  --sidebar-primary-foreground: 0 0% 100%;
   --sidebar-accent: var(--sidebar-accent-hsl);
   --sidebar-accent-foreground: var(--foreground-hsl);
   --sidebar-border: var(--sidebar-border-hsl);
@@ -56,13 +56,13 @@
   --surface-strong: hsl(var(--card-hsl));
   --soft-gray: hsl(var(--background-hsl));
   --navy: #071527;
-  --navy-2: #10233B;
-  --muted: #64748B;
+  --navy-2: #10233b;
+  --muted: #64748b;
   --text-main: hsl(var(--foreground-hsl));
   --text-muted: hsl(var(--muted-foreground-hsl));
-  --gold: #D6A23A;
-  --gold-light: hsl(40 65% 78%);
-  --gold-soft: hsl(40 55% 92%);
+  --gold: #0f766e;
+  --gold-light: #14b8a6;
+  --gold-soft: #ecfdf5;
   --cream-accent: hsl(var(--muted-hsl));
   --border: hsl(var(--border-hsl));
   --admin-nav: hsl(var(--primary-hsl));
@@ -71,7 +71,9 @@
   --font-heading: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
 }
 
 .dark {
@@ -83,11 +85,11 @@
   --navy: #0b172a;
   --navy-2: #17213a;
   --muted: #b9c3d3;
-  --gold: #d4a84f;
-  --gold-light: #e4bf67;
+  --gold: #0f766e;
+  --gold-light: #14b8a6;
   --border: rgba(255, 255, 255, 0.1);
   --admin-nav: #061020;
-  --ring: rgba(212, 168, 79, 0.34);
+  --ring: rgba(20, 184, 166, 0.34);
   --shadow-card-rgb: 0, 0, 0;
 }
 
@@ -111,7 +113,7 @@
   --color-border: var(--border);
   --color-admin-nav: var(--admin-nav);
   --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(40 50% 95%);
+  --color-primary-foreground: hsl(var(--primary-foreground));
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
   --color-card: var(--card);
@@ -134,7 +136,9 @@
   --font-heading: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
   --shadow-soft: 0 28px 80px rgba(var(--shadow-card-rgb), 0.14);
   --shadow-card: 0 18px 45px rgba(var(--shadow-card-rgb), 0.08);
 }
@@ -176,7 +180,7 @@ a {
 }
 
 ::selection {
-  background: var(--gold);
+  background: #0f766e;
   color: #ffffff;
 }
 
@@ -229,7 +233,13 @@ select {
     linear-gradient(rgba(212, 166, 74, 0.08) 1px, transparent 1px),
     linear-gradient(90deg, rgba(212, 166, 74, 0.08) 1px, transparent 1px);
   background-size: 42px 42px;
-  mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 18%,
+    black 82%,
+    transparent
+  );
 }
 
 .mega-menu-panel {
@@ -262,7 +272,13 @@ select {
 }
 
 .dashboard-surface {
-  background: #ffffff;
+  background:
+    radial-gradient(
+      circle at 18% 8%,
+      rgba(16, 185, 129, 0.16),
+      transparent 26%
+    ),
+    linear-gradient(180deg, #ecfdf5 0%, #f8fafc 42%, #ffffff 100%);
 }
 
 .panel-card {
@@ -283,7 +299,7 @@ select {
 }
 
 .service-input:focus {
-  border-color: var(--gold);
+  border-color: hsl(var(--accent-hsl));
   box-shadow: 0 0 0 4px var(--ring);
 }
 
@@ -544,15 +560,15 @@ pre {
   font-family: var(--font-mono);
 }
 
-.gold-divider {
+.green-divider {
   display: inline-grid;
   grid-template-columns: 44px auto 44px;
   align-items: center;
   gap: 14px;
 }
 
-.gold-divider::before,
-.gold-divider::after {
+.green-divider::before,
+.green-divider::after {
   content: "";
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
@@ -585,7 +601,6 @@ pre {
   }
 }
 
-
 h1,
 h2,
 h3,
@@ -606,9 +621,9 @@ a {
   letter-spacing: normal;
 }
 
-
 @keyframes hero-float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {

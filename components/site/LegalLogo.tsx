@@ -12,7 +12,7 @@ export function LegalLogo({
 
   return (
     <span className="inline-flex max-w-full items-center gap-3">
-      <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-gold/35 bg-gold/10 text-gold shadow-[0_12px_28px_rgba(201,151,63,0.16)]">
+      <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-emerald-500/35 bg-emerald-500/10 text-emerald-700 shadow-[0_12px_28px_rgba(201,151,63,0.16)]">
         <svg
           aria-hidden="true"
           className="size-7"

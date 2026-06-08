@@ -7,12 +7,18 @@ const documentTemplateSchema = new Schema(
     description: { type: String, default: "", trim: true },
     usageCount: { type: Number, default: 0 },
     lastUsed: { type: String, default: "", trim: true },
-    status: { type: String, enum: ["active", "draft", "archived"], default: "active" },
+    status: {
+      type: String,
+      enum: ["active", "draft", "archived"],
+      default: "active",
+    },
   },
   { timestamps: true },
 );
 
-export type DocumentTemplateRecord = InferSchemaType<typeof documentTemplateSchema>;
+export type DocumentTemplateRecord = InferSchemaType<
+  typeof documentTemplateSchema
+>;
 
 export const DocumentTemplate: Model<DocumentTemplateRecord> =
   mongoose.models.DocumentTemplate ??

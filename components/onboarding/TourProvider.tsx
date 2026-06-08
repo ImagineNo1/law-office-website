@@ -1,9 +1,21 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import { GuidedTour } from "@/components/onboarding/GuidedTour";
 import { GuidedTourContext } from "@/components/onboarding/useGuidedTour";
-import { TOUR_VERSION, adminTourSteps, clientTourSteps, type TourKind, type TourStep } from "@/components/onboarding/tour-steps";
+import {
+  TOUR_VERSION,
+  adminTourSteps,
+  clientTourSteps,
+  type TourKind,
+  type TourStep,
+} from "@/components/onboarding/tour-steps";
 
 type InitialTourState = {
   completed: boolean;
@@ -37,7 +49,9 @@ export function TourProvider({
   children: React.ReactNode;
   initialState: InitialTourState;
   kind: TourKind;
-  markCompletedAction: (mode?: "completed" | "skipped") => Promise<{ ok: boolean }>;
+  markCompletedAction: (
+    mode?: "completed" | "skipped",
+  ) => Promise<{ ok: boolean }>;
 }) {
   const steps = kind === "admin" ? adminTourSteps : clientTourSteps;
   const [isOpen, setIsOpen] = useState(false);
@@ -58,22 +72,28 @@ export function TourProvider({
     return undefined;
   }, [initialState.shouldShow, kind, startTour]);
 
-  const persistDone = useCallback((mode: "completed" | "skipped") => {
-    startTransition(async () => {
-      try {
-        const result = await markCompletedAction(mode);
-        if (!result.ok) writeLocalCompletion(kind);
-      } catch {
-        writeLocalCompletion(kind);
-      }
-    });
-  }, [kind, markCompletedAction]);
+  const persistDone = useCallback(
+    (mode: "completed" | "skipped") => {
+      startTransition(async () => {
+        try {
+          const result = await markCompletedAction(mode);
+          if (!result.ok) writeLocalCompletion(kind);
+        } catch {
+          writeLocalCompletion(kind);
+        }
+      });
+    },
+    [kind, markCompletedAction],
+  );
 
-  const closeTour = useCallback((mode: "completed" | "skipped") => {
-    setIsOpen(false);
-    writeLocalCompletion(kind);
-    persistDone(mode);
-  }, [kind, persistDone]);
+  const closeTour = useCallback(
+    (mode: "completed" | "skipped") => {
+      setIsOpen(false);
+      writeLocalCompletion(kind);
+      persistDone(mode);
+    },
+    [kind, persistDone],
+  );
 
   const nextStep = useCallback(() => {
     setCurrentStepIndex((index) => Math.min(index + 1, steps.length - 1));
@@ -83,21 +103,40 @@ export function TourProvider({
     setCurrentStepIndex((index) => Math.max(index - 1, 0));
   }, []);
 
-  const value = useMemo(() => ({
-    kind,
-    steps: steps as TourStep[],
-    isOpen,
-    currentStepIndex,
-    startTour,
-    closeTour,
-    nextStep,
-    previousStep,
-  }), [closeTour, currentStepIndex, isOpen, kind, nextStep, previousStep, startTour, steps]);
+  const value = useMemo(
+    () => ({
+      kind,
+      steps: steps as TourStep[],
+      isOpen,
+      currentStepIndex,
+      startTour,
+      closeTour,
+      nextStep,
+      previousStep,
+    }),
+    [
+      closeTour,
+      currentStepIndex,
+      isOpen,
+      kind,
+      nextStep,
+      previousStep,
+      startTour,
+      steps,
+    ],
+  );
 
   return (
     <GuidedTourContext.Provider value={value}>
       {children}
-      <GuidedTour currentStepIndex={currentStepIndex} isOpen={isOpen} nextStep={nextStep} previousStep={previousStep} closeTour={closeTour} steps={steps} />
+      <GuidedTour
+        currentStepIndex={currentStepIndex}
+        isOpen={isOpen}
+        nextStep={nextStep}
+        previousStep={previousStep}
+        closeTour={closeTour}
+        steps={steps}
+      />
     </GuidedTourContext.Provider>
   );
 }

@@ -13,7 +13,11 @@ const faqSchema = new Schema(
       index: true,
     },
     pageSlug: { type: String, default: "", trim: true, index: true },
-    status: { type: String, enum: ["draft", "published", "archived"], default: "published" },
+    status: {
+      type: String,
+      enum: ["draft", "published", "archived"],
+      default: "published",
+    },
     order: { type: Number, default: 0 },
     seo: { type: seoSchema, default: () => ({}) },
   },
