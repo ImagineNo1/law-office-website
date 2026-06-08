@@ -11,7 +11,7 @@ import {
 } from "@/lib/auth";
 import { connectDb } from "@/lib/db";
 import { ensureDefaultAdmin } from "@/lib/ensure-default-admin";
-import { slugFromTitle } from "@/lib/slug";
+import { normalizeSlug, slugFromTitle } from "@/lib/slug";
 import { ContractTemplate } from "@/models/ContractTemplate";
 import { FAQ } from "@/models/FAQ";
 import { HomeContent } from "@/models/HomeContent";
@@ -271,7 +271,7 @@ export async function savePostAction(formData: FormData) {
 
   const id = text(formData, "id");
   const title = text(formData, "title");
-  const slug = text(formData, "slug") || slugFromTitle(title);
+  const slug = normalizeSlug(text(formData, "slug")) || slugFromTitle(title);
 
   const payload = {
     title,
@@ -297,6 +297,7 @@ export async function savePostAction(formData: FormData) {
 
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
+  revalidatePath(`/blog/${payload.slug}`);
   revalidatePath("/");
   redirect("/admin/blog");
 }
@@ -316,7 +317,7 @@ export async function saveNewsAction(formData: FormData) {
 
   const id = text(formData, "id");
   const title = text(formData, "title");
-  const slug = text(formData, "slug") || slugFromTitle(title);
+  const slug = normalizeSlug(text(formData, "slug")) || slugFromTitle(title);
   const payload = {
     title,
     slug,
