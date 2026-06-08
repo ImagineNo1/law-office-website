@@ -67,7 +67,9 @@ const serviceRequestSchema = new Schema(
   { timestamps: true },
 );
 
-export type ServiceRequestDocument = InferSchemaType<typeof serviceRequestSchema>;
+export type ServiceRequestDocument = InferSchemaType<
+  typeof serviceRequestSchema
+>;
 
 export const ServiceRequest: Model<ServiceRequestDocument> =
   mongoose.models.ServiceRequest ??

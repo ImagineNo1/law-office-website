@@ -14,7 +14,7 @@ export function ServiceRequestPanel() {
               className="flex items-center gap-3 rounded-xl bg-white/10 p-3 text-sm font-black"
               key={item}
             >
-              <span className="grid size-7 place-items-center rounded-full bg-[#C9973F] text-xs">
+              <span className="grid size-7 place-items-center rounded-full bg-[#0F766E] text-xs">
                 {index + 1}
               </span>
               {item}
@@ -23,7 +23,7 @@ export function ServiceRequestPanel() {
         )}
       </div>
       <Link
-        className="mt-6 flex h-12 items-center justify-center rounded-xl bg-[#C9973F] text-sm font-black"
+        className="mt-6 flex h-12 items-center justify-center rounded-xl bg-[#0F766E] text-sm font-black"
         href="/dashboard/requests?new=1"
       >
         شروع ثبت

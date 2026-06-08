@@ -6,7 +6,7 @@ export function FinalCta() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-[2.2rem] bg-[radial-gradient(circle_at_18%_30%,rgba(15,118,110,0.45),transparent_28%),linear-gradient(135deg,#071527_0%,#10233B_58%,#071527_100%)] px-6 py-14 text-center shadow-[0_32px_90px_rgba(7,21,39,0.22)] sm:px-10">
           <div className="absolute -left-20 top-8 size-64 rounded-full bg-[#0F766E]/30 blur-3xl" />
-          <div className="absolute bottom-0 right-0 h-40 w-72 rounded-tl-full bg-[#D6A23A]/10" />
+          <div className="absolute bottom-0 right-0 h-40 w-72 rounded-tl-full bg-[#0F766E]/10" />
           <div className="relative mx-auto max-w-3xl">
             <span className="inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-black text-[#99F6E4]">
               شروع شفاف و قابل پیگیری

@@ -1,18 +1,222 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { addRequestAdminMessageAction, addRequestNoteAction, updateRequestAction } from "@/lib/admin-actions";
+import {
+  addRequestAdminMessageAction,
+  addRequestNoteAction,
+  updateRequestAction,
+} from "@/lib/admin-actions";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { AdminEmptyState, AdminStatusBadge } from "@/components/admin/AdminUi";
 import { formatAdminDate, getAdminRequestById } from "@/lib/admin-db";
-import { requestPriorityLabels, requestPriorities, requestStatusLabels, requestStatuses } from "@/lib/service-requests";
+import {
+  requestPriorityLabels,
+  requestPriorities,
+  requestStatusLabels,
+  requestStatuses,
+} from "@/lib/service-requests";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "جزئیات درخواست" };
 
-export default async function AdminRequestDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function AdminRequestDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const request = await getAdminRequestById(id);
   if (!request) notFound();
 
-  return <AdminShell title={`درخواست ${request.requestNumber}`} description="جزئیات درخواست، پیام‌ها و یادداشت‌های مدیریتی"><div className="grid gap-6 xl:grid-cols-[1fr_360px]"><section className="grid gap-6"><div className="rounded-2xl border border-border bg-white p-6 shadow-card"><div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between"><div><p className="text-sm font-black text-gold">{request.requestNumber}</p><h2 className="mt-2 text-2xl font-black text-navy">{request.subject}</h2><p className="mt-2 text-sm font-bold leading-8 text-muted">{request.serviceTitle} · {formatAdminDate(request.createdAt)}</p></div><AdminStatusBadge status={request.status} /></div><p className="mt-5 rounded-2xl bg-slate-50 p-4 text-sm font-bold leading-8 text-muted">{request.description}</p></div><div className="rounded-2xl border border-border bg-white p-6 shadow-card"><h3 className="text-xl font-black text-navy">پیام‌ها</h3>{request.messages.length ? <div className="mt-4 grid gap-3">{request.messages.map((message) => <article className="rounded-2xl border border-border p-4" key={message.id}><div className="flex items-center justify-between gap-3"><strong className="text-navy">{message.senderName}</strong><span className="text-xs font-bold text-muted">{formatAdminDate(message.createdAt)}</span></div><p className="mt-2 text-sm font-bold leading-8 text-muted">{message.message}</p></article>)}</div> : <div className="mt-4"><AdminEmptyState title="پیامی ثبت نشده است" description="پیام‌های مرتبط با این درخواست اینجا نمایش داده می‌شوند." /></div>}<form action={addRequestAdminMessageAction} className="mt-4 grid gap-3"><input name="id" type="hidden" value={request.id} /><textarea className="service-input min-h-24 py-3" name="message" placeholder="ارسال پیام مدیریتی..." required /><button className="rounded-xl bg-gold px-5 py-3 text-sm font-black text-white" type="submit">ارسال پیام</button></form></div><div className="rounded-2xl border border-border bg-white p-6 shadow-card"><h3 className="text-xl font-black text-navy">یادداشت‌های مدیر</h3>{request.adminNotes.length ? <div className="mt-4 grid gap-3">{request.adminNotes.map((note) => <p className="rounded-2xl bg-slate-50 p-4 text-sm font-bold leading-8 text-muted" key={note.id}>{note.message}</p>)}</div> : <p className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm font-bold text-muted">یادداشتی ثبت نشده است.</p>}<form action={addRequestNoteAction} className="mt-4 grid gap-3"><input name="id" type="hidden" value={request.id} /><textarea className="service-input min-h-24 py-3" name="message" placeholder="افزودن یادداشت..." required /><button className="rounded-xl bg-navy px-5 py-3 text-sm font-black text-white" type="submit">ثبت یادداشت</button></form></div></section><aside className="grid content-start gap-6"><form action={updateRequestAction} className="rounded-2xl border border-border bg-white p-5 shadow-card"><input name="id" type="hidden" value={request.id} /><h3 className="text-lg font-black text-navy">به‌روزرسانی</h3><label className="mt-4 grid gap-2 text-sm font-black text-navy"><span>وضعیت</span><select className="service-input" defaultValue={request.status} name="status">{requestStatuses.map((status) => <option key={status} value={status}>{requestStatusLabels[status]}</option>)}</select></label><label className="mt-4 grid gap-2 text-sm font-black text-navy"><span>اولویت</span><select className="service-input" defaultValue={request.priority} name="priority">{requestPriorities.map((priority) => <option key={priority} value={priority}>{requestPriorityLabels[priority]}</option>)}</select></label><label className="mt-4 grid gap-2 text-sm font-black text-navy"><span>مسئول</span><input className="service-input" defaultValue={request.assignedTo} name="assignedTo" /></label><button className="mt-5 w-full rounded-xl bg-gold px-5 py-3 text-sm font-black text-white" type="submit">ذخیره تغییرات</button></form><section className="rounded-2xl border border-border bg-white p-5 shadow-card"><h3 className="text-lg font-black text-navy">اطلاعات مشتری</h3><div className="mt-4 grid gap-2 text-sm font-bold leading-8 text-muted"><span>{request.fullName}</span><span>{request.phone}</span><span>{request.email || "ایمیل ثبت نشده"}</span></div></section><section className="rounded-2xl border border-border bg-white p-5 shadow-card"><h3 className="text-lg font-black text-navy">پیوست‌ها</h3>{request.attachments.length ? <div className="mt-4 grid gap-2">{request.attachments.map((file) => <div className="rounded-xl border border-border p-3 text-sm font-bold text-muted" key={file.id}>{file.filename} · {file.size}</div>)}</div> : <p className="mt-4 text-sm font-bold text-muted">پیوستی ثبت نشده است.</p>}</section></aside></div></AdminShell>;
+  return (
+    <AdminShell
+      title={`درخواست ${request.requestNumber}`}
+      description="جزئیات درخواست، پیام‌ها و یادداشت‌های مدیریتی"
+    >
+      <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
+        <section className="grid gap-6">
+          <div className="rounded-2xl border border-border bg-white p-6 shadow-card">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+              <div>
+                <p className="text-sm font-black text-emerald-700">
+                  {request.requestNumber}
+                </p>
+                <h2 className="mt-2 text-2xl font-black text-navy">
+                  {request.subject}
+                </h2>
+                <p className="mt-2 text-sm font-bold leading-8 text-muted">
+                  {request.serviceTitle} · {formatAdminDate(request.createdAt)}
+                </p>
+              </div>
+              <AdminStatusBadge status={request.status} />
+            </div>
+            <p className="mt-5 rounded-2xl bg-slate-50 p-4 text-sm font-bold leading-8 text-muted">
+              {request.description}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-border bg-white p-6 shadow-card">
+            <h3 className="text-xl font-black text-navy">پیام‌ها</h3>
+            {request.messages.length ? (
+              <div className="mt-4 grid gap-3">
+                {request.messages.map((message) => (
+                  <article
+                    className="rounded-2xl border border-border p-4"
+                    key={message.id}
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <strong className="text-navy">
+                        {message.senderName}
+                      </strong>
+                      <span className="text-xs font-bold text-muted">
+                        {formatAdminDate(message.createdAt)}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-sm font-bold leading-8 text-muted">
+                      {message.message}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-4">
+                <AdminEmptyState
+                  title="پیامی ثبت نشده است"
+                  description="پیام‌های مرتبط با این درخواست اینجا نمایش داده می‌شوند."
+                />
+              </div>
+            )}
+            <form
+              action={addRequestAdminMessageAction}
+              className="mt-4 grid gap-3"
+            >
+              <input name="id" type="hidden" value={request.id} />
+              <textarea
+                className="service-input min-h-24 py-3"
+                name="message"
+                placeholder="ارسال پیام مدیریتی..."
+                required
+              />
+              <button
+                className="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-black text-white"
+                type="submit"
+              >
+                ارسال پیام
+              </button>
+            </form>
+          </div>
+          <div className="rounded-2xl border border-border bg-white p-6 shadow-card">
+            <h3 className="text-xl font-black text-navy">یادداشت‌های مدیر</h3>
+            {request.adminNotes.length ? (
+              <div className="mt-4 grid gap-3">
+                {request.adminNotes.map((note) => (
+                  <p
+                    className="rounded-2xl bg-slate-50 p-4 text-sm font-bold leading-8 text-muted"
+                    key={note.id}
+                  >
+                    {note.message}
+                  </p>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm font-bold text-muted">
+                یادداشتی ثبت نشده است.
+              </p>
+            )}
+            <form action={addRequestNoteAction} className="mt-4 grid gap-3">
+              <input name="id" type="hidden" value={request.id} />
+              <textarea
+                className="service-input min-h-24 py-3"
+                name="message"
+                placeholder="افزودن یادداشت..."
+                required
+              />
+              <button
+                className="rounded-xl bg-navy px-5 py-3 text-sm font-black text-white"
+                type="submit"
+              >
+                ثبت یادداشت
+              </button>
+            </form>
+          </div>
+        </section>
+        <aside className="grid content-start gap-6">
+          <form
+            action={updateRequestAction}
+            className="rounded-2xl border border-border bg-white p-5 shadow-card"
+          >
+            <input name="id" type="hidden" value={request.id} />
+            <h3 className="text-lg font-black text-navy">به‌روزرسانی</h3>
+            <label className="mt-4 grid gap-2 text-sm font-black text-navy">
+              <span>وضعیت</span>
+              <select
+                className="service-input"
+                defaultValue={request.status}
+                name="status"
+              >
+                {requestStatuses.map((status) => (
+                  <option key={status} value={status}>
+                    {requestStatusLabels[status]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="mt-4 grid gap-2 text-sm font-black text-navy">
+              <span>اولویت</span>
+              <select
+                className="service-input"
+                defaultValue={request.priority}
+                name="priority"
+              >
+                {requestPriorities.map((priority) => (
+                  <option key={priority} value={priority}>
+                    {requestPriorityLabels[priority]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="mt-4 grid gap-2 text-sm font-black text-navy">
+              <span>مسئول</span>
+              <input
+                className="service-input"
+                defaultValue={request.assignedTo}
+                name="assignedTo"
+              />
+            </label>
+            <button
+              className="mt-5 w-full rounded-xl bg-emerald-700 px-5 py-3 text-sm font-black text-white"
+              type="submit"
+            >
+              ذخیره تغییرات
+            </button>
+          </form>
+          <section className="rounded-2xl border border-border bg-white p-5 shadow-card">
+            <h3 className="text-lg font-black text-navy">اطلاعات مشتری</h3>
+            <div className="mt-4 grid gap-2 text-sm font-bold leading-8 text-muted">
+              <span>{request.fullName}</span>
+              <span>{request.phone}</span>
+              <span>{request.email || "ایمیل ثبت نشده"}</span>
+            </div>
+          </section>
+          <section className="rounded-2xl border border-border bg-white p-5 shadow-card">
+            <h3 className="text-lg font-black text-navy">پیوست‌ها</h3>
+            {request.attachments.length ? (
+              <div className="mt-4 grid gap-2">
+                {request.attachments.map((file) => (
+                  <div
+                    className="rounded-xl border border-border p-3 text-sm font-bold text-muted"
+                    key={file.id}
+                  >
+                    {file.filename} · {file.size}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-4 text-sm font-bold text-muted">
+                پیوستی ثبت نشده است.
+              </p>
+            )}
+          </section>
+        </aside>
+      </div>
+    </AdminShell>
+  );
 }

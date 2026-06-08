@@ -32,7 +32,7 @@ function Counter({
   const ok = value.length >= min && value.length <= max;
   return (
     <span
-      className={`text-xs font-black ${ok ? "text-emerald-600" : "text-amber-600"}`}
+      className={`text-xs font-black ${ok ? "text-emerald-600" : "text-emerald-600"}`}
     >
       {value.length} / {min}-{max}
     </span>
@@ -147,7 +147,7 @@ export function SeoFields({
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <h4 className="font-black text-navy">پیش‌نمایش گوگل</h4>
             <button
-              className="rounded-lg border border-border px-3 py-2 text-xs font-black text-navy hover:border-gold hover:text-gold"
+              className="rounded-lg border border-border px-3 py-2 text-xs font-black text-navy hover:border-emerald-500 hover:text-emerald-700"
               onClick={() => {
                 setMetaTitle(suggested.title);
                 setMetaDescription(suggested.description);

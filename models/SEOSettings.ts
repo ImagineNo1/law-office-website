@@ -4,10 +4,23 @@ const seoSettingsSchema = new Schema(
   {
     key: { type: String, default: "seo", unique: true },
     siteName: { type: String, default: "وکیل‌یار", trim: true },
-    defaultMetaTitle: { type: String, default: "وکیل‌یار | خدمات حقوقی، قرارداد و امضا", trim: true },
-    defaultMetaDescription: { type: String, default: "پلتفرم فارسی خدمات حقوقی، بانک قرارداد، ثبت درخواست و پیگیری پرونده برای موکلان.", trim: true },
+    defaultMetaTitle: {
+      type: String,
+      default: "وکیل‌یار | خدمات حقوقی، قرارداد و امضا",
+      trim: true,
+    },
+    defaultMetaDescription: {
+      type: String,
+      default:
+        "پلتفرم فارسی خدمات حقوقی، بانک قرارداد، ثبت درخواست و پیگیری پرونده برای موکلان.",
+      trim: true,
+    },
     defaultOgImage: { type: String, default: "", trim: true },
-    canonicalBaseUrl: { type: String, default: "https://vakilyar.vercel.app", trim: true },
+    canonicalBaseUrl: {
+      type: String,
+      default: "https://vakilyar.vercel.app",
+      trim: true,
+    },
     robotsTxt: { type: String, default: "", trim: true },
     googleSearchConsoleVerification: { type: String, default: "", trim: true },
     organizationName: { type: String, default: "وکیل‌یار", trim: true },
@@ -24,5 +37,5 @@ const seoSettingsSchema = new Schema(
 export type SEOSettingsDocument = InferSchemaType<typeof seoSettingsSchema>;
 
 export const SEOSettings: Model<SEOSettingsDocument> =
-  mongoose.models.SEOSettings ?? mongoose.model("SEOSettings", seoSettingsSchema);
-
+  mongoose.models.SEOSettings ??
+  mongoose.model("SEOSettings", seoSettingsSchema);

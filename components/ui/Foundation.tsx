@@ -10,13 +10,17 @@ export function Container({ children, className = "" }: WithChildren) {
 }
 
 export function Section({ children, className = "" }: WithChildren) {
-  return <section className={`py-16 sm:py-20 lg:py-24 ${className}`}>{children}</section>;
+  return (
+    <section className={`py-16 sm:py-20 lg:py-24 ${className}`}>
+      {children}
+    </section>
+  );
 }
 
 export function Badge({ children, className = "" }: WithChildren) {
   return (
     <span
-      className={`inline-flex items-center rounded-full border border-gold/25 bg-gold/10 px-3 py-1 text-xs font-black text-gold ${className}`}
+      className={`inline-flex items-center rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-xs font-black text-emerald-700 ${className}`}
     >
       {children}
     </span>
@@ -26,7 +30,7 @@ export function Badge({ children, className = "" }: WithChildren) {
 export function IconBadge({ children, className = "" }: WithChildren) {
   return (
     <span
-      className={`grid size-14 shrink-0 place-items-center rounded-2xl border border-gold/20 bg-[#FCF4E4] text-gold shadow-[0_12px_30px_rgba(201,151,63,0.12)] ${className}`}
+      className={`grid size-14 shrink-0 place-items-center rounded-2xl border border-emerald-500/20 bg-[#ECFDF5] text-emerald-700 shadow-[0_12px_30px_rgba(15,118,110,0.12)] ${className}`}
     >
       {children}
     </span>
@@ -74,9 +78,13 @@ export function StatCard({
 }) {
   return (
     <div className="flex min-h-24 items-center gap-4 border-border px-5 py-4 sm:border-l last:sm:border-l-0">
-      <IconBadge className="size-12 rounded-full bg-soft-gray shadow-none">{icon}</IconBadge>
+      <IconBadge className="size-12 rounded-full bg-soft-gray shadow-none">
+        {icon}
+      </IconBadge>
       <div>
-        <p className="text-2xl font-black leading-none text-foreground">{value}</p>
+        <p className="text-2xl font-black leading-none text-foreground">
+          {value}
+        </p>
         <p className="mt-2 text-sm font-bold leading-6 text-muted">{label}</p>
       </div>
     </div>
@@ -90,7 +98,7 @@ export function TextLink({
 }: WithChildren & { href: string }) {
   return (
     <Link
-      className={`inline-flex items-center gap-2 text-sm font-black text-gold transition hover:text-gold-light ${className}`}
+      className={`inline-flex items-center gap-2 text-sm font-black text-emerald-700 transition hover:text-emerald-500 ${className}`}
       href={href}
       prefetch={false}
     >

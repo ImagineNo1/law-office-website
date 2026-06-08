@@ -28,9 +28,17 @@ export const requestStatusLabels = statusLabels;
 export const requestPriorityLabels = priorityLabels;
 
 export const requestStatuses = Object.keys(statusLabels) as RequestStatus[];
-export const requestPriorities = Object.keys(priorityLabels) as RequestPriority[];
+export const requestPriorities = Object.keys(
+  priorityLabels,
+) as RequestPriority[];
 
-const experts = ["دکتر محمد حسینی", "فاطمه رضایی", "علی محمدی", "سارا مرادی", "مریم جعفری"];
+const experts = [
+  "دکتر محمد حسینی",
+  "فاطمه رضایی",
+  "علی محمدی",
+  "سارا مرادی",
+  "مریم جعفری",
+];
 const customers = [
   ["علی محمدی", "ali@example.com"],
   ["فاطمه رضایی", "fateme@example.com"],
@@ -52,6 +60,12 @@ export function generateRequestNumber(index = Date.now() % 999999) {
   return `REQ-1405-${pad(Math.max(1, index))}`;
 }
 
+function generateUniqueRequestNumber() {
+  const timePart = Date.now() % 1000000;
+  const randomPart = Math.floor(Math.random() * 900) + 100;
+  return `REQ-1405-${pad(timePart)}-${randomPart}`;
+}
+
 function formatFaDate(date: Date) {
   return new Intl.DateTimeFormat("fa-IR", {
     year: "numeric",
@@ -68,81 +82,86 @@ function dateDaysAgo(days: number) {
 
 const services = serviceSamples.slice(0, 8);
 
-export const sampleServiceRequests: ServiceRequestData[] = Array.from({ length: 50 }, (_, index) => {
-  const id = String(index + 1);
-  const service = services[index % services.length];
-  const customer = customers[index % customers.length];
-  const status = requestStatuses[index % requestStatuses.length];
-  const priority = requestPriorities[(index + 1) % requestPriorities.length];
-  const createdAt = dateDaysAgo(index % 31);
-  const updatedAt = dateDaysAgo(Math.max(0, (index % 31) - 1));
-  const expert = experts[index % experts.length];
-  const requestNumber = generateRequestNumber(index + 1);
+export const sampleServiceRequests: ServiceRequestData[] = Array.from(
+  { length: 50 },
+  (_, index) => {
+    const id = String(index + 1);
+    const service = services[index % services.length];
+    const customer = customers[index % customers.length];
+    const status = requestStatuses[index % requestStatuses.length];
+    const priority = requestPriorities[(index + 1) % requestPriorities.length];
+    const createdAt = dateDaysAgo(index % 31);
+    const updatedAt = dateDaysAgo(Math.max(0, (index % 31) - 1));
+    const expert = experts[index % experts.length];
+    const requestNumber = generateRequestNumber(index + 1);
 
-  return {
-    id,
-    requestNumber,
-    fullName: customer[0],
-    phone: `0912${String(3450000 + index * 73).slice(0, 7)}`,
-    email: customer[1],
-    serviceSlug: service.slug ?? `service-${index % services.length}`,
-    serviceTitle: service.title,
-    subject: `${service.title} برای پرونده ${customer[0]}`,
-    description:
-      "شرح درخواست شامل بررسی مدارک، پیشنهاد مسیر اقدام و اعلام زمان‌بندی اجرای خدمت است.",
-    priority,
-    status,
-    assignedTo: status === "new" ? "در انتظار تخصیص" : expert,
-    adminNotes: [
-      {
-        id: `${id}-n1`,
-        author: expert,
-        message: "مدارک اولیه بررسی شد و ریسک‌های اصلی پرونده در کارتابل ثبت گردید.",
-        createdAt: updatedAt,
-      },
-      {
-        id: `${id}-n2`,
-        author: "مدیر CRM",
-        message: "پیگیری تماس بعدی با مشتری برای تکمیل اطلاعات انجام شود.",
-        createdAt,
-      },
-    ],
-    attachments: [
-      {
-        id: `${id}-a1`,
-        filename: index % 2 ? "مدارک-شناسایی.pdf" : "قرارداد-نمونه.pdf",
-        size: index % 2 ? "۴۸۰ کیلوبایت" : "۲.۱ مگابایت",
-        uploadedBy: "client",
-        uploadedAt: createdAt,
-      },
-      {
-        id: `${id}-a2`,
-        filename: "گزارش-بررسی.docx",
-        size: "۲۲۰ کیلوبایت",
-        uploadedBy: "admin",
-        uploadedAt: updatedAt,
-      },
-    ],
-    messages: [
-      {
-        id: `${id}-m1`,
-        sender: "client",
-        senderName: customer[0],
-        message: "سلام، درخواست را ثبت کردم. لطفا مدارک لازم را اعلام کنید.",
-        createdAt,
-      },
-      {
-        id: `${id}-m2`,
-        sender: "admin",
-        senderName: expert,
-        message: "سلام، مدارک هویتی و مستندات مرتبط را ارسال کنید تا بررسی حقوقی آغاز شود.",
-        createdAt: updatedAt,
-      },
-    ],
-    createdAt,
-    updatedAt,
-  };
-});
+    return {
+      id,
+      requestNumber,
+      fullName: customer[0],
+      phone: `0912${String(3450000 + index * 73).slice(0, 7)}`,
+      email: customer[1],
+      serviceSlug: service.slug ?? `service-${index % services.length}`,
+      serviceTitle: service.title,
+      subject: `${service.title} برای پرونده ${customer[0]}`,
+      description:
+        "شرح درخواست شامل بررسی مدارک، پیشنهاد مسیر اقدام و اعلام زمان‌بندی اجرای خدمت است.",
+      priority,
+      status,
+      assignedTo: status === "new" ? "در انتظار تخصیص" : expert,
+      adminNotes: [
+        {
+          id: `${id}-n1`,
+          author: expert,
+          message:
+            "مدارک اولیه بررسی شد و ریسک‌های اصلی پرونده در کارتابل ثبت گردید.",
+          createdAt: updatedAt,
+        },
+        {
+          id: `${id}-n2`,
+          author: "مدیر CRM",
+          message: "پیگیری تماس بعدی با مشتری برای تکمیل اطلاعات انجام شود.",
+          createdAt,
+        },
+      ],
+      attachments: [
+        {
+          id: `${id}-a1`,
+          filename: index % 2 ? "مدارک-شناسایی.pdf" : "قرارداد-نمونه.pdf",
+          size: index % 2 ? "۴۸۰ کیلوبایت" : "۲.۱ مگابایت",
+          uploadedBy: "client",
+          uploadedAt: createdAt,
+        },
+        {
+          id: `${id}-a2`,
+          filename: "گزارش-بررسی.docx",
+          size: "۲۲۰ کیلوبایت",
+          uploadedBy: "admin",
+          uploadedAt: updatedAt,
+        },
+      ],
+      messages: [
+        {
+          id: `${id}-m1`,
+          sender: "client",
+          senderName: customer[0],
+          message: "سلام، درخواست را ثبت کردم. لطفا مدارک لازم را اعلام کنید.",
+          createdAt,
+        },
+        {
+          id: `${id}-m2`,
+          sender: "admin",
+          senderName: expert,
+          message:
+            "سلام، مدارک هویتی و مستندات مرتبط را ارسال کنید تا بررسی حقوقی آغاز شود.",
+          createdAt: updatedAt,
+        },
+      ],
+      createdAt,
+      updatedAt,
+    };
+  },
+);
 
 type LeanRequest = {
   _id?: unknown;
@@ -157,7 +176,12 @@ type LeanRequest = {
   priority: RequestPriority;
   status: RequestStatus;
   assignedTo?: string | null;
-  adminNotes?: { _id?: unknown; author: string; message: string; createdAt?: Date | string }[];
+  adminNotes?: {
+    _id?: unknown;
+    author: string;
+    message: string;
+    createdAt?: Date | string;
+  }[];
   attachments?: {
     _id?: unknown;
     filename: string;
@@ -230,15 +254,21 @@ export async function getServiceRequests() {
   if (!hasDatabase()) return sampleServiceRequests;
 
   await connectDb();
-  const docs = await ServiceRequest.find().sort({ createdAt: -1 }).lean<LeanRequest[]>();
+  const docs = await ServiceRequest.find()
+    .sort({ createdAt: -1 })
+    .lean<LeanRequest[]>();
   return docs.map(toRequest);
 }
 
 export async function getServiceRequestById(id: string) {
   if (!hasDatabase()) {
-    const request = sampleServiceRequests.find((item) => item.id === id || item.requestNumber === id);
+    const request = sampleServiceRequests.find(
+      (item) => item.id === id || item.requestNumber === id,
+    );
     if (request) return request;
-    return id.startsWith("REQ-") ? { ...sampleServiceRequests[0], id, requestNumber: id } : null;
+    return id.startsWith("REQ-")
+      ? { ...sampleServiceRequests[0], id, requestNumber: id }
+      : null;
   }
 
   await connectDb();
@@ -258,21 +288,27 @@ export async function createServiceRequest(input: {
   description: string;
   attachmentName?: string;
 }) {
-  const requestNumber = generateRequestNumber(Math.floor(Date.now() % 1000000));
+  const requestNumber = generateUniqueRequestNumber();
 
   if (!hasDatabase()) {
     return { requestNumber };
   }
 
   await connectDb();
-  await ServiceRequest.create({
+  const doc = await ServiceRequest.create({
     ...input,
     requestNumber,
     priority: "medium",
     status: "new",
     assignedTo: "در انتظار تخصیص",
     attachments: input.attachmentName
-      ? [{ filename: input.attachmentName, size: "در انتظار بررسی", uploadedBy: "client" }]
+      ? [
+          {
+            filename: input.attachmentName,
+            size: "در انتظار بررسی",
+            uploadedBy: "client",
+          },
+        ]
       : [],
     messages: [
       {
@@ -283,7 +319,7 @@ export async function createServiceRequest(input: {
     ],
   });
 
-  return { requestNumber };
+  return { id: String(doc._id), requestNumber };
 }
 
 export function formatRequestDate(value: string) {
@@ -299,15 +335,26 @@ export function getRequestAnalytics(requests: ServiceRequestData[]) {
 
   const byService = services.slice(0, 6).map((service) => ({
     label: service.title,
-    value: requests.filter((request) => request.serviceSlug === service.slug).length,
+    value: requests.filter((request) => request.serviceSlug === service.slug)
+      .length,
   }));
 
   const overTime = Array.from({ length: 7 }, (_, index) => ({
     label: `روز ${index + 1}`,
-    value: requests.filter((request) => new Date(request.createdAt).getDate() % 7 === index).length + 4,
+    value:
+      requests.filter(
+        (request) => new Date(request.createdAt).getDate() % 7 === index,
+      ).length + 4,
   }));
 
-  const monthlyTrends = ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور"].map((label, index) => ({
+  const monthlyTrends = [
+    "فروردین",
+    "اردیبهشت",
+    "خرداد",
+    "تیر",
+    "مرداد",
+    "شهریور",
+  ].map((label, index) => ({
     label,
     reviewing: 8 + index * 2,
     progress: 5 + index * 3,

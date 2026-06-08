@@ -6,14 +6,21 @@ const clientContractSchema = new Schema(
     contractTemplateId: { type: String, default: "", trim: true },
     title: { type: String, required: true, trim: true },
     category: { type: String, default: "قرارداد", trim: true },
-    status: { type: String, enum: ["active", "ready", "expired", "draft"], default: "ready" },
+    status: {
+      type: String,
+      enum: ["active", "ready", "expired", "draft"],
+      default: "ready",
+    },
     purchasedAt: { type: Date, default: Date.now },
     fileUrl: { type: String, default: "", trim: true },
   },
   { timestamps: true },
 );
 
-export type ClientContractDocument = InferSchemaType<typeof clientContractSchema>;
+export type ClientContractDocument = InferSchemaType<
+  typeof clientContractSchema
+>;
 
 export const ClientContract: Model<ClientContractDocument> =
-  mongoose.models.ClientContract ?? mongoose.model("ClientContract", clientContractSchema);
+  mongoose.models.ClientContract ??
+  mongoose.model("ClientContract", clientContractSchema);

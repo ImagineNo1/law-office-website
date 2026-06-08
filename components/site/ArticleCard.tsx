@@ -13,12 +13,12 @@ export function ArticleCard({ item, href, type = "blog" }: ArticleCardProps) {
   const category = "category" in item ? item.category : "خبر موسسه";
 
   return (
-    <Card className="group overflow-hidden rounded-[18px] bg-white transition duration-300 hover:-translate-y-1 hover:border-gold/45 hover:shadow-soft dark:bg-surface-strong/92">
+    <Card className="group overflow-hidden rounded-[18px] bg-white transition duration-300 hover:-translate-y-1 hover:border-emerald-500/45 hover:shadow-soft dark:bg-surface-strong/92">
       <Link href={href} className="block">
         <div className="article-thumb relative h-60 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/18 via-transparent to-white/8 opacity-75 transition group-hover:opacity-55 dark:from-black/42" />
           <div className="absolute right-4 top-4">
-            <Badge tone="gold">{category}</Badge>
+            <Badge tone="green">{category}</Badge>
           </div>
         </div>
 
@@ -28,7 +28,7 @@ export function ArticleCard({ item, href, type = "blog" }: ArticleCardProps) {
             <span>{item.publishedAt}</span>
           </div>
 
-          <h3 className="font-heading text-2xl font-black leading-9 text-foreground transition group-hover:text-gold">
+          <h3 className="font-heading text-2xl font-black leading-9 text-foreground transition group-hover:text-emerald-700">
             {item.title}
           </h3>
 
@@ -36,7 +36,7 @@ export function ArticleCard({ item, href, type = "blog" }: ArticleCardProps) {
             {item.excerpt}
           </p>
 
-          <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-gold">
+          <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-emerald-700">
             {type === "blog" ? "مطالعه مقاله" : "مشاهده خبر"}
             <span aria-hidden="true">←</span>
           </span>

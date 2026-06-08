@@ -1,4 +1,8 @@
-export { PageShell, Container, IconBox } from "@/components/platform/layout/PageShell";
+export {
+  PageShell,
+  Container,
+  IconBox,
+} from "@/components/platform/layout/PageShell";
 export { PublicHeader } from "@/components/platform/layout/PublicHeader";
 export { PublicFooter } from "@/components/platform/layout/PublicFooter";
 export { HomeExperience } from "@/components/platform/home/HomeExperience";

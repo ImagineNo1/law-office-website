@@ -50,23 +50,50 @@ export function TourStepCard({
     >
       <TourProgress current={current} total={total} />
       <div className="mt-5">
-        <h2 className="font-heading text-xl font-extrabold text-navy" id="guided-tour-title">{step.title}</h2>
-        <p className="mt-3 text-sm font-bold leading-8 text-muted-foreground" id="guided-tour-body">{step.body}</p>
+        <h2
+          className="font-heading text-xl font-extrabold text-navy"
+          id="guided-tour-title"
+        >
+          {step.title}
+        </h2>
+        <p
+          className="mt-3 text-sm font-bold leading-8 text-muted-foreground"
+          id="guided-tour-body"
+        >
+          {step.body}
+        </p>
       </div>
       <div className="mt-6 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
-        <button className="rounded-xl border border-border px-4 py-3 text-sm font-extrabold text-muted-foreground transition hover:border-gold hover:text-gold" onClick={onSkip} type="button">
+        <button
+          className="rounded-xl border border-border px-4 py-3 text-sm font-extrabold text-muted-foreground transition hover:border-emerald-500 hover:text-emerald-700"
+          onClick={onSkip}
+          type="button"
+        >
           رد کردن
         </button>
         <div className="grid grid-cols-2 gap-2 sm:flex">
-          <button className="rounded-xl border border-border px-4 py-3 text-sm font-extrabold text-navy transition hover:border-gold hover:text-gold disabled:cursor-not-allowed disabled:opacity-45" disabled={isFirst} onClick={onPrevious} type="button">
+          <button
+            className="rounded-xl border border-border px-4 py-3 text-sm font-extrabold text-navy transition hover:border-emerald-500 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-45"
+            disabled={isFirst}
+            onClick={onPrevious}
+            type="button"
+          >
             قبلی
           </button>
           {isLast ? (
-            <button className="rounded-xl bg-gold px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:bg-gold/90" onClick={onFinish} type="button">
+            <button
+              className="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:bg-emerald-700/90"
+              onClick={onFinish}
+              type="button"
+            >
               پایان راهنما
             </button>
           ) : (
-            <button className="rounded-xl bg-navy px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:bg-navy/90" onClick={onNext} type="button">
+            <button
+              className="rounded-xl bg-navy px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:bg-navy/90"
+              onClick={onNext}
+              type="button"
+            >
               بعدی
             </button>
           )}

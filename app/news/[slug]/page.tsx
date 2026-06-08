@@ -41,7 +41,7 @@ export default async function NewsDetailPage({ params, searchParams }: Props) {
   return (
     <PublicShell>
       <article className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
-        <p className="text-sm font-bold text-gold">{item.publishedAt}</p>
+        <p className="text-sm font-bold text-emerald-700">{item.publishedAt}</p>
         <h1 className="mt-4 text-4xl font-black leading-[1.35] text-foreground">
           {item.title}
         </h1>

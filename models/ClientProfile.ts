@@ -15,7 +15,11 @@ const clientContractSchema = new Schema(
     title: { type: String, required: true, trim: true },
     category: { type: String, default: "قرارداد", trim: true },
     purchaseDate: { type: Date, default: Date.now },
-    status: { type: String, enum: ["active", "ready", "expired", "draft"], default: "ready" },
+    status: {
+      type: String,
+      enum: ["active", "ready", "expired", "draft"],
+      default: "ready",
+    },
   },
   { _id: true },
 );
@@ -24,7 +28,11 @@ const clientPaymentSchema = new Schema(
   {
     invoiceNumber: { type: String, required: true, trim: true },
     amount: { type: Number, required: true },
-    status: { type: String, enum: ["paid", "pending", "cancelled"], default: "pending" },
+    status: {
+      type: String,
+      enum: ["paid", "pending", "cancelled"],
+      default: "pending",
+    },
     paidAt: { type: Date, default: Date.now },
   },
   { _id: true },
@@ -51,4 +59,5 @@ const clientProfileSchema = new Schema(
 export type ClientProfileDocument = InferSchemaType<typeof clientProfileSchema>;
 
 export const ClientProfile: Model<ClientProfileDocument> =
-  mongoose.models.ClientProfile ?? mongoose.model("ClientProfile", clientProfileSchema);
+  mongoose.models.ClientProfile ??
+  mongoose.model("ClientProfile", clientProfileSchema);

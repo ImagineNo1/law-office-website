@@ -10,7 +10,7 @@ export function MegaMenu() {
     <div className="pointer-events-none absolute right-1/2 top-[calc(100%+14px)] z-40 hidden w-[920px] translate-x-1/2 opacity-0 transition group-hover:pointer-events-auto group-hover:opacity-100 lg:block">
       <div className="grid grid-cols-[1.1fr_0.9fr_0.8fr] gap-4 rounded-[26px] border border-slate-200 bg-white p-5 text-[#0B172A] shadow-[0_30px_90px_rgba(15,23,42,.14)]">
         <div>
-          <p className="mb-3 text-xs font-black text-[#C9973F]">
+          <p className="mb-3 text-xs font-black text-[#0F766E]">
             خدمات پرتکرار
           </p>
           <div className="grid gap-2">
@@ -29,7 +29,7 @@ export function MegaMenu() {
           </div>
         </div>
         <div>
-          <p className="mb-3 text-xs font-black text-[#C9973F]">بانک قرارداد</p>
+          <p className="mb-3 text-xs font-black text-[#0F766E]">بانک قرارداد</p>
           <div className="grid gap-2">
             {fallbackContracts.slice(0, 5).map((contract) => (
               <Link
@@ -38,7 +38,7 @@ export function MegaMenu() {
                 key={contract.id}
               >
                 <span>{contract.title}</span>
-                <span className="rounded-full bg-[#FFF8EA] px-2 py-1 text-xs text-[#C9973F]">
+                <span className="rounded-full bg-[#ECFDF5] px-2 py-1 text-xs text-[#0F766E]">
                   {contract.category}
                 </span>
               </Link>

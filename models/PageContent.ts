@@ -16,4 +16,5 @@ const pageContentSchema = new Schema(
 export type PageContentDocument = InferSchemaType<typeof pageContentSchema>;
 
 export const PageContent: Model<PageContentDocument> =
-  mongoose.models.PageContent ?? mongoose.model("PageContent", pageContentSchema);
+  mongoose.models.PageContent ??
+  mongoose.model("PageContent", pageContentSchema);

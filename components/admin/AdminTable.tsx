@@ -16,14 +16,21 @@ export function AdminTable({ rows }: { rows: AdminContentRow[] }) {
         </thead>
         <tbody>
           {rows.map((row) => (
-            <tr className="border-t border-border text-foreground transition hover:bg-gold/5" key={`${row.title}-${row.date}`}>
+            <tr
+              className="border-t border-border text-foreground transition hover:bg-emerald-500/5"
+              key={`${row.title}-${row.date}`}
+            >
               <td className="px-5 py-4 font-bold">{row.title}</td>
               <td className="px-5 py-4 text-muted">{row.category}</td>
               <td className="px-5 py-4 text-muted">{row.date}</td>
               <td className="px-5 py-4">
-                <Badge tone={row.status === "منتشر شده" ? "green" : "muted"}>{row.status}</Badge>
+                <Badge tone={row.status === "منتشر شده" ? "green" : "muted"}>
+                  {row.status}
+                </Badge>
               </td>
-              <td className="px-5 py-4 text-sm font-bold text-gold">ویرایش</td>
+              <td className="px-5 py-4 text-sm font-bold text-emerald-700">
+                ویرایش
+              </td>
             </tr>
           ))}
         </tbody>

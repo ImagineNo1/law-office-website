@@ -1,4 +1,11 @@
-export function organizationSchema(input: { name: string; url: string; logo?: string; phone?: string; address?: string; socialProfiles?: string[] }) {
+export function organizationSchema(input: {
+  name: string;
+  url: string;
+  logo?: string;
+  phone?: string;
+  address?: string;
+  socialProfiles?: string[];
+}) {
   return {
     "@context": "https://schema.org",
     "@type": "LegalService",
@@ -44,4 +51,3 @@ export function faqSchema(items: { question: string; answer: string }[]) {
     })),
   };
 }
-

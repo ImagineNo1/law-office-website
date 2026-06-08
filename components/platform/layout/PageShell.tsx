@@ -35,7 +35,7 @@ export function Container({
 
 export function IconBox({ children }: { children: React.ReactNode }) {
   return (
-    <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#FFF8EA] text-[#C9973F] shadow-inner">
+    <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#ECFDF5] text-[#0F766E] shadow-inner">
       {children}
     </span>
   );

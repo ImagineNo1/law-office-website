@@ -17,10 +17,10 @@ function ServiceIcon() {
 
 export function ServiceCard({ service }: { service: Service }) {
   return (
-    <Card className="group relative flex min-h-[285px] flex-col overflow-hidden rounded-[18px] bg-white p-8 transition duration-300 hover:-translate-y-1 hover:border-gold/45 hover:shadow-soft dark:bg-surface-strong/92">
-      <div className="absolute -left-12 -top-12 size-40 rounded-full bg-gold/8 blur-3xl transition group-hover:bg-gold/16" />
+    <Card className="group relative flex min-h-[285px] flex-col overflow-hidden rounded-[18px] bg-white p-8 transition duration-300 hover:-translate-y-1 hover:border-emerald-500/45 hover:shadow-soft dark:bg-surface-strong/92">
+      <div className="absolute -left-12 -top-12 size-40 rounded-full bg-emerald-700/8 blur-3xl transition group-hover:bg-emerald-700/16" />
 
-      <div className="relative mb-7 grid size-[58px] place-items-center self-start rounded-2xl border border-gold/18 bg-[#fbf1dc] text-gold transition group-hover:bg-gold group-hover:text-[#1b1305] dark:bg-gold/10">
+      <div className="relative mb-7 grid size-[58px] place-items-center self-start rounded-2xl border border-emerald-500/18 bg-[#fbf1dc] text-emerald-700 transition group-hover:bg-emerald-700 group-hover:text-[#ffffff] dark:bg-emerald-500/10">
         <ServiceIcon />
       </div>
 
@@ -32,7 +32,7 @@ export function ServiceCard({ service }: { service: Service }) {
         {service.excerpt}
       </p>
 
-      <span className="relative mt-7 inline-flex items-center gap-2 text-sm font-bold text-gold">
+      <span className="relative mt-7 inline-flex items-center gap-2 text-sm font-bold text-emerald-700">
         بیشتر بدانید
         <span aria-hidden="true">←</span>
       </span>

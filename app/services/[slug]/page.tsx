@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { ServicesExperience } from "@/components/platform/services/ServicesExperience";
-import { getPlatformFaqs, getPlatformServiceBySlug, getPlatformServices } from "@/lib/platform-db";
+import {
+  getPlatformFaqs,
+  getPlatformServiceBySlug,
+  getPlatformServices,
+} from "@/lib/platform-db";
 import { buildMetadata, getSeoForPath } from "@/lib/seo";
 
 type Props = {
@@ -21,14 +25,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export default async function ServiceDetailPage({
-  params,
-}: Props) {
+export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
   const [services, service, faqs] = await Promise.all([
     getPlatformServices(),
     getPlatformServiceBySlug(slug),
     getPlatformFaqs("service", slug),
   ]);
-  return <ServicesExperience detailSlug={slug} faqs={faqs} service={service} services={services} />;
+  return (
+    <ServicesExperience
+      detailSlug={slug}
+      faqs={faqs}
+      service={service}
+      services={services}
+    />
+  );
 }

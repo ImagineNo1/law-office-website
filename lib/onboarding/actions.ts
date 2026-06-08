@@ -26,15 +26,25 @@ type OnboardingDoc = {
   };
 };
 
-function stateFromOnboarding(onboarding: OnboardingDoc["onboarding"], kind: "admin" | "client"): SafeTourState {
-  const completed = kind === "admin" ? Boolean(onboarding?.adminTourCompleted) : Boolean(onboarding?.dashboardTourCompleted);
-  const skipped = kind === "admin" ? Boolean(onboarding?.adminTourSkippedAt) : Boolean(onboarding?.dashboardTourSkippedAt);
+function stateFromOnboarding(
+  onboarding: OnboardingDoc["onboarding"],
+  kind: "admin" | "client",
+): SafeTourState {
+  const completed =
+    kind === "admin"
+      ? Boolean(onboarding?.adminTourCompleted)
+      : Boolean(onboarding?.dashboardTourCompleted);
+  const skipped =
+    kind === "admin"
+      ? Boolean(onboarding?.adminTourSkippedAt)
+      : Boolean(onboarding?.dashboardTourSkippedAt);
   const lastSeenTourVersion = onboarding?.lastSeenTourVersion ?? "";
   return {
     completed,
     skipped,
     lastSeenTourVersion,
-    shouldShow: (!completed && !skipped) || lastSeenTourVersion !== TOUR_VERSION,
+    shouldShow:
+      (!completed && !skipped) || lastSeenTourVersion !== TOUR_VERSION,
     source: "db",
   };
 }
@@ -52,11 +62,15 @@ export async function getAdminTourState(): Promise<SafeTourState> {
   if (!admin) return { ...fallbackState, shouldShow: false };
 
   await connectDb();
-  const user = await User.findById(admin.id).select("onboarding").lean<OnboardingDoc>();
+  const user = await User.findById(admin.id)
+    .select("onboarding")
+    .lean<OnboardingDoc>();
   return stateFromOnboarding(user?.onboarding, "admin");
 }
 
-export async function markAdminTourCompleted(mode: "completed" | "skipped" = "completed") {
+export async function markAdminTourCompleted(
+  mode: "completed" | "skipped" = "completed",
+) {
   const admin = await getCurrentUser();
   if (!admin) return { ok: false };
 
@@ -69,7 +83,10 @@ export async function markAdminTourCompleted(mode: "completed" | "skipped" = "co
         "onboarding.adminTourCompleted": true,
         "onboarding.lastSeenTourVersion": TOUR_VERSION,
         ...(mode === "completed"
-          ? { "onboarding.adminTourCompletedAt": now, "onboarding.adminTourSkippedAt": null }
+          ? {
+              "onboarding.adminTourCompletedAt": now,
+              "onboarding.adminTourSkippedAt": null,
+            }
           : { "onboarding.adminTourSkippedAt": now }),
       },
     },
@@ -100,14 +117,19 @@ export async function resetAdminTour() {
 
 export async function getClientTourState(): Promise<SafeTourState> {
   const client = await getCurrentClient();
-  if (!client || client.id === "demo-client") return { ...fallbackState, source: "fallback" };
+  if (!client || client.id === "demo-client")
+    return { ...fallbackState, source: "fallback" };
 
   await connectDb();
-  const user = await ClientUser.findById(client.id).select("onboarding").lean<OnboardingDoc>();
+  const user = await ClientUser.findById(client.id)
+    .select("onboarding")
+    .lean<OnboardingDoc>();
   return stateFromOnboarding(user?.onboarding, "client");
 }
 
-export async function markClientTourCompleted(mode: "completed" | "skipped" = "completed") {
+export async function markClientTourCompleted(
+  mode: "completed" | "skipped" = "completed",
+) {
   const client = await getCurrentClient();
   if (!client || client.id === "demo-client") return { ok: false };
 
@@ -120,7 +142,10 @@ export async function markClientTourCompleted(mode: "completed" | "skipped" = "c
         "onboarding.dashboardTourCompleted": true,
         "onboarding.lastSeenTourVersion": TOUR_VERSION,
         ...(mode === "completed"
-          ? { "onboarding.dashboardTourCompletedAt": now, "onboarding.dashboardTourSkippedAt": null }
+          ? {
+              "onboarding.dashboardTourCompletedAt": now,
+              "onboarding.dashboardTourSkippedAt": null,
+            }
           : { "onboarding.dashboardTourSkippedAt": now }),
       },
     },

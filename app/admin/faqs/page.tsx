@@ -189,7 +189,7 @@ export default async function AdminFaqsPage({
                       action={
                         <form action={archiveFaqAction}>
                           <input name="id" type="hidden" value={faq.id} />
-                          <button className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-black text-white">
+                          <button className="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-black text-white">
                             آرشیو
                           </button>
                         </form>

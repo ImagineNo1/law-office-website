@@ -18,7 +18,7 @@ export function AdminConfirmDialog({
   const isArchive = buttonLabel.includes("آرشیو");
   const Icon = isArchive ? Archive : Trash2;
   const buttonClass = isArchive
-    ? "border-amber-200 text-amber-700 hover:bg-amber-50"
+    ? "border-emerald-200 text-emerald-700 hover:bg-emerald-50"
     : "border-red-200 text-red-600 hover:bg-red-50";
 
   return (

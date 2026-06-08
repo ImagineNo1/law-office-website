@@ -24,7 +24,7 @@ export function RequestCreateModal({
     <>
       <button
         data-tour="client-new-request"
-        className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-extrabold text-accent-foreground shadow-sm transition hover:bg-accent/90"
+        className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:bg-accent/90"
         onClick={() => ref.current?.showModal()}
         type="button"
       >
@@ -55,13 +55,21 @@ export function RequestCreateModal({
             </label>
             <label className="grid gap-2 text-sm font-extrabold text-primary">
               نوع خدمت
-              <select className="service-input" name="serviceSlug">
+              <input
+                className="service-input"
+                list="dashboard-service-options"
+                name="serviceTitle"
+                placeholder="انتخاب کنید یا نوع خدمت جدید را بنویسید"
+                required
+              />
+              <datalist id="dashboard-service-options">
                 {services.map((service) => (
-                  <option key={service.slug} value={service.slug}>
-                    {service.title}
-                  </option>
+                  <option key={service.slug} value={service.title} />
                 ))}
-              </select>
+              </datalist>
+              <span className="text-xs font-bold leading-6 text-muted-foreground">
+                اگر خدمت موردنظر در لیست نیست، همین‌جا نام آن را تایپ کنید.
+              </span>
             </label>
           </div>
           <label className="grid gap-2 text-sm font-extrabold text-primary">
@@ -81,7 +89,7 @@ export function RequestCreateModal({
               انصراف
             </button>
             <button
-              className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-extrabold text-accent-foreground"
+              className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-extrabold text-white"
               type="submit"
             >
               <Send aria-hidden="true" className="size-4" />

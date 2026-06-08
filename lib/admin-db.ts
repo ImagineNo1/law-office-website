@@ -10,7 +10,11 @@ import { Post } from "@/models/Post";
 import { Service } from "@/models/Service";
 import { ServiceRequest } from "@/models/ServiceRequest";
 import { User } from "@/models/User";
-import type { RequestPriority, RequestStatus, ServiceRequestData } from "@/types";
+import type {
+  RequestPriority,
+  RequestStatus,
+  ServiceRequestData,
+} from "@/types";
 
 export type PublishStatus = "draft" | "published" | "archived";
 
@@ -20,105 +24,234 @@ function idOf(value: unknown) {
 
 export function formatAdminDate(value?: Date | string | null) {
   if (!value) return "ثبت نشده";
-  return new Intl.DateTimeFormat("fa-IR", { year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(value));
+  return new Intl.DateTimeFormat("fa-IR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date(value));
 }
 
 export async function getAdminServices() {
   await connectDb();
   const docs = await Service.find().sort({ order: 1, createdAt: -1 }).lean();
-  return docs.map((doc) => ({ ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt), updatedAtText: formatAdminDate(doc.updatedAt) }));
+  return docs.map((doc) => ({
+    ...doc,
+    id: idOf(doc._id),
+    createdAtText: formatAdminDate(doc.createdAt),
+    updatedAtText: formatAdminDate(doc.updatedAt),
+  }));
 }
 
 export async function getAdminContracts() {
   await connectDb();
-  const docs = await ContractTemplate.find().sort({ order: 1, createdAt: -1 }).lean();
-  return docs.map((doc) => ({ ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt), updatedAtText: formatAdminDate(doc.updatedAt) }));
+  const docs = await ContractTemplate.find()
+    .sort({ order: 1, createdAt: -1 })
+    .lean();
+  return docs.map((doc) => ({
+    ...doc,
+    id: idOf(doc._id),
+    createdAtText: formatAdminDate(doc.createdAt),
+    updatedAtText: formatAdminDate(doc.updatedAt),
+  }));
 }
 
 export async function getAdminLegalForms() {
   await connectDb();
   const docs = await LegalFormTemplate.find().sort({ createdAt: -1 }).lean();
-  return docs.map((doc) => ({ ...doc, id: idOf(doc._id), fieldsText: (doc.fields ?? []).join("\n"), createdAtText: formatAdminDate(doc.createdAt), updatedAtText: formatAdminDate(doc.updatedAt) }));
+  return docs.map((doc) => ({
+    ...doc,
+    id: idOf(doc._id),
+    fieldsText: (doc.fields ?? []).join("\n"),
+    createdAtText: formatAdminDate(doc.createdAt),
+    updatedAtText: formatAdminDate(doc.updatedAt),
+  }));
 }
 
-export async function getAdminFaqs(filters?: { pageSlug?: string; pageType?: string }) {
+export async function getAdminFaqs(filters?: {
+  pageSlug?: string;
+  pageType?: string;
+}) {
   await connectDb();
   const query: Record<string, string> = {};
   if (filters?.pageType) query.pageType = filters.pageType;
   if (filters?.pageSlug) query.pageSlug = filters.pageSlug;
-  const docs = await FAQ.find(query).sort({ pageType: 1, order: 1, createdAt: -1 }).lean();
-  return docs.map((doc) => ({ ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt), updatedAtText: formatAdminDate(doc.updatedAt) }));
+  const docs = await FAQ.find(query)
+    .sort({ pageType: 1, order: 1, createdAt: -1 })
+    .lean();
+  return docs.map((doc) => ({
+    ...doc,
+    id: idOf(doc._id),
+    createdAtText: formatAdminDate(doc.createdAt),
+    updatedAtText: formatAdminDate(doc.updatedAt),
+  }));
 }
 
 export async function getAdminPostById(id: string) {
   await connectDb();
   const doc = await Post.findById(id).lean();
-  return doc ? { ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt), updatedAtText: formatAdminDate(doc.updatedAt), publishedAtText: formatAdminDate(doc.publishedAt) } : null;
+  return doc
+    ? {
+        ...doc,
+        id: idOf(doc._id),
+        createdAtText: formatAdminDate(doc.createdAt),
+        updatedAtText: formatAdminDate(doc.updatedAt),
+        publishedAtText: formatAdminDate(doc.publishedAt),
+      }
+    : null;
 }
 
 export async function getAdminPosts() {
   await connectDb();
-  const docs = await Post.find().sort({ publishedAt: -1, createdAt: -1 }).lean();
-  return docs.map((doc) => ({ ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt), updatedAtText: formatAdminDate(doc.updatedAt), publishedAtText: formatAdminDate(doc.publishedAt) }));
+  const docs = await Post.find()
+    .sort({ publishedAt: -1, createdAt: -1 })
+    .lean();
+  return docs.map((doc) => ({
+    ...doc,
+    id: idOf(doc._id),
+    createdAtText: formatAdminDate(doc.createdAt),
+    updatedAtText: formatAdminDate(doc.updatedAt),
+    publishedAtText: formatAdminDate(doc.publishedAt),
+  }));
 }
 
 export async function getAdminNewsById(id: string) {
   await connectDb();
   const doc = await News.findById(id).lean();
-  return doc ? { ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt), updatedAtText: formatAdminDate(doc.updatedAt), publishedAtText: formatAdminDate(doc.publishedAt) } : null;
+  return doc
+    ? {
+        ...doc,
+        id: idOf(doc._id),
+        createdAtText: formatAdminDate(doc.createdAt),
+        updatedAtText: formatAdminDate(doc.updatedAt),
+        publishedAtText: formatAdminDate(doc.publishedAt),
+      }
+    : null;
 }
 
 export async function getAdminNews() {
   await connectDb();
-  const docs = await News.find().sort({ publishedAt: -1, createdAt: -1 }).lean();
-  return docs.map((doc) => ({ ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt), updatedAtText: formatAdminDate(doc.updatedAt), publishedAtText: formatAdminDate(doc.publishedAt) }));
+  const docs = await News.find()
+    .sort({ publishedAt: -1, createdAt: -1 })
+    .lean();
+  return docs.map((doc) => ({
+    ...doc,
+    id: idOf(doc._id),
+    createdAtText: formatAdminDate(doc.createdAt),
+    updatedAtText: formatAdminDate(doc.updatedAt),
+    publishedAtText: formatAdminDate(doc.publishedAt),
+  }));
 }
 
 export async function getAdminMessages() {
   await connectDb();
   const docs = await Message.find().sort({ createdAt: -1 }).lean();
-  return docs.map((doc) => ({ ...doc, id: idOf(doc._id), createdAtText: formatAdminDate(doc.createdAt) }));
+  return docs.map((doc) => ({
+    ...doc,
+    id: idOf(doc._id),
+    createdAtText: formatAdminDate(doc.createdAt),
+  }));
 }
-
 
 export async function getAdminClientConversations() {
   await connectDb();
-  const docs = await ClientMessage.find().sort({ createdAt: 1 }).lean<{
-    _id: unknown;
-    clientId: string;
-    senderType?: "client" | "admin";
-    sender?: "client" | "lawyer" | "admin";
-    message: string;
-    threadId?: string;
-    threadTitle?: string;
-    createdAt?: Date | string;
-  }[]>();
-  const clientIds = Array.from(new Set(docs.map((doc) => doc.clientId).filter(Boolean)));
-  const clients = await ClientUser.find({ _id: { $in: clientIds } }).select("fullName phone email").lean();
-  const clientMap = new Map(clients.map((client) => [String(client._id), client]));
-  const groups = new Map<string, { threadId: string; threadTitle: string; clientId: string; clientName: string; clientPhone: string; messages: { id: string; sender: "client" | "admin"; senderName: string; message: string; createdAtText: string }[] }>();
+  const docs = await ClientMessage.find().sort({ createdAt: 1 }).lean<
+    {
+      _id: unknown;
+      clientId: string;
+      senderType?: "client" | "admin";
+      sender?: "client" | "lawyer" | "admin";
+      message: string;
+      threadId?: string;
+      threadTitle?: string;
+      createdAt?: Date | string;
+    }[]
+  >();
+  const clientIds = Array.from(
+    new Set(docs.map((doc) => doc.clientId).filter(Boolean)),
+  );
+  const clients = await ClientUser.find({ _id: { $in: clientIds } })
+    .select("fullName phone email")
+    .lean();
+  const clientMap = new Map(
+    clients.map((client) => [String(client._id), client]),
+  );
+  const groups = new Map<
+    string,
+    {
+      threadId: string;
+      threadTitle: string;
+      clientId: string;
+      clientName: string;
+      clientPhone: string;
+      messages: {
+        id: string;
+        sender: "client" | "admin";
+        senderName: string;
+        message: string;
+        createdAtText: string;
+      }[];
+    }
+  >();
   for (const doc of docs) {
     const threadId = doc.threadId ?? "general";
     const key = `${doc.clientId}:${threadId}`;
     const client = clientMap.get(doc.clientId);
-    const sender = doc.senderType ?? (doc.sender === "client" ? "client" : "admin");
+    const sender =
+      doc.senderType ?? (doc.sender === "client" ? "client" : "admin");
     if (!groups.has(key)) {
-      groups.set(key, { threadId, threadTitle: doc.threadTitle ?? "گفتگوی پشتیبانی", clientId: doc.clientId, clientName: client?.fullName ?? "کاربر", clientPhone: client?.phone ?? "", messages: [] });
+      groups.set(key, {
+        threadId,
+        threadTitle: doc.threadTitle ?? "گفتگوی پشتیبانی",
+        clientId: doc.clientId,
+        clientName: client?.fullName ?? "کاربر",
+        clientPhone: client?.phone ?? "",
+        messages: [],
+      });
     }
-    groups.get(key)?.messages.push({ id: idOf(doc._id), sender, senderName: sender === "client" ? client?.fullName ?? "کاربر" : "تیم مدیریت", message: doc.message, createdAtText: formatAdminDate(doc.createdAt) });
+    groups
+      .get(key)
+      ?.messages.push({
+        id: idOf(doc._id),
+        sender,
+        senderName:
+          sender === "client" ? (client?.fullName ?? "کاربر") : "تیم مدیریت",
+        message: doc.message,
+        createdAtText: formatAdminDate(doc.createdAt),
+      });
   }
-  return Array.from(groups.values()).sort((a, b) => (b.messages.at(-1)?.id ?? "").localeCompare(a.messages.at(-1)?.id ?? ""));
+  return Array.from(groups.values()).sort((a, b) =>
+    (b.messages.at(-1)?.id ?? "").localeCompare(a.messages.at(-1)?.id ?? ""),
+  );
 }
 
 export async function getAdminUsers() {
   await connectDb();
   const [admins, clients] = await Promise.all([
-    User.find().select("fullName email role status createdAt updatedAt").sort({ createdAt: -1 }).lean(),
-    ClientUser.find().select("fullName email phone role status nationalCode createdAt updatedAt lastLoginAt").sort({ createdAt: -1 }).lean(),
+    User.find()
+      .select("fullName email role status createdAt updatedAt")
+      .sort({ createdAt: -1 })
+      .lean(),
+    ClientUser.find()
+      .select(
+        "fullName email phone role status nationalCode createdAt updatedAt lastLoginAt",
+      )
+      .sort({ createdAt: -1 })
+      .lean(),
   ]);
   return {
-    admins: admins.map((doc) => ({ ...doc, id: idOf(doc._id), userType: "admin" as const, createdAtText: formatAdminDate(doc.createdAt) })),
-    clients: clients.map((doc) => ({ ...doc, id: idOf(doc._id), userType: "client" as const, createdAtText: formatAdminDate(doc.createdAt), lastLoginAtText: formatAdminDate(doc.lastLoginAt) })),
+    admins: admins.map((doc) => ({
+      ...doc,
+      id: idOf(doc._id),
+      userType: "admin" as const,
+      createdAtText: formatAdminDate(doc.createdAt),
+    })),
+    clients: clients.map((doc) => ({
+      ...doc,
+      id: idOf(doc._id),
+      userType: "client" as const,
+      createdAtText: formatAdminDate(doc.createdAt),
+      lastLoginAtText: formatAdminDate(doc.lastLoginAt),
+    })),
   };
 }
 
@@ -135,9 +268,27 @@ type LeanRequest = {
   priority: RequestPriority;
   status: RequestStatus;
   assignedTo?: string;
-  adminNotes?: { _id?: unknown; author: string; message: string; createdAt?: Date | string }[];
-  attachments?: { _id?: unknown; filename: string; size?: string; uploadedBy?: "client" | "admin"; uploadedAt?: Date | string }[];
-  messages?: { _id?: unknown; sender: "client" | "admin"; senderName: string; message: string; avatar?: string; createdAt?: Date | string }[];
+  adminNotes?: {
+    _id?: unknown;
+    author: string;
+    message: string;
+    createdAt?: Date | string;
+  }[];
+  attachments?: {
+    _id?: unknown;
+    filename: string;
+    size?: string;
+    uploadedBy?: "client" | "admin";
+    uploadedAt?: Date | string;
+  }[];
+  messages?: {
+    _id?: unknown;
+    sender: "client" | "admin";
+    senderName: string;
+    message: string;
+    avatar?: string;
+    createdAt?: Date | string;
+  }[];
   createdAt?: Date | string;
   updatedAt?: Date | string;
 };
@@ -160,24 +311,57 @@ function toRequest(doc: LeanRequest): ServiceRequestData {
     priority: doc.priority,
     status: doc.status,
     assignedTo: doc.assignedTo ?? "در انتظار تخصیص",
-    adminNotes: (doc.adminNotes ?? []).map((note) => ({ id: idOf(note._id), author: note.author, message: note.message, createdAt: iso(note.createdAt) })),
-    attachments: (doc.attachments ?? []).map((file) => ({ id: idOf(file._id), filename: file.filename, size: file.size ?? "", uploadedBy: file.uploadedBy ?? "client", uploadedAt: iso(file.uploadedAt) })),
-    messages: (doc.messages ?? []).map((message) => ({ id: idOf(message._id), sender: message.sender, senderName: message.senderName, message: message.message, avatar: message.avatar ?? "", createdAt: iso(message.createdAt) })),
+    adminNotes: (doc.adminNotes ?? []).map((note) => ({
+      id: idOf(note._id),
+      author: note.author,
+      message: note.message,
+      createdAt: iso(note.createdAt),
+    })),
+    attachments: (doc.attachments ?? []).map((file) => ({
+      id: idOf(file._id),
+      filename: file.filename,
+      size: file.size ?? "",
+      uploadedBy: file.uploadedBy ?? "client",
+      uploadedAt: iso(file.uploadedAt),
+    })),
+    messages: (doc.messages ?? []).map((message) => ({
+      id: idOf(message._id),
+      sender: message.sender,
+      senderName: message.senderName,
+      message: message.message,
+      avatar: message.avatar ?? "",
+      createdAt: iso(message.createdAt),
+    })),
     createdAt: iso(doc.createdAt),
     updatedAt: iso(doc.updatedAt),
   };
 }
 
-export async function getAdminRequests(filters?: { priority?: string; q?: string; status?: string }) {
+export async function getAdminRequests(filters?: {
+  priority?: string;
+  q?: string;
+  status?: string;
+}) {
   await connectDb();
   const query: Record<string, unknown> = {};
   if (filters?.status) query.status = filters.status;
   if (filters?.priority) query.priority = filters.priority;
   if (filters?.q) {
-    const regex = new RegExp(filters.q.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
-    query.$or = [{ requestNumber: regex }, { fullName: regex }, { phone: regex }, { serviceTitle: regex }, { subject: regex }];
+    const regex = new RegExp(
+      filters.q.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+      "i",
+    );
+    query.$or = [
+      { requestNumber: regex },
+      { fullName: regex },
+      { phone: regex },
+      { serviceTitle: regex },
+      { subject: regex },
+    ];
   }
-  const docs = await ServiceRequest.find(query).sort({ createdAt: -1 }).lean<LeanRequest[]>();
+  const docs = await ServiceRequest.find(query)
+    .sort({ createdAt: -1 })
+    .lean<LeanRequest[]>();
   return docs.map(toRequest);
 }
 
@@ -190,7 +374,18 @@ export async function getAdminRequestById(id: string) {
 
 export async function getAdminDashboardData() {
   await connectDb();
-  const [requests, services, contracts, forms, faqs, posts, news, messages, admins, clients] = await Promise.all([
+  const [
+    requests,
+    services,
+    contracts,
+    forms,
+    faqs,
+    posts,
+    news,
+    messages,
+    admins,
+    clients,
+  ] = await Promise.all([
     ServiceRequest.countDocuments(),
     Service.countDocuments(),
     ContractTemplate.countDocuments(),
@@ -202,5 +397,15 @@ export async function getAdminDashboardData() {
     User.countDocuments(),
     ClientUser.countDocuments(),
   ]);
-  return { requests, services, contracts, forms, faqs, posts, news, messages, users: admins + clients };
+  return {
+    requests,
+    services,
+    contracts,
+    forms,
+    faqs,
+    posts,
+    news,
+    messages,
+    users: admins + clients,
+  };
 }

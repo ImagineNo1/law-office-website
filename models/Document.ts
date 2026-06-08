@@ -35,7 +35,15 @@ const documentSchema = new Schema(
     requiresSignature: { type: Boolean, default: false },
     signatureStatus: {
       type: String,
-      enum: ["none", "draft", "sent", "viewed", "signed", "rejected", "expired"],
+      enum: [
+        "none",
+        "draft",
+        "sent",
+        "viewed",
+        "signed",
+        "rejected",
+        "expired",
+      ],
       default: "none",
     },
   },

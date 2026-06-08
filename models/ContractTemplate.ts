@@ -33,7 +33,9 @@ const contractTemplateSchema = new Schema(
   { timestamps: true },
 );
 
-export type ContractTemplateDocument = InferSchemaType<typeof contractTemplateSchema>;
+export type ContractTemplateDocument = InferSchemaType<
+  typeof contractTemplateSchema
+>;
 
 export const ContractTemplate: Model<ContractTemplateDocument> =
   mongoose.models.ContractTemplate ??

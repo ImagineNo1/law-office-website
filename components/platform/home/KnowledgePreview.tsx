@@ -1,8 +1,28 @@
 const items = [
-  ["راهنمای قرارداد", "محتوای آموزشی برای تصمیم‌گیری حقوقی دقیق‌تر و استفاده بهتر از سامانه.", "bg-blue-500/10 text-blue-600", "book"],
-  ["آموزش امضای دیجیتال", "راهنمای کامل ارسال، پیگیری و بایگانی امضا در کارتابل اختصاصی.", "bg-emerald-500/10 text-emerald-600", "pen"],
-  ["سوالات متداول", "پاسخ‌های کوتاه و کاربردی برای کاربران، موکلین و مدیران حقوقی.", "bg-purple-500/10 text-purple-600", "help"],
-  ["اخبار حقوقی", "به‌روزرسانی‌های مهم و اطلاعیه‌های حقوقی برای تصمیم‌گیری بهتر.", "bg-amber-500/10 text-amber-600", "news"],
+  [
+    "راهنمای قرارداد",
+    "محتوای آموزشی برای تصمیم‌گیری حقوقی دقیق‌تر و استفاده بهتر از سامانه.",
+    "bg-blue-500/10 text-blue-600",
+    "book",
+  ],
+  [
+    "آموزش امضای دیجیتال",
+    "راهنمای کامل ارسال، پیگیری و بایگانی امضا در کارتابل اختصاصی.",
+    "bg-emerald-500/10 text-emerald-600",
+    "pen",
+  ],
+  [
+    "سوالات متداول",
+    "پاسخ‌های کوتاه و کاربردی برای کاربران، موکلین و مدیران حقوقی.",
+    "bg-purple-500/10 text-purple-600",
+    "help",
+  ],
+  [
+    "اخبار حقوقی",
+    "به‌روزرسانی‌های مهم و اطلاعیه‌های حقوقی برای تصمیم‌گیری بهتر.",
+    "bg-emerald-600/10 text-emerald-600",
+    "news",
+  ],
 ];
 
 function Icon({ name }: { name: string }) {
@@ -14,7 +34,13 @@ function Icon({ name }: { name: string }) {
   };
   return (
     <svg aria-hidden="true" className="size-7" viewBox="0 0 24 24" fill="none">
-      <path d={paths[name]} stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
+      <path
+        d={paths[name]}
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+      />
     </svg>
   );
 }
@@ -27,17 +53,26 @@ export function KnowledgePreview() {
           <span className="mb-4 inline-flex rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent">
             مرکز دانش
           </span>
-          <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">یاد بگیرید و تصمیم بهتری بگیرید</h2>
+          <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">
+            یاد بگیرید و تصمیم بهتری بگیرید
+          </h2>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {items.map(([title, description, color, icon]) => (
-            <article className="group rounded-2xl border border-border/50 bg-card p-6 text-center transition-all duration-300 hover:border-accent/20 hover:shadow-lg" key={title}>
-              <span className={`mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl ${color} transition-transform group-hover:scale-110`}>
+            <article
+              className="group rounded-2xl border border-border/50 bg-card p-6 text-center transition-all duration-300 hover:border-accent/20 hover:shadow-lg"
+              key={title}
+            >
+              <span
+                className={`mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl ${color} transition-transform group-hover:scale-110`}
+              >
                 <Icon name={icon} />
               </span>
               <h3 className="mb-2 text-base font-bold">{title}</h3>
-              <p className="mb-4 text-sm leading-relaxed text-muted-foreground">{description}</p>
+              <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
+                {description}
+              </p>
               <span className="inline-flex items-center gap-1 text-xs font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">
                 مطالعه بیشتر ←
               </span>

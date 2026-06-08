@@ -54,7 +54,7 @@ export default async function DashboardPage() {
           <div className="grid gap-6">
             <PortalCard className="p-5">
               <div
-                className="rounded-2xl border border-gold/25 bg-gold/5 p-4 text-sm font-bold leading-8 text-muted"
+                className="rounded-2xl border border-emerald-500/25 bg-emerald-500/5 p-4 text-sm font-bold leading-8 text-muted"
                 data-tour="client-help"
               >
                 برای شروع، اولین درخواست حقوقی خود را ثبت کنید.
@@ -69,7 +69,7 @@ export default async function DashboardPage() {
                   ["پیام‌ها", "/dashboard/messages"],
                 ].map(([label, href]) => (
                   <Link
-                    className="rounded-xl border border-border px-4 py-3 text-sm font-black text-navy transition hover:border-gold hover:text-gold"
+                    className="rounded-xl border border-border px-4 py-3 text-sm font-black text-navy transition hover:border-emerald-500 hover:text-emerald-700"
                     data-tour={
                       label === "ثبت درخواست جدید"
                         ? "client-new-request"

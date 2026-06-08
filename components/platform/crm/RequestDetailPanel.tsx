@@ -1,7 +1,15 @@
-import { formatRequestDate, requestPriorityLabels, requestStatusLabels } from "@/lib/service-requests";
+import {
+  formatRequestDate,
+  requestPriorityLabels,
+  requestStatusLabels,
+} from "@/lib/service-requests";
 import type { ServiceRequestData } from "@/types";
 
-export function RequestDetailPanel({ request }: { request: ServiceRequestData }) {
+export function RequestDetailPanel({
+  request,
+}: {
+  request: ServiceRequestData;
+}) {
   return (
     <section className="rounded-2xl bg-white p-6 shadow-[0_18px_45px_rgba(11,23,42,.06)]">
       <h2 className="text-xl font-black">پنل جزئیات درخواست</h2>

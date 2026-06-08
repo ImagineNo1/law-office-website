@@ -14,5 +14,5 @@ const seoRedirectSchema = new Schema(
 export type SEORedirectDocument = InferSchemaType<typeof seoRedirectSchema>;
 
 export const SEORedirect: Model<SEORedirectDocument> =
-  mongoose.models.SEORedirect ?? mongoose.model("SEORedirect", seoRedirectSchema);
-
+  mongoose.models.SEORedirect ??
+  mongoose.model("SEORedirect", seoRedirectSchema);

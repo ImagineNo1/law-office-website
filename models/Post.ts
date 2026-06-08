@@ -18,4 +18,5 @@ const postSchema = new Schema(
 
 export type PostDocument = InferSchemaType<typeof postSchema>;
 
-export const Post: Model<PostDocument> = mongoose.models.Post ?? mongoose.model("Post", postSchema);
+export const Post: Model<PostDocument> =
+  mongoose.models.Post ?? mongoose.model("Post", postSchema);

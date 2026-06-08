@@ -3,7 +3,13 @@ import Link from "next/link";
 function FileIcon() {
   return (
     <svg aria-hidden="true" className="size-6" viewBox="0 0 24 24" fill="none">
-      <path d="M7 3h7l5 5v13H7V3Zm7 0v6h6M10 13h7M10 17h5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
+      <path
+        d="M7 3h7l5 5v13H7V3Zm7 0v6h6M10 13h7M10 17h5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+      />
     </svg>
   );
 }
@@ -31,12 +37,20 @@ export function ServiceCard({
         <FileIcon />
       </div>
       <div className="mb-3 flex items-center gap-2">
-        <span className="rounded-full bg-[#F8FAFC] px-3 py-1 text-[11px] font-black text-[#64748B]">{tag || "خدمات"}</span>
-        <span className="rounded-full bg-[#ECFDF5] px-3 py-1 text-[11px] font-black text-[#0F766E]">{sla || "بررسی سریع"}</span>
+        <span className="rounded-full bg-[#F8FAFC] px-3 py-1 text-[11px] font-black text-[#64748B]">
+          {tag || "خدمات"}
+        </span>
+        <span className="rounded-full bg-[#ECFDF5] px-3 py-1 text-[11px] font-black text-[#0F766E]">
+          {sla || "بررسی سریع"}
+        </span>
       </div>
       <h3 className="mb-2 text-base font-black text-[#10233B]">{title}</h3>
-      <p className="mb-4 line-clamp-3 min-h-20 text-sm font-bold leading-7 text-[#64748B]">{desc}</p>
-      <span className="text-xs font-black text-[#0F766E] opacity-0 transition-opacity group-hover:opacity-100">مشاهده خدمت ←</span>
+      <p className="mb-4 line-clamp-3 min-h-20 text-sm font-bold leading-7 text-[#64748B]">
+        {desc}
+      </p>
+      <span className="text-xs font-black text-[#0F766E] opacity-0 transition-opacity group-hover:opacity-100">
+        مشاهده خدمت ←
+      </span>
     </Link>
   );
 }

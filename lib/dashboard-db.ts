@@ -53,7 +53,13 @@ export type DashboardActivityRecord = {
   actorId: string;
   title: string;
   description: string;
-  type: "request" | "document" | "signature" | "payment" | "message" | "security";
+  type:
+    | "request"
+    | "document"
+    | "signature"
+    | "payment"
+    | "message"
+    | "security";
   createdAt: string;
 };
 
@@ -104,7 +110,10 @@ function hasDatabase() {
 }
 
 function canUseDemoFallback() {
-  return process.env.NODE_ENV !== "production" || process.env.ALLOW_DEMO_DATA === "true";
+  return (
+    process.env.NODE_ENV !== "production" ||
+    process.env.ALLOW_DEMO_DATA === "true"
+  );
 }
 
 function asIso(value: unknown) {
@@ -114,11 +123,17 @@ function asIso(value: unknown) {
 
 function asFaDate(value: unknown) {
   if (!value) return "";
-  return new Intl.DateTimeFormat("fa-IR", { year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(value as string | Date));
+  return new Intl.DateTimeFormat("fa-IR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date(value as string | Date));
 }
 
 function idOf(value: unknown, fallback: string) {
-  return value && typeof value === "object" && "toString" in value ? String(value) : fallback;
+  return value && typeof value === "object" && "toString" in value
+    ? String(value)
+    : fallback;
 }
 
 async function fromDbOrFallback<T>(query: () => Promise<T[]>, fallback: T[]) {
@@ -151,13 +166,17 @@ export async function getDashboardDocuments(): Promise<LegalDocumentRecord[]> {
   }, fallbackDocuments);
 }
 
-export async function getDashboardSignatureRequests(): Promise<SignatureRequestRecord[]> {
+export async function getDashboardSignatureRequests(): Promise<
+  SignatureRequestRecord[]
+> {
   return fromDbOrFallback(async () => {
     await connectDb();
     const docs = await SignatureRequest.find().sort({ sentAt: -1 }).lean();
     const documents = await getDashboardDocuments();
     return docs.map((doc, index) => {
-      const document = documents.find((item) => item.id === doc.documentId || item.slug === doc.documentId);
+      const document = documents.find(
+        (item) => item.id === doc.documentId || item.slug === doc.documentId,
+      );
       return {
         id: idOf(doc._id, `signature-${index + 1}`),
         documentId: String(doc.documentId),
@@ -212,12 +231,19 @@ export async function getDashboardWorkflows(): Promise<WorkflowRecord[]> {
     await connectDb();
     const docs = await Workflow.find().sort({ createdAt: -1 }).lean();
     return docs.map((doc, index) => {
-      const completed = (doc.steps ?? []).filter((step) => step.status === "completed").length;
-      const progress = doc.steps?.length ? Math.round((completed / doc.steps.length) * 100) : 0;
+      const completed = (doc.steps ?? []).filter(
+        (step) => step.status === "completed",
+      ).length;
+      const progress = doc.steps?.length
+        ? Math.round((completed / doc.steps.length) * 100)
+        : 0;
       return {
         id: idOf(doc._id, `workflow-${index + 1}`),
         name: String(doc.name),
-        steps: (doc.steps ?? []).map((step) => ({ title: step.title, status: step.status })),
+        steps: (doc.steps ?? []).map((step) => ({
+          title: step.title,
+          status: step.status,
+        })),
         assignedRoles: doc.assignedRoles ?? [],
         status: doc.status,
         progress,
@@ -226,7 +252,9 @@ export async function getDashboardWorkflows(): Promise<WorkflowRecord[]> {
   }, fallbackWorkflows);
 }
 
-export async function getDashboardPayments(): Promise<DashboardPaymentRecord[]> {
+export async function getDashboardPayments(): Promise<
+  DashboardPaymentRecord[]
+> {
   return fromDbOrFallback(async () => {
     await connectDb();
     const docs = await Payment.find().sort({ createdAt: -1 }).lean();
@@ -241,7 +269,9 @@ export async function getDashboardPayments(): Promise<DashboardPaymentRecord[]> 
   }, []);
 }
 
-export async function getDashboardMessages(): Promise<DashboardMessageRecord[]> {
+export async function getDashboardMessages(): Promise<
+  DashboardMessageRecord[]
+> {
   return fromDbOrFallback(async () => {
     await connectDb();
     const docs = await ClientMessage.find().sort({ createdAt: -1 }).lean();
@@ -255,26 +285,34 @@ export async function getDashboardMessages(): Promise<DashboardMessageRecord[]> 
   }, []);
 }
 
-export async function getDashboardActivityEvents(): Promise<DashboardActivityRecord[]> {
-  return fromDbOrFallback(async () => {
-    await connectDb();
-    const docs = await ActivityEvent.find().sort({ createdAt: -1 }).limit(30).lean();
-    return docs.map((doc, index) => ({
-      id: idOf(doc._id, `activity-${index + 1}`),
-      actorId: String(doc.actorId),
-      title: String(doc.title),
-      description: String(doc.description || ""),
-      type: doc.type,
-      createdAt: asIso(doc.createdAt),
-    }));
-  }, fallbackActivityFeed.map((title, index) => ({
-    id: `activity-${index + 1}`,
-    actorId: "demo",
-    title,
-    description: "",
-    type: "document" as const,
-    createdAt: "",
-  })));
+export async function getDashboardActivityEvents(): Promise<
+  DashboardActivityRecord[]
+> {
+  return fromDbOrFallback(
+    async () => {
+      await connectDb();
+      const docs = await ActivityEvent.find()
+        .sort({ createdAt: -1 })
+        .limit(30)
+        .lean();
+      return docs.map((doc, index) => ({
+        id: idOf(doc._id, `activity-${index + 1}`),
+        actorId: String(doc.actorId),
+        title: String(doc.title),
+        description: String(doc.description || ""),
+        type: doc.type,
+        createdAt: asIso(doc.createdAt),
+      }));
+    },
+    fallbackActivityFeed.map((title, index) => ({
+      id: `activity-${index + 1}`,
+      actorId: "demo",
+      title,
+      description: "",
+      type: "document" as const,
+      createdAt: "",
+    })),
+  );
 }
 
 export async function getDashboardStats(): Promise<DashboardStats> {
@@ -287,30 +325,45 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   const signed = signatures.filter((item) => item.status === "signed").length;
   return {
     totalDocuments: documents.length,
-    pendingSignatures: signatures.filter((item) => item.status === "pending").length,
-    signedDocuments: documents.filter((item) => item.status === "signed").length,
+    pendingSignatures: signatures.filter((item) => item.status === "pending")
+      .length,
+    signedDocuments: documents.filter((item) => item.status === "signed")
+      .length,
     contacts: contacts.length,
     templates: templates.length,
-    completionRate: signatures.length ? Math.round((signed / signatures.length) * 100) : 0,
+    completionRate: signatures.length
+      ? Math.round((signed / signatures.length) * 100)
+      : 0,
     todaySignatures: signed,
     monthSignatures: signatures.length,
   };
 }
 
 export async function getDashboardData(): Promise<DashboardData> {
-  const [documents, signatureRequests, templates, contacts, workflows, payments, messages, activityEvents, stats] =
-    await Promise.all([
-      getDashboardDocuments(),
-      getDashboardSignatureRequests(),
-      getDashboardTemplates(),
-      getDashboardContacts(),
-      getDashboardWorkflows(),
-      getDashboardPayments(),
-      getDashboardMessages(),
-      getDashboardActivityEvents(),
-      getDashboardStats(),
-    ]);
-  const archivedDocuments = documents.filter((document) => document.status === "archived");
+  const [
+    documents,
+    signatureRequests,
+    templates,
+    contacts,
+    workflows,
+    payments,
+    messages,
+    activityEvents,
+    stats,
+  ] = await Promise.all([
+    getDashboardDocuments(),
+    getDashboardSignatureRequests(),
+    getDashboardTemplates(),
+    getDashboardContacts(),
+    getDashboardWorkflows(),
+    getDashboardPayments(),
+    getDashboardMessages(),
+    getDashboardActivityEvents(),
+    getDashboardStats(),
+  ]);
+  const archivedDocuments = documents.filter(
+    (document) => document.status === "archived",
+  );
   const storageStats = {
     ...fallbackStorageStats,
     documents: documents.length,
@@ -324,12 +377,18 @@ export async function getDashboardData(): Promise<DashboardData> {
     ).map(([label, count], index) => ({
       label,
       count,
-      color: ["#C9973F", "#2563EB", "#16A34A", "#EF4444", "#7C3AED", "#F59E0B"][index % 6],
+      color: ["#0F766E", "#2563EB", "#16A34A", "#EF4444", "#7C3AED", "#F59E0B"][
+        index % 6
+      ],
     })),
   };
   return {
     documents,
-    archivedDocuments: archivedDocuments.length ? archivedDocuments : (canUseDemoFallback() ? fallbackArchivedDocuments : []),
+    archivedDocuments: archivedDocuments.length
+      ? archivedDocuments
+      : canUseDemoFallback()
+        ? fallbackArchivedDocuments
+        : [],
     signatureRequests,
     templates,
     contacts,
