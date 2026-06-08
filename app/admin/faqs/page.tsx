@@ -75,9 +75,6 @@ function FaqForm({ categories, faq }: { categories: string[]; faq?: FaqRow }) {
             name="pageSlug"
             placeholder="اختیاری؛ اگر خالی باشد عمومی است"
           />
-          <span className="text-xs font-bold leading-6 text-muted">
-            اگر سوال برای صفحه خاصی نیست، این بخش را خالی بگذارید.
-          </span>
         </label>
         <CategoryField categories={categories} defaultValue={faq?.category} />
         <OrderField defaultValue={faq?.order} />

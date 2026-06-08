@@ -9,7 +9,7 @@ const links = [
   { label: "خدمات حقوقی", href: "/services" },
   { label: "بانک قراردادها", href: "/contracts" },
   { label: "فرم‌های حقوقی", href: "/legal-forms" },
-  { label: "مرکز دانش", href: "/blog" },
+  { label: "وبلاگ", href: "/blog" },
   { label: "اخبار", href: "/news" },
   { label: "درباره ما", href: "/about" },
   { label: "تماس با ما", href: "/contact" },

@@ -200,56 +200,64 @@ export function RequestTimeline({
   request: ServiceRequestData;
   compact?: boolean;
 }) {
-  const steps = [
-    "ثبت درخواست",
-    "بررسی اولیه",
-    "تخصیص کارشناس",
-    "در حال انجام",
-    "تکمیل و تحویل",
-    "بسته شدن درخواست",
-  ];
-  const progressByStatus: Record<RequestStatus, number> = {
-    new: 1,
-    reviewing: 2,
-    waiting_for_client: 3,
-    quoted: 3,
-    in_progress: 4,
-    completed: 5,
-    cancelled: 2,
+  const events = request.timeline?.length
+    ? request.timeline
+    : [
+        {
+          id: "created",
+          title: "ثبت درخواست",
+          description: request.subject,
+          actor: request.fullName,
+          at: request.createdAt,
+          type: "created" as const,
+        },
+      ];
+  const sortedEvents = [...events].sort(
+    (a, b) => +new Date(a.at) - +new Date(b.at),
+  );
+  const formatDateTime = (value: string) =>
+    new Intl.DateTimeFormat("fa-IR", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(new Date(value));
+  const minuteGap = (previous: string | null, current: string) => {
+    if (!previous) return "شروع";
+    const diff = Math.max(
+      0,
+      Math.round((+new Date(current) - +new Date(previous)) / 60000),
+    );
+    return `${new Intl.NumberFormat("fa-IR").format(diff)} دقیقه بعد`;
   };
-  const progress = progressByStatus[request.status];
 
   return (
     <div className="rounded-2xl border border-border bg-white p-5 shadow-card">
-      <h3 className="text-lg font-black text-navy">وضعیت درخواست</h3>
+      <h3 className="text-lg font-black text-navy">تایم‌لاین درخواست</h3>
       <div className="mt-6 grid gap-5">
-        {steps.map((step, index) => {
-          const done = index < progress;
-          const current = index === progress;
+        {sortedEvents.map((event, index) => {
+          const previous = index ? sortedEvents[index - 1]?.at ?? null : null;
           return (
-            <div className="grid grid-cols-[34px_1fr] gap-3" key={step}>
+            <div className="grid grid-cols-[34px_1fr] gap-3" key={event.id}>
               <div className="relative flex justify-center">
-                {index < steps.length - 1 ? (
-                  <span
-                    className={`absolute top-8 h-10 w-px ${done ? "bg-emerald-400" : "bg-slate-200"}`}
-                  />
+                {index < sortedEvents.length - 1 ? (
+                  <span className="absolute top-8 h-10 w-px bg-emerald-200" />
                 ) : null}
-                <span
-                  className={`relative z-10 grid size-7 place-items-center rounded-full text-xs font-black ${done ? "bg-emerald-500 text-white" : current ? "bg-emerald-700 text-white" : "bg-slate-200 text-slate-500"}`}
-                >
-                  {done ? "✓" : index + 1}
+                <span className="relative z-10 grid size-7 place-items-center rounded-full bg-emerald-600 text-xs font-black text-white">
+                  {index + 1}
                 </span>
               </div>
               <div>
-                <p className="font-black text-navy">{step}</p>
+                <div className="flex items-center justify-between gap-3">
+                  <p className="font-black text-navy">{event.title}</p>
+                  <span className="text-xs font-black text-emerald-700">
+                    {minuteGap(previous, event.at)}
+                  </span>
+                </div>
                 <p className="mt-1 text-xs font-bold text-muted">
-                  {done || current
-                    ? formatRequestDate(request.updatedAt)
-                    : "در انتظار"}
+                  {event.actor || "سیستم"} · {formatDateTime(event.at)}
                 </p>
-                {!compact && current ? (
+                {!compact ? (
                   <p className="mt-2 text-xs leading-6 text-muted">
-                    پرونده در این مرحله توسط تیم حقوقی پیگیری می‌شود.
+                    {event.description}
                   </p>
                 ) : null}
               </div>

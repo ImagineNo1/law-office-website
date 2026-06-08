@@ -107,7 +107,8 @@ export const sampleServiceRequests: ServiceRequestData[] = Array.from(
       description:
         "شرح درخواست شامل بررسی مدارک، پیشنهاد مسیر اقدام و اعلام زمان‌بندی اجرای خدمت است.",
       priority,
-      status,
+  status,
+      assignedLawyerId: "",
       assignedTo: status === "new" ? "در انتظار تخصیص" : expert,
       adminNotes: [
         {
@@ -129,6 +130,7 @@ export const sampleServiceRequests: ServiceRequestData[] = Array.from(
           id: `${id}-a1`,
           filename: index % 2 ? "مدارک-شناسایی.pdf" : "قرارداد-نمونه.pdf",
           size: index % 2 ? "۴۸۰ کیلوبایت" : "۲.۱ مگابایت",
+          url: "",
           uploadedBy: "client",
           uploadedAt: createdAt,
         },
@@ -136,6 +138,7 @@ export const sampleServiceRequests: ServiceRequestData[] = Array.from(
           id: `${id}-a2`,
           filename: "گزارش-بررسی.docx",
           size: "۲۲۰ کیلوبایت",
+          url: "",
           uploadedBy: "admin",
           uploadedAt: updatedAt,
         },
@@ -157,6 +160,24 @@ export const sampleServiceRequests: ServiceRequestData[] = Array.from(
           createdAt: updatedAt,
         },
       ],
+      timeline: [
+        {
+          id: `${id}-t1`,
+          title: "ثبت درخواست",
+          description: "درخواست توسط مشتری ثبت شد.",
+          actor: customer[0],
+          type: "created",
+          at: createdAt,
+        },
+        {
+          id: `${id}-t2`,
+          title: "تخصیص کارشناس",
+          description: expert,
+          actor: "مدیر CRM",
+          type: "assignment",
+          at: updatedAt,
+        },
+      ],
       createdAt,
       updatedAt,
     };
@@ -175,6 +196,7 @@ type LeanRequest = {
   description: string;
   priority: RequestPriority;
   status: RequestStatus;
+  assignedLawyerId?: string | null;
   assignedTo?: string | null;
   adminNotes?: {
     _id?: unknown;
@@ -186,8 +208,23 @@ type LeanRequest = {
     _id?: unknown;
     filename: string;
     size?: string | null;
+    url?: string | null;
     uploadedBy?: "client" | "admin";
     uploadedAt?: Date | string;
+  }[];
+  timeline?: {
+    _id?: unknown;
+    title: string;
+    description?: string | null;
+    actor?: string | null;
+    type?:
+      | "created"
+      | "status"
+      | "assignment"
+      | "message"
+      | "note"
+      | "attachment";
+    at?: Date | string;
   }[];
   messages?: {
     _id?: unknown;
@@ -219,6 +256,7 @@ function toRequest(doc: LeanRequest): ServiceRequestData {
     description: doc.description,
     priority: doc.priority,
     status: doc.status,
+    assignedLawyerId: doc.assignedLawyerId ?? "",
     assignedTo: doc.assignedTo ?? "در انتظار تخصیص",
     adminNotes: (doc.adminNotes ?? []).map((note) => ({
       id: String(note._id ?? note.createdAt),
@@ -230,6 +268,7 @@ function toRequest(doc: LeanRequest): ServiceRequestData {
       id: String(attachment._id ?? attachment.filename),
       filename: attachment.filename,
       size: attachment.size ?? "",
+      url: attachment.url ?? "",
       uploadedBy: attachment.uploadedBy ?? "client",
       uploadedAt: asIso(attachment.uploadedAt),
     })),
@@ -240,6 +279,14 @@ function toRequest(doc: LeanRequest): ServiceRequestData {
       message: message.message,
       avatar: message.avatar ?? "",
       createdAt: asIso(message.createdAt),
+    })),
+    timeline: (doc.timeline ?? []).map((event) => ({
+      id: String(event._id ?? event.at ?? event.title),
+      title: event.title,
+      description: event.description ?? "",
+      actor: event.actor ?? "",
+      type: event.type ?? "created",
+      at: asIso(event.at),
     })),
     createdAt: asIso(doc.createdAt),
     updatedAt: asIso(doc.updatedAt ?? doc.createdAt),
@@ -306,6 +353,7 @@ export async function createServiceRequest(input: {
           {
             filename: input.attachmentName,
             size: "در انتظار بررسی",
+            url: "",
             uploadedBy: "client",
           },
         ]
@@ -316,6 +364,24 @@ export async function createServiceRequest(input: {
         senderName: input.fullName,
         message: input.description,
       },
+    ],
+    timeline: [
+      {
+        title: "ثبت درخواست",
+        description: input.subject,
+        actor: input.fullName,
+        type: "created",
+      },
+      ...(input.attachmentName
+        ? [
+            {
+              title: "آپلود پیوست",
+              description: input.attachmentName,
+              actor: input.fullName,
+              type: "attachment",
+            },
+          ]
+        : []),
     ],
   });
 

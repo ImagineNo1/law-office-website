@@ -4,7 +4,6 @@ import {
   getPlatformArticles,
   getPlatformContracts,
   getPlatformFaqs,
-  getPlatformNews,
 } from "@/lib/platform-db";
 import { buildMetadata, getSeoForPath } from "@/lib/seo";
 
@@ -18,18 +17,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [contracts, faqs, articles, news] = await Promise.all([
+  const [contracts, faqs, articles] = await Promise.all([
     getPlatformContracts(),
     getPlatformFaqs("general"),
     getPlatformArticles(4),
-    getPlatformNews(3),
   ]);
   return (
     <HomeExperience
       articles={articles}
       contracts={contracts}
       faqs={faqs}
-      news={news}
     />
   );
 }

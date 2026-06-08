@@ -51,7 +51,7 @@ export function KnowledgePreview() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-14 text-center">
           <span className="mb-4 inline-flex rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent">
-            مرکز دانش
+            وبلاگ
           </span>
           <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">
             یاد بگیرید و تصمیم بهتری بگیرید

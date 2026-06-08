@@ -2,6 +2,16 @@ export type PublishStatus = "draft" | "published";
 export type MessageStatus = "unread" | "read" | "archived";
 export type UserRole = "super_admin" | "admin" | "user";
 export type UserStatus = "active" | "disabled";
+export type LawyerLicenseType =
+  | "paye_one"
+  | "paye_two"
+  | "trainee"
+  | "article_187"
+  | "judicial_advisor"
+  | "taskhiri"
+  | "moazadati"
+  | "taeini"
+  | "ettefaghi";
 
 export type Article = {
   id?: string;
@@ -209,6 +219,7 @@ export type RequestAttachment = {
   id: string;
   filename: string;
   size: string;
+  url?: string;
   uploadedBy: "client" | "admin";
   uploadedAt: string;
 };
@@ -220,6 +231,21 @@ export type RequestMessage = {
   message: string;
   createdAt: string;
   avatar?: string;
+};
+
+export type RequestTimelineEvent = {
+  id: string;
+  title: string;
+  description: string;
+  actor: string;
+  at: string;
+  type:
+    | "created"
+    | "status"
+    | "assignment"
+    | "message"
+    | "note"
+    | "attachment";
 };
 
 export type ServiceRequestData = {
@@ -234,10 +260,12 @@ export type ServiceRequestData = {
   description: string;
   priority: RequestPriority;
   status: RequestStatus;
+  assignedLawyerId?: string;
   assignedTo?: string;
   adminNotes: RequestNote[];
   attachments: RequestAttachment[];
   messages: RequestMessage[];
+  timeline: RequestTimelineEvent[];
   createdAt: string;
   updatedAt: string;
 };

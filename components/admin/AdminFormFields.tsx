@@ -1,13 +1,3 @@
-type FieldHelpProps = {
-  children: React.ReactNode;
-};
-
-export function FieldHelp({ children }: FieldHelpProps) {
-  return (
-    <span className="text-xs font-bold leading-6 text-muted">{children}</span>
-  );
-}
-
 export function AdminSubmitButton({
   children = "ذخیره",
 }: {
@@ -39,10 +29,6 @@ export function SlugField({
         name={name}
         placeholder="اگر خالی بماند، از روی عنوان ساخته می‌شود"
       />
-      <FieldHelp>
-        این مقدار آدرس صفحه را می‌سازد. اگر مطمئن نیستید خالی بگذارید تا سیستم
-        خودش تنظیم کند.
-      </FieldHelp>
     </label>
   );
 }
@@ -63,9 +49,6 @@ export function OrderField({
         name={name}
         type="number"
       />
-      <FieldHelp>
-        عدد کوچک‌تر بالاتر نمایش داده می‌شود؛ اگر مهم نیست روی ۰ بگذارید.
-      </FieldHelp>
     </label>
   );
 }
@@ -108,9 +91,6 @@ export function CategoryField({
         name={name}
         placeholder="برای دسته جدید، نام را اینجا تایپ کنید"
       />
-      <FieldHelp>
-        از فهرست انتخاب کنید یا برای افزودن دسته جدید، فیلد دوم را پر کنید.
-      </FieldHelp>
     </label>
   );
 }
@@ -130,10 +110,9 @@ export function UploadField({
     <label className="grid gap-2 text-sm font-black text-navy">
       <span>{label}</span>
       <input
-        className="service-input"
-        defaultValue={defaultValue ?? ""}
         name={name}
-        placeholder="آدرس فایل/تصویر یا خروجی آپلود"
+        type="hidden"
+        defaultValue={defaultValue ?? ""}
       />
       <input
         accept="image/*"
@@ -141,9 +120,6 @@ export function UploadField({
         name={fileName}
         type="file"
       />
-      <FieldHelp>
-        می‌توانید آدرس تصویر را وارد کنید یا از سیستم خود فایل تصویر آپلود کنید.
-      </FieldHelp>
     </label>
   );
 }

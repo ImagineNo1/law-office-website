@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AdminConfirmDialog } from "@/components/admin/AdminConfirmDialog";
+import { UploadField } from "@/components/admin/AdminFormFields";
 import { AdminModal } from "@/components/admin/AdminModal";
 import { SeoFields } from "@/components/admin/SeoFields";
 import {
@@ -435,14 +436,12 @@ function SettingsPanel({
           />
         </label>
         <div className="grid gap-4 md:grid-cols-2">
-          <label className="grid gap-2 text-sm font-black text-navy">
-            <span>تصویر OG پیش‌فرض</span>
-            <input
-              className="service-input"
-              defaultValue={settings.defaultOgImage}
-              name="defaultOgImage"
-            />
-          </label>
+          <UploadField
+            defaultValue={settings.defaultOgImage}
+            fileName="defaultOgImageFile"
+            label="تصویر OG پیش‌فرض"
+            name="defaultOgImage"
+          />
           <label className="grid gap-2 text-sm font-black text-navy">
             <span>کد سرچ کنسول گوگل</span>
             <input

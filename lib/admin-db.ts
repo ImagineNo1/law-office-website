@@ -11,10 +11,12 @@ import { Service } from "@/models/Service";
 import { ServiceRequest } from "@/models/ServiceRequest";
 import { User } from "@/models/User";
 import type {
+  LawyerLicenseType,
   RequestPriority,
   RequestStatus,
   ServiceRequestData,
 } from "@/types";
+import { lawyerLicenseLabels } from "@/lib/lawyers";
 
 export type PublishStatus = "draft" | "published" | "archived";
 
@@ -28,6 +30,14 @@ export function formatAdminDate(value?: Date | string | null) {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
+  }).format(new Date(value));
+}
+
+export function formatAdminDateTime(value?: Date | string | null) {
+  if (!value) return "ثبت نشده";
+  return new Intl.DateTimeFormat("fa-IR", {
+    dateStyle: "medium",
+    timeStyle: "short",
   }).format(new Date(value));
 }
 
@@ -233,7 +243,7 @@ export async function getAdminUsers() {
       .lean(),
     ClientUser.find()
       .select(
-        "fullName email phone role status nationalCode createdAt updatedAt lastLoginAt",
+        "fullName email phone role status nationalCode isLawyer lawyerLicenseType lawyerSpecialties lawyerBio createdAt updatedAt lastLoginAt",
       )
       .sort({ createdAt: -1 })
       .lean(),
@@ -255,6 +265,65 @@ export async function getAdminUsers() {
   };
 }
 
+type LawyerSource = {
+  _id?: unknown;
+  fullName: string;
+  email?: string;
+  phone?: string;
+  role?: string;
+  status?: string;
+  isLawyer?: boolean;
+  lawyerLicenseType?: LawyerLicenseType;
+  lawyerSpecialties?: string[];
+  lawyerBio?: string;
+  createdAt?: Date | string;
+};
+
+function toLawyer(doc: LawyerSource, source: "admin" | "client") {
+  const license = doc.lawyerLicenseType ?? "paye_one";
+  return {
+    id: idOf(doc._id),
+    source,
+    fullName: doc.fullName,
+    email: doc.email ?? "",
+    phone: doc.phone ?? "",
+    role: doc.role ?? "",
+    status: doc.status ?? "",
+    isLawyer: Boolean(doc.isLawyer),
+    lawyerLicenseType: license,
+    lawyerLicenseLabel: lawyerLicenseLabels[license],
+    lawyerSpecialties: doc.lawyerSpecialties ?? [],
+    lawyerBio: doc.lawyerBio ?? "",
+    createdAtText: formatAdminDate(doc.createdAt),
+  };
+}
+
+export async function getAdminLawyers() {
+  await connectDb();
+  const [admins, clients] = await Promise.all([
+    User.find()
+      .select(
+        "fullName email role status isLawyer lawyerLicenseType lawyerSpecialties lawyerBio createdAt",
+      )
+      .sort({ isLawyer: -1, createdAt: -1 })
+      .lean<LawyerSource[]>(),
+    ClientUser.find()
+      .select(
+        "fullName email phone role status isLawyer lawyerLicenseType lawyerSpecialties lawyerBio createdAt",
+      )
+      .sort({ isLawyer: -1, createdAt: -1 })
+      .lean<LawyerSource[]>(),
+  ]);
+  return [
+    ...admins.map((doc) => toLawyer(doc, "admin" as const)),
+    ...clients.map((doc) => toLawyer(doc, "client" as const)),
+  ];
+}
+
+export async function getAssignableLawyers() {
+  return (await getAdminLawyers()).filter((lawyer) => lawyer.isLawyer);
+}
+
 type LeanRequest = {
   _id?: unknown;
   requestNumber: string;
@@ -267,6 +336,7 @@ type LeanRequest = {
   description: string;
   priority: RequestPriority;
   status: RequestStatus;
+  assignedLawyerId?: string;
   assignedTo?: string;
   adminNotes?: {
     _id?: unknown;
@@ -278,6 +348,7 @@ type LeanRequest = {
     _id?: unknown;
     filename: string;
     size?: string;
+    url?: string;
     uploadedBy?: "client" | "admin";
     uploadedAt?: Date | string;
   }[];
@@ -288,6 +359,20 @@ type LeanRequest = {
     message: string;
     avatar?: string;
     createdAt?: Date | string;
+  }[];
+  timeline?: {
+    _id?: unknown;
+    title: string;
+    description?: string;
+    actor?: string;
+    type?:
+      | "created"
+      | "status"
+      | "assignment"
+      | "message"
+      | "note"
+      | "attachment";
+    at?: Date | string;
   }[];
   createdAt?: Date | string;
   updatedAt?: Date | string;
@@ -310,6 +395,7 @@ function toRequest(doc: LeanRequest): ServiceRequestData {
     description: doc.description,
     priority: doc.priority,
     status: doc.status,
+    assignedLawyerId: doc.assignedLawyerId ?? "",
     assignedTo: doc.assignedTo ?? "در انتظار تخصیص",
     adminNotes: (doc.adminNotes ?? []).map((note) => ({
       id: idOf(note._id),
@@ -321,6 +407,7 @@ function toRequest(doc: LeanRequest): ServiceRequestData {
       id: idOf(file._id),
       filename: file.filename,
       size: file.size ?? "",
+      url: file.url ?? "",
       uploadedBy: file.uploadedBy ?? "client",
       uploadedAt: iso(file.uploadedAt),
     })),
@@ -331,6 +418,14 @@ function toRequest(doc: LeanRequest): ServiceRequestData {
       message: message.message,
       avatar: message.avatar ?? "",
       createdAt: iso(message.createdAt),
+    })),
+    timeline: (doc.timeline ?? []).map((event) => ({
+      id: idOf(event._id),
+      title: event.title,
+      description: event.description ?? "",
+      actor: event.actor ?? "",
+      type: event.type ?? "created",
+      at: iso(event.at),
     })),
     createdAt: iso(doc.createdAt),
     updatedAt: iso(doc.updatedAt),

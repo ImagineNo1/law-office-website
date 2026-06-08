@@ -48,6 +48,24 @@ function checked(formData: FormData, key: string, fallback = false) {
   return value === "on" || value === "true" || value === "1";
 }
 
+async function uploadedImageDataUrl(formData: FormData, key: string) {
+  const file = formData.get(key);
+  if (!(file instanceof File) || !file.name || file.size === 0) return "";
+  if (!file.type.startsWith("image/")) return "";
+  const buffer = Buffer.from(await file.arrayBuffer());
+  return `data:${file.type};base64,${buffer.toString("base64")}`;
+}
+
+async function imageValue(
+  formData: FormData,
+  textKey: string,
+  fileKey: string,
+) {
+  return (
+    (await uploadedImageDataUrl(formData, fileKey)) || text(formData, textKey)
+  );
+}
+
 const frequencies = [
   "always",
   "hourly",
@@ -64,7 +82,7 @@ function frequencyOf(value: string, fallback: (typeof frequencies)[number]) {
     : fallback;
 }
 
-function seoPayload(formData: FormData) {
+async function seoPayload(formData: FormData) {
   const seo = {
     metaTitle: text(formData, "seo.metaTitle"),
     metaDescription: text(formData, "seo.metaDescription"),
@@ -75,10 +93,14 @@ function seoPayload(formData: FormData) {
     robotsFollow: checked(formData, "seo.robotsFollow", true),
     ogTitle: text(formData, "seo.ogTitle"),
     ogDescription: text(formData, "seo.ogDescription"),
-    ogImage: text(formData, "seo.ogImage"),
+    ogImage: await imageValue(formData, "seo.ogImage", "seo.ogImageFile"),
     twitterTitle: text(formData, "seo.twitterTitle"),
     twitterDescription: text(formData, "seo.twitterDescription"),
-    twitterImage: text(formData, "seo.twitterImage"),
+    twitterImage: await imageValue(
+      formData,
+      "seo.twitterImage",
+      "seo.twitterImageFile",
+    ),
     imageAlt: text(formData, "seo.imageAlt"),
     schemaType: text(formData, "seo.schemaType"),
     schemaJson: jsonObject(text(formData, "seo.schemaJson")),
@@ -124,7 +146,7 @@ export async function saveLegalFormAction(formData: FormData) {
     fields: lines(formData.get("fields")),
     usageCount: Number(formData.get("usageCount") ?? 0),
     status: statusOf(String(formData.get("status") ?? "published")),
-    seo: seoPayload(formData),
+    seo: await seoPayload(formData),
   };
   if (id) {
     await LegalFormTemplate.findByIdAndUpdate(id, payload, {

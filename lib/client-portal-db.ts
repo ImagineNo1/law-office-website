@@ -80,6 +80,7 @@ type LeanRequest = {
   description: string;
   priority: ServiceRequestData["priority"];
   status: RequestStatus;
+  assignedLawyerId?: string | null;
   assignedTo?: string | null;
   adminNotes?: {
     _id?: unknown;
@@ -91,6 +92,7 @@ type LeanRequest = {
     _id?: unknown;
     filename: string;
     size?: string | null;
+    url?: string | null;
     uploadedBy?: "client" | "admin";
     uploadedAt?: Date | string;
   }[];
@@ -101,6 +103,20 @@ type LeanRequest = {
     message: string;
     avatar?: string | null;
     createdAt?: Date | string;
+  }[];
+  timeline?: {
+    _id?: unknown;
+    title: string;
+    description?: string | null;
+    actor?: string | null;
+    type?:
+      | "created"
+      | "status"
+      | "assignment"
+      | "message"
+      | "note"
+      | "attachment";
+    at?: Date | string;
   }[];
   createdAt?: Date | string;
   updatedAt?: Date | string;
@@ -145,6 +161,7 @@ function toRequest(doc: LeanRequest): ServiceRequestData {
     description: doc.description,
     priority: doc.priority,
     status: doc.status,
+    assignedLawyerId: doc.assignedLawyerId ?? "",
     assignedTo: doc.assignedTo ?? "در انتظار تخصیص",
     adminNotes: (doc.adminNotes ?? []).map((note) => ({
       id: idOf(note._id, asIso(note.createdAt)),
@@ -156,6 +173,7 @@ function toRequest(doc: LeanRequest): ServiceRequestData {
       id: idOf(attachment._id, attachment.filename),
       filename: attachment.filename,
       size: attachment.size ?? "",
+      url: attachment.url ?? "",
       uploadedBy: attachment.uploadedBy ?? "client",
       uploadedAt: asIso(attachment.uploadedAt),
     })),
@@ -166,6 +184,14 @@ function toRequest(doc: LeanRequest): ServiceRequestData {
       message: message.message,
       avatar: message.avatar ?? "",
       createdAt: asIso(message.createdAt),
+    })),
+    timeline: (doc.timeline ?? []).map((event) => ({
+      id: idOf(event._id, asIso(event.at)),
+      title: event.title,
+      description: event.description ?? "",
+      actor: event.actor ?? "",
+      type: event.type ?? "created",
+      at: asIso(event.at),
     })),
     createdAt: asIso(doc.createdAt),
     updatedAt: asIso(doc.updatedAt ?? doc.createdAt),
@@ -455,6 +481,42 @@ export async function appendClientRequestMessage(
           sender: "client",
           senderName: client.fullName,
           message,
+        },
+        timeline: {
+          title: "پیام مشتری",
+          description: message,
+          actor: client.fullName,
+          type: "message",
+          at: new Date(),
+        },
+      },
+    },
+  );
+}
+
+export async function appendClientRequestAttachment(
+  requestId: string,
+  file: { filename: string; size: string; url: string },
+) {
+  const client = await requireClient();
+  await connectDb();
+  const request = await getClientRequestById(requestId, client);
+  if (!request) notFound();
+  await ServiceRequest.updateOne(
+    { _id: request.id },
+    {
+      $push: {
+        attachments: {
+          ...file,
+          uploadedBy: "client",
+          uploadedAt: new Date(),
+        },
+        timeline: {
+          title: "آپلود فایل مشتری",
+          description: file.filename,
+          actor: client.fullName,
+          type: "attachment",
+          at: new Date(),
         },
       },
     },

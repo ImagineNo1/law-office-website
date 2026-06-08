@@ -250,6 +250,25 @@ select {
   box-shadow: 0 24px 70px rgba(11, 23, 42, 0.18);
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+@supports not (overflow: clip) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+}
+
+img,
+video,
+canvas {
+  max-width: 100%;
+}
+
 .service-input {
   min-height: 44px;
   width: 100%;
@@ -301,6 +320,21 @@ select {
 .service-input:focus {
   border-color: hsl(var(--accent-hsl));
   box-shadow: 0 0 0 4px var(--ring);
+}
+
+@media (max-width: 640px) {
+  .service-input {
+    min-width: 0;
+    font-size: 0.8125rem;
+  }
+
+  .admin-table th,
+  .admin-table td,
+  .dashboard-table th,
+  .dashboard-table td {
+    padding-inline: 0.75rem;
+    white-space: nowrap;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

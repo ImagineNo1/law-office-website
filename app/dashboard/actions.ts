@@ -9,6 +9,7 @@ import {
 } from "@/lib/platform-db";
 import { createServiceRequest } from "@/lib/service-requests";
 import {
+  appendClientRequestAttachment,
   appendClientRequestMessage,
   createClientMessage,
   updateClientProfile,
@@ -16,6 +17,17 @@ import {
 
 function text(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
+}
+
+async function uploadedFileValue(formData: FormData, key: string) {
+  const file = formData.get(key);
+  if (!(file instanceof File) || !file.name || file.size === 0) return null;
+  const buffer = Buffer.from(await file.arrayBuffer());
+  return {
+    filename: file.name,
+    size: `${new Intl.NumberFormat("fa-IR").format(Math.ceil(file.size / 1024))} کیلوبایت`,
+    url: `data:${file.type || "application/octet-stream"};base64,${buffer.toString("base64")}`,
+  };
 }
 
 function slugFromText(value: string) {
@@ -81,6 +93,14 @@ export async function sendRequestMessageAction(formData: FormData) {
   const message = text(formData, "message");
   if (!requestId || !message) return;
   await appendClientRequestMessage(requestId, message);
+  revalidatePath(`/dashboard/requests/${requestId}`);
+}
+
+export async function uploadRequestAttachmentAction(formData: FormData) {
+  const requestId = text(formData, "requestId");
+  const file = await uploadedFileValue(formData, "attachment");
+  if (!requestId || !file) return;
+  await appendClientRequestAttachment(requestId, file);
   revalidatePath(`/dashboard/requests/${requestId}`);
 }
 

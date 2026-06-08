@@ -8,6 +8,7 @@ import {
   UploadField,
 } from "@/components/admin/AdminFormFields";
 import { AdminModal } from "@/components/admin/AdminModal";
+import { PriceInput } from "@/components/admin/PriceInput";
 import {
   AdminDataTable,
   AdminEmptyState,
@@ -107,7 +108,7 @@ function ContractForm({
         <OrderField defaultValue={contract?.order} />
       </div>
       <div className="grid gap-4 md:grid-cols-3">
-        <Input
+        <PriceInput
           defaultValue={contract?.priceLabel}
           label="قیمت"
           name="priceLabel"

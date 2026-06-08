@@ -318,107 +318,6 @@ function ArticleImage({
   );
 }
 
-export function LatestMediaSection({
-  articles = [],
-  news = [],
-}: {
-  articles?: PlatformArticle[];
-  news?: PlatformArticle[];
-}) {
-  const blogItems = articles.length
-    ? articles.slice(0, 3)
-    : fallbackArticles.slice(0, 3);
-  const newsItems = news.slice(0, 3);
-  const groups = [
-    {
-      eyebrow: "وبلاگ حقوقی",
-      title: "آخرین مطالب وبلاگ",
-      href: "/blog",
-      items: blogItems,
-      empty: "هنوز مقاله‌ای منتشر نشده است.",
-    },
-    {
-      eyebrow: "اخبار",
-      title: "آخرین اخبار و اطلاعیه‌ها",
-      href: "/news",
-      items: newsItems,
-      empty: "هنوز خبری منتشر نشده است.",
-    },
-  ];
-
-  return (
-    <section className="bg-white py-16" dir="rtl">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-10 text-center">
-          <span className="inline-flex rounded-full bg-[#ECFDF5] px-4 py-2 text-xs font-black text-[#0F766E]">
-            مجله و اخبار وکیل‌یار
-          </span>
-          <h2 className="mt-3 text-3xl font-black text-[#071527]">
-            تازه‌ترین نوشته‌ها و خبرها
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-sm font-bold leading-8 text-[#64748B]">
-            چند مطلب و خبر تازه را همین‌جا ببینید و برای مشاهده همه، وارد آرشیو
-            وبلاگ یا اخبار شوید.
-          </p>
-        </div>
-        <div className="grid gap-6 lg:grid-cols-2">
-          {groups.map((group) => (
-            <div
-              className="rounded-[2rem] border border-[#E2E8F0] bg-[#F8FAFC] p-5 shadow-[0_18px_45px_rgba(7,21,39,0.05)]"
-              key={group.title}
-            >
-              <div className="mb-5 flex items-center justify-between gap-3">
-                <div>
-                  <span className="text-xs font-black text-[#0F766E]">
-                    {group.eyebrow}
-                  </span>
-                  <h3 className="mt-1 text-xl font-black text-[#10233B]">
-                    {group.title}
-                  </h3>
-                </div>
-                <Link
-                  className="rounded-2xl border border-[#0F766E]/25 bg-white px-4 py-2 text-xs font-black text-[#0F766E] transition hover:bg-[#ECFDF5]"
-                  href={group.href}
-                >
-                  مشاهده همه
-                </Link>
-              </div>
-              <div className="grid gap-3">
-                {group.items.length ? (
-                  group.items.map((item) => (
-                    <Link
-                      className="group rounded-3xl border border-[#E2E8F0] bg-white p-4 transition hover:-translate-y-0.5 hover:border-[#0F766E]/30 hover:shadow-[0_18px_40px_rgba(15,118,110,0.10)]"
-                      href={item.href}
-                      key={item.id}
-                    >
-                      <span className="rounded-full bg-[#ECFDF5] px-3 py-1 text-[11px] font-black text-[#0F766E]">
-                        {item.category}
-                      </span>
-                      <h4 className="mt-3 text-base font-black leading-8 text-[#10233B] transition group-hover:text-[#0F766E]">
-                        {item.title}
-                      </h4>
-                      <p className="mt-2 line-clamp-2 text-xs font-bold leading-6 text-[#64748B]">
-                        {item.excerpt}
-                      </p>
-                      <span className="mt-3 inline-flex text-xs font-black text-[#0F766E]">
-                        مطالعه / مشاهده ←
-                      </span>
-                    </Link>
-                  ))
-                ) : (
-                  <div className="rounded-3xl border border-dashed border-[#CBD5E1] bg-white p-6 text-center text-sm font-bold text-[#64748B]">
-                    {group.empty}
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function KnowledgeCenterSection({
   articles = [],
 }: {
@@ -433,7 +332,7 @@ export function KnowledgeCenterSection({
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <span className="inline-flex rounded-full bg-[#ECFDF5] px-4 py-2 text-xs font-black text-[#0F766E]">
-              مرکز دانش
+              وبلاگ
             </span>
             <h2 className="mt-3 text-3xl font-black text-[#071527]">
               راهنماهای حقوقی برای تصمیم بهتر

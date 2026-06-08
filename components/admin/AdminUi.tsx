@@ -33,8 +33,8 @@ export function AdminPageHeader({
   title: string;
 }) {
   return (
-    <div className="panel-card flex flex-col gap-4 rounded-lg p-5 lg:flex-row lg:items-center lg:justify-between">
-      <div>
+    <div className="panel-card flex flex-col gap-4 rounded-lg p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
+      <div className="min-w-0">
         <h2 className="font-heading text-2xl font-extrabold text-primary">
           {title}
         </h2>
@@ -44,7 +44,11 @@ export function AdminPageHeader({
           </p>
         ) : null}
       </div>
-      {action ? <div data-tour="admin-create-button">{action}</div> : null}
+      {action ? (
+        <div className="w-full sm:w-auto" data-tour="admin-create-button">
+          {action}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -111,8 +115,8 @@ export function AdminDataTable({
       className="panel-card overflow-hidden rounded-lg"
       data-tour="admin-table"
     >
-      <div className="overflow-x-auto">
-        <table className="admin-table w-full min-w-[860px] text-sm">
+      <div className="overflow-x-auto overscroll-x-contain">
+        <table className="admin-table w-full min-w-[760px] text-sm sm:min-w-[860px]">
           <thead className="bg-white text-muted-foreground">
             <tr>
               {headers.map((header) => (

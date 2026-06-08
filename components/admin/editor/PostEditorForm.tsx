@@ -76,9 +76,6 @@ export function PostEditorForm({
             name="publishedAt"
             type="datetime-local"
           />
-          <span className="text-xs font-bold leading-6 text-muted">
-            اگر خالی بماند، زمان ذخیره به‌عنوان زمان انتشار ثبت می‌شود.
-          </span>
         </label>
         <div className="md:col-span-3">
           <UploadField

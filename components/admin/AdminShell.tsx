@@ -24,10 +24,7 @@ export async function AdminShell({
       kind="admin"
       markCompletedAction={markAdminTourCompleted}
     >
-      <div
-        className="admin-surface flex min-h-screen font-body text-foreground"
-        dir="rtl"
-      >
+      <div className="admin-surface min-h-screen font-body text-foreground" dir="rtl">
         <AdminSidebar />
         <div className="min-w-0 flex-1 lg:mr-64">
           <main

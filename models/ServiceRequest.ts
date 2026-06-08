@@ -13,6 +13,7 @@ const attachmentSchema = new Schema(
   {
     filename: { type: String, required: true, trim: true },
     size: { type: String, default: "", trim: true },
+    url: { type: String, default: "", trim: true },
     uploadedBy: { type: String, enum: ["client", "admin"], default: "client" },
     uploadedAt: { type: Date, default: Date.now },
   },
@@ -26,6 +27,21 @@ const messageSchema = new Schema(
     message: { type: String, required: true, trim: true },
     avatar: { type: String, default: "", trim: true },
     createdAt: { type: Date, default: Date.now },
+  },
+  { _id: true },
+);
+
+const timelineSchema = new Schema(
+  {
+    title: { type: String, required: true, trim: true },
+    description: { type: String, default: "", trim: true },
+    actor: { type: String, default: "", trim: true },
+    type: {
+      type: String,
+      enum: ["created", "status", "assignment", "message", "note", "attachment"],
+      default: "created",
+    },
+    at: { type: Date, default: Date.now },
   },
   { _id: true },
 );
@@ -59,10 +75,12 @@ const serviceRequestSchema = new Schema(
       ],
       default: "new",
     },
+    assignedLawyerId: { type: String, default: "", trim: true, index: true },
     assignedTo: { type: String, default: "", trim: true },
     adminNotes: { type: [noteSchema], default: [] },
     attachments: { type: [attachmentSchema], default: [] },
     messages: { type: [messageSchema], default: [] },
+    timeline: { type: [timelineSchema], default: [] },
   },
   { timestamps: true },
 );

@@ -8,6 +8,7 @@ import {
   UploadField,
 } from "@/components/admin/AdminFormFields";
 import { AdminModal } from "@/components/admin/AdminModal";
+import { PriceInput } from "@/components/admin/PriceInput";
 import {
   AdminDataTable,
   AdminEmptyState,
@@ -131,7 +132,7 @@ function ServiceForm({
           label="آیکن / تصویر کوچک"
           name="icon"
         />
-        <TextInput
+        <PriceInput
           defaultValue={service?.priceLabel}
           label="برچسب قیمت"
           name="priceLabel"

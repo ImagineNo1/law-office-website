@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { UploadField } from "@/components/admin/AdminFormFields";
 import type { SeoData } from "@/lib/seo";
 
 type SeoInput = Partial<SeoData> | undefined;
@@ -40,7 +41,6 @@ function Counter({
 }
 
 function Field({
-  help,
   label,
   max,
   min,
@@ -49,7 +49,6 @@ function Field({
   placeholder,
   value,
 }: {
-  help?: string;
   label: string;
   max?: number;
   min?: number;
@@ -80,20 +79,15 @@ function Field({
           placeholder={placeholder}
         />
       )}
-      {help ? (
-        <span className="text-xs font-bold leading-6 text-muted">{help}</span>
-      ) : null}
     </label>
   );
 }
 
 function Area({
-  help,
   label,
   name,
   value,
 }: {
-  help?: string;
   label: string;
   name: string;
   value: string;
@@ -106,9 +100,6 @@ function Area({
         defaultValue={value}
         name={name}
       />
-      {help ? (
-        <span className="text-xs font-bold leading-6 text-muted">{help}</span>
-      ) : null}
     </label>
   );
 }
@@ -172,7 +163,6 @@ export function SeoFields({
 
         <div className="grid gap-4 md:grid-cols-2">
           <Field
-            help="حدود ۵۰ تا ۶۰ کاراکتر؛ نام صفحه + نام برند."
             label="عنوانی که در گوگل نمایش داده می‌شود"
             max={60}
             min={40}
@@ -181,7 +171,6 @@ export function SeoFields({
             value={metaTitle}
           />
           <Field
-            help="انگلیسی، کوتاه، بدون فاصله. مثال: property-lease-contract"
             label="آدرس اصلی این صفحه برای گوگل"
             name="seo.canonicalUrl"
             value={valueOf(initial.canonicalUrl)}
@@ -198,9 +187,6 @@ export function SeoFields({
             onChange={(event) => setMetaDescription(event.target.value)}
             value={metaDescription}
           />
-          <span className="text-xs font-bold leading-6 text-muted">
-            حدود ۱۴۰ تا ۱۶۰ کاراکتر؛ مزیت اصلی + اقدام بعدی.
-          </span>
         </label>
 
         <div className="grid gap-4 md:grid-cols-2">
@@ -211,7 +197,6 @@ export function SeoFields({
             value={valueOf(initial.focusKeyword)}
           />
           <Field
-            help="با ویرگول جدا کنید."
             label="کلمات کلیدی"
             name="seo.keywords"
             value={valueOf(initial.keywords)}
@@ -244,10 +229,11 @@ export function SeoFields({
             onChange={setOgTitle}
             value={ogTitle}
           />
-          <Field
+          <UploadField
             label="تصویر اشتراک‌گذاری"
+            fileName="seo.ogImageFile"
             name="seo.ogImage"
-            value={valueOf(initial.ogImage)}
+            defaultValue={valueOf(initial.ogImage)}
           />
         </div>
         <label className="grid gap-2 text-sm font-black text-navy">
@@ -265,10 +251,11 @@ export function SeoFields({
             name="seo.twitterTitle"
             value={valueOf(initial.twitterTitle)}
           />
-          <Field
+          <UploadField
             label="تصویر توییتر"
+            fileName="seo.twitterImageFile"
             name="seo.twitterImage"
-            value={valueOf(initial.twitterImage)}
+            defaultValue={valueOf(initial.twitterImage)}
           />
         </div>
         <label className="grid gap-2 text-sm font-black text-navy">
@@ -281,7 +268,6 @@ export function SeoFields({
         </label>
 
         <Field
-          help="تصویر را برای کسی که نمی‌بیند توضیح دهید."
           label="متن جایگزین تصویر"
           name="seo.imageAlt"
           value={valueOf(initial.imageAlt)}
@@ -349,7 +335,6 @@ export function SeoFields({
           />
         </label>
         <Area
-          help="اختیاری است. فقط JSON معتبر وارد کنید."
           label="JSON اسکیما"
           name="seo.schemaJson"
           value={valueOf(initial.schemaJson)}

@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
-import { sendRequestMessageAction } from "@/app/dashboard/actions";
+import {
+  sendRequestMessageAction,
+  uploadRequestAttachmentAction,
+} from "@/app/dashboard/actions";
 import { ClientPortalShell } from "@/components/dashboard/ClientPortalShell";
 import { EmptyState, PortalCard } from "@/components/dashboard/ClientPortalUi";
 import { RequestTimeline } from "@/components/requests/CrmUi";
@@ -139,9 +142,19 @@ export default async function DashboardRequestDetailPage({
                     className="flex items-center justify-between rounded-xl border border-border p-3"
                     key={file.id}
                   >
-                    <span className="text-sm font-black text-navy">
-                      {file.filename}
-                    </span>
+                    {file.url ? (
+                      <a
+                        className="text-sm font-black text-emerald-700"
+                        href={file.url}
+                        target="_blank"
+                      >
+                        {file.filename}
+                      </a>
+                    ) : (
+                      <span className="text-sm font-black text-navy">
+                        {file.filename}
+                      </span>
+                    )}
                     <span className="text-xs font-black text-muted">
                       {file.size || "ثبت شده"}
                     </span>
@@ -153,6 +166,19 @@ export default async function DashboardRequestDetailPage({
                 هنوز پیوستی ثبت نشده است.
               </p>
             )}
+            <form
+              action={uploadRequestAttachmentAction}
+              className="mt-4 grid gap-3"
+            >
+              <input name="requestId" type="hidden" value={request.id} />
+              <input className="service-input py-2" name="attachment" type="file" />
+              <button
+                className="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-black text-white"
+                type="submit"
+              >
+                آپلود فایل
+              </button>
+            </form>
           </PortalCard>
         </aside>
       </div>

@@ -5,6 +5,7 @@ import {
   FileText,
   FolderOpen,
   Globe,
+  Home,
   LayoutDashboard,
   LogOut,
   MessageSquare,
@@ -15,10 +16,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { logoutAction } from "@/lib/admin-actions";
 import { TourHelpButton } from "@/components/onboarding/TourHelpButton";
+import { logoutAction } from "@/lib/admin-actions";
 
 const links = [
+  {
+    label: "صفحه اصلی",
+    href: "/",
+    icon: Home,
+  },
   {
     label: "پیشخوان",
     href: "/admin",
@@ -59,6 +65,7 @@ const links = [
   { label: "اخبار", href: "/admin/news", icon: BarChart3, tour: "admin-news" },
   { label: "پیام‌ها", href: "/admin/messages", icon: MessageSquare },
   { label: "کاربران", href: "/admin/users", icon: Users, tour: "admin-users" },
+  { label: "وکلا", href: "/admin/lawyers", icon: Users },
   { label: "سئو", href: "/admin/seo", icon: SearchCheck, tour: "admin-seo" },
   {
     label: "تنظیمات",
@@ -69,6 +76,7 @@ const links = [
 ];
 
 function isActivePath(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
   if (href === "/admin") return pathname === "/admin";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
@@ -77,69 +85,111 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside
-      data-tour="admin-sidebar"
-      className="fixed inset-y-0 right-0 z-40 hidden w-64 flex-col border-l border-sidebar-border bg-sidebar text-sidebar-foreground shadow-[18px_0_55px_rgba(12,27,51,0.08)] lg:flex"
-    >
-      <div className="border-b border-sidebar-border p-5">
-        <Link className="flex items-center gap-3" href="/admin">
-          <span className="grid size-11 place-items-center rounded-lg border border-sidebar-primary/40 bg-sidebar-primary/10 text-sidebar-primary">
+    <>
+      <div className="sticky top-0 z-50 border-b border-sidebar-border bg-sidebar/95 px-4 py-3 text-sidebar-foreground shadow-sm backdrop-blur lg:hidden">
+        <Link className="mb-3 flex items-center gap-3" href="/admin">
+          <span className="grid size-10 shrink-0 place-items-center rounded-lg border border-sidebar-primary/40 bg-sidebar-primary/10 text-sidebar-primary">
             <LayoutDashboard aria-hidden="true" className="size-5" />
           </span>
-          <span>
-            <span className="block font-heading text-base font-extrabold text-sidebar-foreground">
+          <span className="min-w-0">
+            <span className="block truncate font-heading text-base font-extrabold text-sidebar-foreground">
               پنل مدیریت
             </span>
-            <span className="text-xs font-bold text-sidebar-foreground/70">
+            <span className="block truncate text-xs font-bold text-sidebar-foreground/70">
               موسسه حقوقی
             </span>
           </span>
         </Link>
+        <nav
+          aria-label="ناوبری موبایل پنل مدیریت"
+          className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1"
+        >
+          {links.map((link) => {
+            const active = isActivePath(pathname, link.href);
+            const Icon = link.icon;
+            return (
+              <Link
+                className={`inline-flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-xs font-extrabold transition ${
+                  active
+                    ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+                    : "border border-sidebar-border bg-white/80 text-sidebar-foreground/82 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                }`}
+                data-tour={link.tour}
+                href={link.href}
+                key={link.href}
+              >
+                <Icon aria-hidden="true" className="size-4" strokeWidth={2.1} />
+                <span className="whitespace-nowrap">{link.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
       </div>
 
-      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-        {links.map((link) => {
-          const active = isActivePath(pathname, link.href);
-          const Icon = link.icon;
-          return (
-            <Link
-              className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-extrabold transition ${
-                active
-                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
-                  : "text-sidebar-foreground/82 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-              }`}
-              data-tour={link.tour}
-              href={link.href}
-              key={link.href}
+      <aside
+        data-tour="admin-sidebar"
+        className="fixed inset-y-0 right-0 z-40 hidden w-64 flex-col border-l border-sidebar-border bg-sidebar text-sidebar-foreground shadow-[18px_0_55px_rgba(12,27,51,0.08)] lg:flex"
+      >
+        <div className="border-b border-sidebar-border p-5">
+          <Link className="flex items-center gap-3" href="/admin">
+            <span className="grid size-11 place-items-center rounded-lg border border-sidebar-primary/40 bg-sidebar-primary/10 text-sidebar-primary">
+              <LayoutDashboard aria-hidden="true" className="size-5" />
+            </span>
+            <span>
+              <span className="block font-heading text-base font-extrabold text-sidebar-foreground">
+                پنل مدیریت
+              </span>
+              <span className="text-xs font-bold text-sidebar-foreground/70">
+                موسسه حقوقی
+              </span>
+            </span>
+          </Link>
+        </div>
+
+        <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
+          {links.map((link) => {
+            const active = isActivePath(pathname, link.href);
+            const Icon = link.icon;
+            return (
+              <Link
+                className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-extrabold transition ${
+                  active
+                    ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+                    : "text-sidebar-foreground/82 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                }`}
+                data-tour={link.tour}
+                href={link.href}
+                key={link.href}
+              >
+                <Icon
+                  aria-hidden="true"
+                  className="size-5 shrink-0"
+                  strokeWidth={2.1}
+                />
+                <span>{link.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="border-t border-sidebar-border p-3">
+          <TourHelpButton
+            className="mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-extrabold text-sidebar-foreground/82 transition hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            label="راهنمای پنل"
+            tourId="admin-help"
+          />
+          <form action={logoutAction}>
+            <button
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-extrabold text-sidebar-foreground/82 transition hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+              data-tour="admin-logout"
+              type="submit"
             >
-              <Icon
-                aria-hidden="true"
-                className="size-5 shrink-0"
-                strokeWidth={2.1}
-              />
-              <span>{link.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
-
-      <div className="border-t border-sidebar-border p-3">
-        <TourHelpButton
-          className="mb-2 flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-extrabold text-sidebar-foreground/82 transition hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-          label="راهنمای پنل"
-          tourId="admin-help"
-        />
-        <form action={logoutAction}>
-          <button
-            data-tour="admin-logout"
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm font-extrabold text-sidebar-foreground/82 transition hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-            type="submit"
-          >
-            <LogOut aria-hidden="true" className="size-5" strokeWidth={2.1} />
-            <span>خروج</span>
-          </button>
-        </form>
-      </div>
-    </aside>
+              <LogOut aria-hidden="true" className="size-5" strokeWidth={2.1} />
+              <span>خروج</span>
+            </button>
+          </form>
+        </div>
+      </aside>
+    </>
   );
 }

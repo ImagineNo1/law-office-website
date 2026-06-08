@@ -29,6 +29,7 @@ import { ServiceRequest } from "@/models/ServiceRequest";
 import { SEOSettings } from "@/models/SEOSettings";
 import { SEORedirect } from "@/models/SEORedirect";
 import { scoreSeo } from "@/lib/seo";
+import { lawyerLicenseType } from "@/lib/lawyers";
 
 function text(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -46,6 +47,17 @@ async function uploadedImageDataUrl(formData: FormData, key: string) {
   if (!file.type.startsWith("image/")) return "";
   const buffer = Buffer.from(await file.arrayBuffer());
   return `data:${file.type};base64,${buffer.toString("base64")}`;
+}
+
+async function uploadedFileValue(formData: FormData, key: string) {
+  const file = formData.get(key);
+  if (!(file instanceof File) || !file.name || file.size === 0) return null;
+  const buffer = Buffer.from(await file.arrayBuffer());
+  return {
+    filename: file.name,
+    size: `${new Intl.NumberFormat("fa-IR").format(Math.ceil(file.size / 1024))} کیلوبایت`,
+    url: `data:${file.type || "application/octet-stream"};base64,${buffer.toString("base64")}`,
+  };
 }
 
 async function imageValue(
@@ -138,6 +150,21 @@ function parseCsv(value: string) {
     .filter(Boolean);
 }
 
+function pushTimeline(
+  title: string,
+  description: string,
+  actor: string,
+  type:
+    | "created"
+    | "status"
+    | "assignment"
+    | "message"
+    | "note"
+    | "attachment",
+) {
+  return { title, description, actor, type, at: new Date() };
+}
+
 function parseJsonObject(value: string) {
   if (!value) return {};
   try {
@@ -177,7 +204,7 @@ function sitemapFrequency(
     : fallback;
 }
 
-function seoPayload(formData: FormData) {
+async function seoPayload(formData: FormData) {
   const seo = {
     metaTitle: text(formData, "seo.metaTitle"),
     metaDescription: text(formData, "seo.metaDescription"),
@@ -188,10 +215,14 @@ function seoPayload(formData: FormData) {
     robotsFollow: boolValue(formData, "seo.robotsFollow", true),
     ogTitle: text(formData, "seo.ogTitle"),
     ogDescription: text(formData, "seo.ogDescription"),
-    ogImage: text(formData, "seo.ogImage"),
+    ogImage: await imageValue(formData, "seo.ogImage", "seo.ogImageFile"),
     twitterTitle: text(formData, "seo.twitterTitle"),
     twitterDescription: text(formData, "seo.twitterDescription"),
-    twitterImage: text(formData, "seo.twitterImage"),
+    twitterImage: await imageValue(
+      formData,
+      "seo.twitterImage",
+      "seo.twitterImageFile",
+    ),
     imageAlt: text(formData, "seo.imageAlt"),
     schemaType: text(formData, "seo.schemaType"),
     schemaJson: parseJsonObject(text(formData, "seo.schemaJson")),
@@ -282,7 +313,7 @@ export async function savePostAction(formData: FormData) {
     category: categoryValue(formData, "عمومی"),
     status: publishedStatus(text(formData, "status")),
     publishedAt: optionalDate(text(formData, "publishedAt")),
-    seo: seoPayload(formData),
+    seo: await seoPayload(formData),
   };
 
   if (!payload.title || !payload.excerpt || !payload.content) {
@@ -327,7 +358,7 @@ export async function saveNewsAction(formData: FormData) {
     category: categoryValue(formData, "عمومی"),
     status: publishedStatus(text(formData, "status")),
     publishedAt: optionalDate(text(formData, "publishedAt")),
-    seo: seoPayload(formData),
+    seo: await seoPayload(formData),
   };
 
   if (!payload.title || !payload.excerpt || !payload.content) {
@@ -361,7 +392,7 @@ export async function saveContractAction(formData: FormData) {
 
   const id = text(formData, "id");
   const title = text(formData, "title");
-  const seo = seoPayload(formData);
+  const seo = await seoPayload(formData);
   const payload = {
     title,
     slug: text(formData, "slug") || slugFromTitle(title),
@@ -432,7 +463,7 @@ export async function saveServiceAction(formData: FormData) {
 
   const id = text(formData, "id");
   const title = text(formData, "title");
-  const seo = seoPayload(formData);
+  const seo = await seoPayload(formData);
   const payload = {
     title,
     slug: text(formData, "slug") || slugFromTitle(title),
@@ -529,7 +560,7 @@ export async function saveSeoAction(formData: FormData) {
   const type = text(formData, "type");
   const path = text(formData, "path");
   const title = text(formData, "title");
-  const seo = seoPayload(formData);
+  const seo = await seoPayload(formData);
 
   if (model === "Service") {
     await Service.findByIdAndUpdate(id, { seo }, { runValidators: true });
@@ -576,7 +607,11 @@ export async function saveSeoSettingsAction(formData: FormData) {
       siteName: text(formData, "siteName"),
       defaultMetaTitle: text(formData, "defaultMetaTitle"),
       defaultMetaDescription: text(formData, "defaultMetaDescription"),
-      defaultOgImage: text(formData, "defaultOgImage"),
+      defaultOgImage: await imageValue(
+        formData,
+        "defaultOgImage",
+        "defaultOgImageFile",
+      ),
       canonicalBaseUrl:
         text(formData, "canonicalBaseUrl") || "https://vakilyar.vercel.app",
       robotsTxt: text(formData, "robotsTxt"),
@@ -693,7 +728,7 @@ export async function savePageContentAction(formData: FormData) {
       subtitle: text(formData, "subtitle"),
       content: text(formData, "content"),
       metadata: {},
-      seo: seoPayload(formData),
+      seo: await seoPayload(formData),
     },
     { upsert: true, runValidators: true },
   );
@@ -834,47 +869,136 @@ export async function deleteClientUserAction(formData: FormData) {
   revalidatePath("/admin/users");
 }
 
-export async function updateRequestAction(formData: FormData) {
+export async function saveLawyerAction(formData: FormData) {
   await requireAdmin();
   await connectDb();
+
+  const id = text(formData, "id");
+  const source = text(formData, "source");
+  const payload = {
+    isLawyer: boolValue(formData, "isLawyer", false),
+    lawyerLicenseType: lawyerLicenseType(text(formData, "lawyerLicenseType")),
+    lawyerSpecialties: parseCsv(text(formData, "lawyerSpecialties")),
+    lawyerBio: text(formData, "lawyerBio"),
+  };
+
+  if (source === "client") {
+    await ClientUser.findByIdAndUpdate(id, payload, { runValidators: true });
+  } else {
+    await User.findByIdAndUpdate(id, payload, { runValidators: true });
+  }
+
+  revalidatePath("/admin/lawyers");
+  revalidatePath("/admin/requests");
+}
+
+async function lawyerNameFromValue(value: string) {
+  if (!value) return "";
+  const [source, id] = value.split(":");
+  if (!id) return "";
+  const doc =
+    source === "client"
+      ? await ClientUser.findById(id).select("fullName").lean()
+      : await User.findById(id).select("fullName").lean();
+  return doc?.fullName ? String(doc.fullName) : "";
+}
+
+export async function updateRequestAction(formData: FormData) {
+  const user = await requireAdmin();
+  await connectDb();
+  const id = text(formData, "id");
+  const current = await ServiceRequest.findById(id).lean<{
+    status?: string;
+    priority?: string;
+    assignedLawyerId?: string;
+    assignedTo?: string;
+  }>();
+  const assignedLawyerId = text(formData, "assignedLawyerId");
+  const assignedTo =
+    (await lawyerNameFromValue(assignedLawyerId)) || "در انتظار تخصیص";
+  const status = text(formData, "status");
+  const priority = text(formData, "priority");
+  const timeline = [];
+
+  if (current?.status !== status) {
+    timeline.push(
+      pushTimeline(
+        "تغییر وضعیت",
+        `${current?.status ?? "ثبت نشده"} → ${status}`,
+        user.fullName,
+        "status",
+      ),
+    );
+  }
+  if (current?.assignedLawyerId !== assignedLawyerId) {
+    timeline.push(
+      pushTimeline("اختصاص وکیل", assignedTo, user.fullName, "assignment"),
+    );
+  }
+
   await ServiceRequest.findByIdAndUpdate(
-    text(formData, "id"),
+    id,
     {
-      status: text(formData, "status"),
-      priority: text(formData, "priority"),
-      assignedTo: text(formData, "assignedTo"),
+      $set: { status, priority, assignedLawyerId, assignedTo },
+      ...(timeline.length ? { $push: { timeline: { $each: timeline } } } : {}),
     },
     { runValidators: true },
   );
   revalidatePath("/admin/requests");
-  revalidatePath(`/admin/requests/${text(formData, "id")}`);
+  revalidatePath(`/admin/requests/${id}`);
 }
 
 export async function addRequestNoteAction(formData: FormData) {
   const user = await requireAdmin();
   await connectDb();
-  await ServiceRequest.findByIdAndUpdate(text(formData, "id"), {
+  const id = text(formData, "id");
+  const message = text(formData, "message");
+  await ServiceRequest.findByIdAndUpdate(id, {
     $push: {
       adminNotes: {
         author: user.fullName,
-        message: text(formData, "message"),
+        message,
       },
+      timeline: pushTimeline("یادداشت مدیر", message, user.fullName, "note"),
     },
   });
-  revalidatePath(`/admin/requests/${text(formData, "id")}`);
+  revalidatePath(`/admin/requests/${id}`);
 }
 
 export async function addRequestAdminMessageAction(formData: FormData) {
   const user = await requireAdmin();
   await connectDb();
-  await ServiceRequest.findByIdAndUpdate(text(formData, "id"), {
+  const id = text(formData, "id");
+  const message = text(formData, "message");
+  await ServiceRequest.findByIdAndUpdate(id, {
     $push: {
       messages: {
         sender: "admin",
         senderName: user.fullName,
-        message: text(formData, "message"),
+        message,
       },
+      timeline: pushTimeline("پیام مدیر", message, user.fullName, "message"),
     },
   });
-  revalidatePath(`/admin/requests/${text(formData, "id")}`);
+  revalidatePath(`/admin/requests/${id}`);
+}
+
+export async function addRequestAdminAttachmentAction(formData: FormData) {
+  const user = await requireAdmin();
+  await connectDb();
+  const id = text(formData, "id");
+  const file = await uploadedFileValue(formData, "attachment");
+  if (!id || !file) return;
+  await ServiceRequest.findByIdAndUpdate(id, {
+    $push: {
+      attachments: { ...file, uploadedBy: "admin", uploadedAt: new Date() },
+      timeline: pushTimeline(
+        "آپلود فایل مدیر",
+        file.filename,
+        user.fullName,
+        "attachment",
+      ),
+    },
+  });
+  revalidatePath(`/admin/requests/${id}`);
 }
