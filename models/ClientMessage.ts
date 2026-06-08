@@ -12,6 +12,13 @@ const clientMessageSchema = new Schema(
     message: { type: String, required: true, trim: true },
     threadId: { type: String, default: "general", trim: true, index: true },
     threadTitle: { type: String, default: "گفتگوی پشتیبانی", trim: true },
+    recipientId: { type: String, default: "", trim: true, index: true },
+    recipientType: {
+      type: String,
+      enum: ["admin", "lawyer", ""],
+      default: "",
+    },
+    recipientName: { type: String, default: "", trim: true },
     readAt: { type: Date },
   },
   { timestamps: true },

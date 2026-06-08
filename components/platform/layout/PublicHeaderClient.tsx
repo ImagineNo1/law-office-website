@@ -114,9 +114,13 @@ function RequestIcon() {
 export function PublicHeaderClient({
   dashboardHref,
   isLoggedIn,
+  logoText,
+  siteIcon,
 }: {
   dashboardHref: string;
   isLoggedIn: boolean;
+  logoText: string;
+  siteIcon: string;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
@@ -147,12 +151,17 @@ export function PublicHeaderClient({
 
       <nav className="mx-auto flex min-h-20 w-full max-w-[1540px] items-center justify-between gap-5 px-5 sm:px-8 lg:px-16">
         <Link className="flex min-w-36 items-center gap-3" href="/">
-          <span className="grid size-12 place-items-center rounded-2xl bg-[#ECFDF5] text-[#0F766E] ring-1 ring-[#0F766E]/10">
-            <ScaleIcon className="size-7" />
+          <span className="grid size-12 place-items-center overflow-hidden rounded-2xl bg-[#ECFDF5] text-[#0F766E] ring-1 ring-[#0F766E]/10">
+            {siteIcon ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img alt={logoText} className="size-full object-cover" src={siteIcon} />
+            ) : (
+              <ScaleIcon className="size-7" />
+            )}
           </span>
           <span>
             <span className="block text-2xl font-black leading-8 text-[#071527]">
-              وکیل‌یار
+              {logoText || "وکیل‌یار"}
             </span>
             <span className="block text-[11px] font-black text-[#64748B]">
               سامانه خدمات حقوقی

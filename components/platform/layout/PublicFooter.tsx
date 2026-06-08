@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getSiteSettings } from "@/lib/cms";
 
 function ScaleIcon() {
   return (
@@ -50,7 +51,9 @@ const columns = [
   },
 ];
 
-export function PublicFooter() {
+export async function PublicFooter() {
+  const settings = await getSiteSettings();
+
   return (
     <footer
       id="footer"
@@ -61,19 +64,29 @@ export function PublicFooter() {
         <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr]">
           <div>
             <div className="mb-4 flex items-center gap-3">
-              <span className="grid size-13 place-items-center rounded-2xl bg-[#ECFDF5] text-[#0F766E]">
-                <ScaleIcon />
+              <span className="grid size-13 place-items-center overflow-hidden rounded-2xl bg-[#ECFDF5] text-[#0F766E]">
+                {settings.siteIcon ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    alt={settings.logoText}
+                    className="size-full object-cover"
+                    src={settings.siteIcon}
+                  />
+                ) : (
+                  <ScaleIcon />
+                )}
               </span>
               <span>
-                <span className="block text-2xl font-black">وکیل‌یار</span>
+                <span className="block text-2xl font-black">
+                  {settings.logoText || "وکیل‌یار"}
+                </span>
                 <span className="text-xs font-bold text-white/55">
                   سامانه خدمات حقوقی
                 </span>
               </span>
             </div>
             <p className="max-w-sm text-sm font-bold leading-8 text-white/60">
-              پلتفرم فارسی خدمات حقوقی، بانک قرارداد، CRM، پورتال موکل و امضای
-              دیجیتال.
+              {settings.footerDescription}
             </p>
             <div className="mt-6 flex gap-3" aria-label="شبکه‌های اجتماعی">
               <SocialIcon label="in" />
@@ -108,7 +121,7 @@ export function PublicFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 py-6 sm:flex-row">
           <p className="text-xs font-bold text-white/40">
-            © ۱۴۰۳ وکیل‌یار — تمامی حقوق محفوظ است.
+            {settings.footerCopyright}
           </p>
           <div className="flex gap-6 text-xs font-bold text-white/40">
             <Link

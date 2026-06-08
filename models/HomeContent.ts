@@ -25,6 +25,16 @@ const orderedItemSchema = new Schema(
   { _id: false },
 );
 
+
+const sectionSchema = new Schema(
+  {
+    eyebrow: { type: String, default: "" },
+    title: { type: String, default: "" },
+    description: { type: String, default: "" },
+  },
+  { _id: false },
+);
+
 const statSchema = new Schema(
   {
     label: { type: String, default: "" },
@@ -54,6 +64,10 @@ const homeContentSchema = new Schema(
     hero: { type: heroSchema, default: {} },
     trustFeatures: { type: [orderedItemSchema], default: [] },
     stats: { type: [statSchema], default: [] },
+    processSteps: { type: [orderedItemSchema], default: [] },
+    legalSupport: { type: sectionSchema, default: {} },
+    legalSupportCards: { type: [orderedItemSchema], default: [] },
+    finalCta: { type: sectionSchema, default: {} },
     contactCta: { type: contactCtaSchema, default: {} },
   },
   { timestamps: true },

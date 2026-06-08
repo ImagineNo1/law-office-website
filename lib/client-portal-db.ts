@@ -7,9 +7,15 @@ import { ClientFile } from "@/models/ClientFile";
 import { ClientMessage } from "@/models/ClientMessage";
 import { ClientProfile } from "@/models/ClientProfile";
 import { ClientUser } from "@/models/ClientUser";
+import { User } from "@/models/User";
 import { Payment } from "@/models/Payment";
 import { ServiceRequest } from "@/models/ServiceRequest";
-import type { RequestStatus, ServiceRequestData } from "@/types";
+import { lawyerLicenseLabels } from "@/lib/lawyers";
+import type {
+  LawyerLicenseType,
+  RequestStatus,
+  ServiceRequestData,
+} from "@/types";
 
 export type ClientProfileData = {
   id: string;
@@ -58,6 +64,18 @@ export type ClientMessageRecord = {
   createdAt: string;
   threadId: string;
   threadTitle: string;
+  recipientId: string;
+  recipientType: "admin" | "lawyer" | "";
+  recipientName: string;
+};
+
+export type ClientMessageContact = {
+  id: string;
+  type: "admin" | "lawyer";
+  name: string;
+  label: string;
+  description: string;
+  threadId: string;
 };
 
 export type ClientActivity = {
@@ -67,6 +85,78 @@ export type ClientActivity = {
   timestamp: string;
   type: "message" | "request" | "contract" | "payment" | "file";
 };
+
+type MessageContactSource = {
+  _id?: unknown;
+  fullName: string;
+  email?: string;
+  phone?: string;
+  role?: string;
+  status?: string;
+  isLawyer?: boolean;
+  lawyerLicenseType?: LawyerLicenseType;
+  lawyerSpecialties?: string[];
+};
+
+function toMessageContact(
+  doc: MessageContactSource,
+  type: "admin" | "lawyer",
+): ClientMessageContact {
+  const id = idOf(doc._id, doc.fullName);
+  const license = doc.lawyerLicenseType ?? "paye_one";
+  const specialties = doc.lawyerSpecialties?.filter(Boolean).join("، ");
+  const label = type === "admin" ? "مدیر سامانه" : lawyerLicenseLabels[license];
+  return {
+    id,
+    type,
+    name: doc.fullName,
+    label,
+    description:
+      specialties ||
+      doc.email ||
+      doc.phone ||
+      (type === "admin" ? "پاسخگویی مدیریتی" : "وکیل فعال"),
+    threadId: `${type}-${id}`,
+  };
+}
+
+export async function getClientMessageContacts(client?: CurrentClient) {
+  client ??= await requireClient();
+  await connectDb();
+  const [admins, adminLawyers, clientLawyers] = await Promise.all([
+    User.find({ role: { $in: ["admin", "super_admin"] }, status: "active" })
+      .select("fullName email role status")
+      .sort({ role: 1, createdAt: 1 })
+      .lean<MessageContactSource[]>(),
+    User.find({ isLawyer: true, status: "active" })
+      .select(
+        "fullName email role status isLawyer lawyerLicenseType lawyerSpecialties",
+      )
+      .sort({ createdAt: -1 })
+      .lean<MessageContactSource[]>(),
+    ClientUser.find({
+      isLawyer: true,
+      status: "active",
+      _id: { $ne: client.id },
+    })
+      .select(
+        "fullName email phone status isLawyer lawyerLicenseType lawyerSpecialties",
+      )
+      .sort({ createdAt: -1 })
+      .lean<MessageContactSource[]>(),
+  ]);
+
+  const contacts = new Map<string, ClientMessageContact>();
+  for (const admin of admins) {
+    const contact = toMessageContact(admin, "admin");
+    contacts.set(contact.threadId, contact);
+  }
+  for (const lawyer of [...adminLawyers, ...clientLawyers]) {
+    const contact = toMessageContact(lawyer, "lawyer");
+    contacts.set(contact.threadId, contact);
+  }
+  return Array.from(contacts.values());
+}
 
 type LeanRequest = {
   _id?: unknown;
@@ -378,6 +468,9 @@ export async function getClientMessages(client?: CurrentClient) {
         message: string;
         threadId?: string;
         threadTitle?: string;
+        recipientId?: string;
+        recipientType?: "admin" | "lawyer" | "";
+        recipientName?: string;
         createdAt?: Date | string;
       }[]
     >();
@@ -393,6 +486,9 @@ export async function getClientMessages(client?: CurrentClient) {
       createdAt: asIso(doc.createdAt),
       threadId: doc.threadId ?? "general",
       threadTitle: doc.threadTitle ?? "گفتگوی پشتیبانی",
+      recipientId: doc.recipientId ?? "",
+      recipientType: doc.recipientType ?? "",
+      recipientName: doc.recipientName ?? "",
     };
   });
 }
@@ -451,6 +547,7 @@ export async function createClientMessage(
   message: string,
   threadTitle = "گفتگوی پشتیبانی",
   threadId?: string,
+  recipient?: { id: string; type: "admin" | "lawyer" | ""; name: string },
 ) {
   const client = await requireClient();
   await connectDb();
@@ -462,6 +559,9 @@ export async function createClientMessage(
     message,
     threadId: normalizedThreadId,
     threadTitle,
+    recipientId: recipient?.id ?? "",
+    recipientType: recipient?.type ?? "",
+    recipientName: recipient?.name ?? "",
   });
 }
 

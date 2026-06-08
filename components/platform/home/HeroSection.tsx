@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Container } from "@/components/platform/layout/PageShell";
+import type { SiteSettings } from "@/types";
 
 function ArrowLeft() {
   return (
@@ -16,7 +17,15 @@ function ArrowLeft() {
   );
 }
 
-export function HeroSection() {
+export function HeroSection({ settings }: { settings: SiteSettings }) {
+  const titleLines = (settings.siteDescription || "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const [firstLine, secondLine, ...remainingLines] = titleLines.length
+    ? titleLines
+    : ["پلتفرم هوشمند", "خدمات حقوقی", "از مشاوره تا قرارداد", "و پیگیری پرونده"];
+
   return (
     <section
       className="relative overflow-hidden bg-[radial-gradient(circle_at_20%_10%,rgba(15,118,110,0.10),transparent_30%),linear-gradient(180deg,#ffffff_0%,#F8FAFC_100%)]"
@@ -28,7 +37,7 @@ export function HeroSection() {
             <div className="relative mx-auto max-w-[700px]">
               <div className="absolute inset-5 rounded-[2.2rem] bg-emerald-700/10 blur-3xl" />
               <Image
-                alt="دفتر حقوقی مدرن و قرارداد روی میز برای خدمات وکیل‌یار"
+                alt={`دفتر حقوقی مدرن و قرارداد روی میز برای خدمات ${settings.logoText}`}
                 className="relative aspect-[1.28/1] w-full rounded-[2rem] border border-[#E2E8F0] object-cover shadow-[0_30px_90px_rgba(7,21,39,0.16)]"
                 height={992}
                 priority
@@ -42,17 +51,21 @@ export function HeroSection() {
 
           <div className="order-1 text-center lg:order-none lg:[direction:rtl] lg:text-right">
             <h1 className="text-4xl font-black leading-[1.45] tracking-[-0.03em] text-[#071527] sm:text-5xl lg:text-[58px] xl:text-[64px]">
-              پلتفرم هوشمند
-              <br />
-              <span className="text-[#0F766E]">خدمات حقوقی</span>
-              <br />
-              از مشاوره تا قرارداد
-              <br />و پیگیری پرونده
+              {firstLine}
+              {secondLine ? (
+                <>
+                  <br />
+                  <span className="text-[#0F766E]">{secondLine}</span>
+                </>
+              ) : null}
+              {remainingLines.map((line) => (
+                <span className="block" key={line}>
+                  {line}
+                </span>
+              ))}
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base font-bold leading-9 text-[#64748B] sm:text-lg lg:mx-0">
-              در وکیل‌یار می‌توانید درخواست حقوقی ثبت کنید، مدارک خود را ارسال
-              کنید، با تیم حقوقی گفتگو کنید و روند پرونده را در داشبورد اختصاصی
-              پیگیری کنید.
+              {settings.detailedDescription}
             </p>
 
             <div className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start">

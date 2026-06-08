@@ -18,28 +18,36 @@ import {
   type PlatformContract,
   type PlatformFaq,
 } from "@/lib/platform-db";
+import type { HomeContentData, SiteSettings } from "@/types";
 
 export function HomeExperience({
   articles = [],
   contracts = fallbackContracts,
   faqs = [],
+  home,
+  settings,
 }: {
   articles?: PlatformArticle[];
   contracts?: PlatformContract[];
   faqs?: PlatformFaq[];
+  home: HomeContentData;
+  settings: SiteSettings;
 }) {
   return (
     <PageShell>
       <PublicHeader />
-      <HeroSection />
+      <HeroSection settings={settings} />
       <HelpIntentSection />
       <DepartmentsSection />
-      <ProcessTimeline />
+      <ProcessTimeline steps={home.processSteps} />
       <ContractPreview contracts={contracts} />
-      <LegalSupportSection />
+      <LegalSupportSection
+        cards={home.legalSupportCards}
+        section={home.legalSupport}
+      />
       <KnowledgeCenterSection articles={articles} />
       <FaqSection faqs={faqs} />
-      <FinalCta />
+      <FinalCta content={home.finalCta} />
       <PublicFooter />
     </PageShell>
   );

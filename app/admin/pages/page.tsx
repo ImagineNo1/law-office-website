@@ -40,6 +40,18 @@ export default async function AdminPagesPage() {
         `${item.value}|${item.label}|${item.icon ?? "scale"}|${item.order ?? index}`,
     )
     .join("\n");
+  const processLines = home.processSteps
+    .map(
+      (item, index) =>
+        `${item.title}|${item.excerpt}|${item.icon ?? "shield"}|${item.order ?? index}`,
+    )
+    .join("\n");
+  const legalSupportLines = home.legalSupportCards
+    .map(
+      (item, index) =>
+        `${item.title}|${item.excerpt}|${item.icon ?? "shield"}|${item.order ?? index}`,
+    )
+    .join("\n");
 
   return (
     <AdminShell
@@ -108,6 +120,50 @@ export default async function AdminPagesPage() {
               defaultValue={statLines}
               label="Stats: value|label|icon|order"
               name="stats"
+            />
+            <Textarea
+              defaultValue={processLines}
+              label="Process steps: title|excerpt|icon|order"
+              name="processSteps"
+            />
+            <div className="grid gap-4 md:grid-cols-2">
+              <Input
+                defaultValue={home.legalSupport.eyebrow}
+                label="Legal support eyebrow"
+                name="legalSupportEyebrow"
+              />
+              <Input
+                defaultValue={home.legalSupport.title}
+                label="Legal support title"
+                name="legalSupportTitle"
+              />
+            </div>
+            <Textarea
+              defaultValue={home.legalSupport.description}
+              label="Legal support description"
+              name="legalSupportDescription"
+            />
+            <Textarea
+              defaultValue={legalSupportLines}
+              label="Legal support cards: title|excerpt|icon|order"
+              name="legalSupportCards"
+            />
+            <div className="grid gap-4 md:grid-cols-2">
+              <Input
+                defaultValue={home.finalCta.eyebrow}
+                label="Final CTA eyebrow"
+                name="finalCtaEyebrow"
+              />
+              <Input
+                defaultValue={home.finalCta.title}
+                label="Final CTA title"
+                name="finalCtaTitle"
+              />
+            </div>
+            <Textarea
+              defaultValue={home.finalCta.description}
+              label="Final CTA description"
+              name="finalCtaDescription"
             />
             <div className="grid gap-4 md:grid-cols-2">
               <Input

@@ -123,17 +123,29 @@ export type ContactCtaContent = {
   secondaryHref: string;
 };
 
+export type SectionContent = {
+  eyebrow: string;
+  title: string;
+  description: string;
+};
+
 export type HomeContentData = {
   hero: HeroContent;
   trustFeatures: TrustFeature[];
   stats: SiteStat[];
+  processSteps: TrustFeature[];
+  legalSupport: SectionContent;
+  legalSupportCards: TrustFeature[];
+  finalCta: SectionContent;
   contactCta: ContactCtaContent;
 };
 
 export type SiteSettings = {
   siteTitle: string;
   siteDescription: string;
+  detailedDescription: string;
   logoText: string;
+  siteIcon: string;
   phone: string;
   email: string;
   address: string;
@@ -145,6 +157,8 @@ export type SiteSettings = {
   };
   seoTitle?: string;
   seoDescription?: string;
+  footerDescription: string;
+  footerCopyright: string;
 };
 
 export type PageContentData = {
