@@ -30,7 +30,7 @@ export function PublicFooter() {
             <ul className="space-y-2.5">
               {["مشاوره حقوقی", "تنظیم قرارداد", "تنظیم دادخواست", "امضای دیجیتال"].map((item) => (
                 <li key={item}>
-                  <a className="text-sm text-primary-foreground/50 transition-colors hover:text-accent" href="#services">{item}</a>
+                  <Link className="text-sm text-primary-foreground/50 transition-colors hover:text-accent" href="/services">{item}</Link>
                 </li>
               ))}
             </ul>
@@ -41,7 +41,7 @@ export function PublicFooter() {
             <ul className="space-y-2.5">
               {["قراردادهای ملکی", "قراردادهای استخدامی", "قراردادهای تجاری", "قراردادهای مشارکتی"].map((item) => (
                 <li key={item}>
-                  <a className="text-sm text-primary-foreground/50 transition-colors hover:text-accent" href="#contracts">{item}</a>
+                  <Link className="text-sm text-primary-foreground/50 transition-colors hover:text-accent" href="/contracts">{item}</Link>
                 </li>
               ))}
             </ul>
@@ -62,8 +62,8 @@ export function PublicFooter() {
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-primary-foreground/10 pt-8 sm:flex-row">
           <p className="text-xs text-primary-foreground/40">© ۱۴۰۳ وکیل‌یار — تمامی حقوق محفوظ است.</p>
           <div className="flex gap-6 text-xs text-primary-foreground/40">
-            <Link className="transition-colors hover:text-accent" href="/">قوانین استفاده</Link>
-            <Link className="transition-colors hover:text-accent" href="/">حریم خصوصی</Link>
+            <Link className="transition-colors hover:text-accent" href="/about">درباره وکیل‌یار</Link>
+            <Link className="transition-colors hover:text-accent" href="/contact">تماس با ما</Link>
           </div>
         </div>
       </div>

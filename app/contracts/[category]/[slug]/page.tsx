@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getPlatformContractBySlug, getPlatformContracts } from "@/lib/platform-db";
-import { PageShell } from "@/components/platform/layout/PageShell";
-import { PublicHeader } from "@/components/platform/layout/PublicHeader";
+import { PublicShell } from "@/components/platform/layout/PublicShell";
 import { ContractDetailHero } from "@/components/platform/contracts/ContractDetailHero";
 import { ContractPricingPanel } from "@/components/platform/contracts/ContractPricingPanel";
 import { ContractTabs } from "@/components/platform/contracts/ContractTabs";
@@ -34,8 +33,7 @@ export default async function ContractDetailPage({
   const related = contracts.filter((item) => item.slug !== contract?.slug && item.category === contract?.category);
 
   return (
-    <PageShell>
-      <PublicHeader />
+    <PublicShell>
       {contract ? <ContractDetailHero contract={contract} /> : null}
       <section className="py-8">
         <div className="mx-auto grid w-[min(1440px,calc(100%-32px))] gap-6 lg:grid-cols-[1fr_360px]">
@@ -46,6 +44,6 @@ export default async function ContractDetailPage({
           {contract ? <ContractPricingPanel contract={contract} /> : null}
         </div>
       </section>
-    </PageShell>
+    </PublicShell>
   );
 }

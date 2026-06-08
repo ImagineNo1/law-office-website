@@ -1,6 +1,6 @@
-import { PageShell, Container } from "@/components/platform/layout/PageShell";
-import { PublicHeader } from "@/components/platform/layout/PublicHeader";
-import { PublicFooter } from "@/components/platform/layout/PublicFooter";
+import Link from "next/link";
+import { Container } from "@/components/platform/layout/PageShell";
+import { PublicPageHero, PublicShell } from "@/components/platform/layout/PublicShell";
 import { fallbackServices, type PlatformFaq, type PlatformService } from "@/lib/platform-db";
 import { ServiceHero } from "@/components/platform/services/ServiceHero";
 import { ServicesExplorer } from "@/components/platform/services/ServicesExplorer";
@@ -24,8 +24,7 @@ export function ServicesExperience({
 
   if (!service) {
     return (
-      <PageShell>
-        <PublicHeader />
+      <PublicShell>
         <section className="py-12">
           <Container>
             <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-[0_18px_45px_rgba(11,23,42,.06)]">
@@ -33,34 +32,32 @@ export function ServicesExperience({
               <p className="mt-3 text-sm font-bold leading-7 text-[#66758A]">
                 محتوای خدمات هنوز در پایگاه داده منتشر نشده است.
               </p>
-              <a className="mt-6 inline-flex h-12 items-center rounded-xl bg-[#0B172A] px-6 text-sm font-black text-white" href="/admin/services">
-                مدیریت خدمات
-              </a>
+              <Link className="mt-6 inline-flex h-12 items-center rounded-xl bg-[#0B172A] px-6 text-sm font-black text-white" href="/requests/new">
+                ثبت درخواست حقوقی
+              </Link>
               <div className="mt-8 grid gap-4 md:grid-cols-3">
-                {["ایجاد خدمت", "انتشار محتوا", "اتصال درخواست"].map((item) => (
+                {["مشاوره اولیه", "بررسی مدارک", "پیگیری در داشبورد"].map((item) => (
                   <div className="rounded-2xl bg-slate-50 p-4 text-sm font-black" key={item}>{item}</div>
                 ))}
               </div>
             </div>
           </Container>
         </section>
-        <PublicFooter />
-      </PageShell>
+      </PublicShell>
     );
   }
 
   return (
-    <PageShell>
-      <PublicHeader />
-      <ServiceHero
-        detail={isDetail}
-        title={isDetail ? service.title : "خدمات حقوقی تخصصی"}
-        description={
-          isDetail
-            ? service.heroDescription || service.description
-            : "انتخاب، ثبت درخواست، بارگذاری مدارک و پیگیری مرحله ای خدمات حقوقی در یک تجربه SaaS فارسی."
-        }
-      />
+    <PublicShell>
+      {isDetail ? (
+        <ServiceHero detail title={service.title} description={service.heroDescription || service.description} />
+      ) : (
+        <PublicPageHero
+          description="خدمت مناسب را پیدا کنید، جزئیات مدارک و مراحل را ببینید و درخواست حقوقی خود را با مسیر پیگیری روشن ثبت کنید."
+          eyebrow="خدمات حقوقی"
+          title="خدمات حقوقی تخصصی"
+        />
+      )}
       <section className="py-8">
         <Container className={isDetail ? "grid gap-6 lg:grid-cols-[1fr_360px]" : "grid gap-6 lg:grid-cols-[300px_1fr]"}>
           {isDetail ? (
@@ -94,7 +91,6 @@ export function ServicesExperience({
           )}
         </Container>
       </section>
-      <PublicFooter />
-    </PageShell>
+    </PublicShell>
   );
 }

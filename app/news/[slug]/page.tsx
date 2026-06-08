@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/site/ArticleCard";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
-import { getLatestNews, getNewsBySlug, getSiteSettings } from "@/lib/cms";
+import { Container } from "@/components/platform/layout/PageShell";
+import { PublicShell } from "@/components/platform/layout/PublicShell";
+import { getLatestNews, getNewsBySlug } from "@/lib/cms";
 import { buildMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -27,8 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function NewsDetailPage({ params }: Props) {
   const { slug } = await params;
-  const [settings, item, newsItems] = await Promise.all([
-    getSiteSettings(),
+  const [item, newsItems] = await Promise.all([
     getNewsBySlug(slug),
     getLatestNews(4),
   ]);
@@ -38,8 +37,7 @@ export default async function NewsDetailPage({ params }: Props) {
   }
 
   return (
-    <main>
-      <SiteHeader settings={settings} />
+    <PublicShell>
       <article className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
         <p className="text-sm font-bold text-gold">{item.publishedAt}</p>
         <h1 className="mt-4 text-4xl font-black leading-[1.35] text-foreground">
@@ -50,7 +48,8 @@ export default async function NewsDetailPage({ params }: Props) {
           <p>{item.content || item.excerpt}</p>
         </div>
       </article>
-      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
+      <section className="pb-16">
+        <Container>
         <h2 className="mb-6 text-2xl font-black text-foreground">
           اخبار مرتبط
         </h2>
@@ -61,8 +60,8 @@ export default async function NewsDetailPage({ params }: Props) {
               <ArticleCard href={`/news/${news.slug}`} item={news} key={news.slug} type="news" />
             ))}
         </div>
+        </Container>
       </section>
-      <SiteFooter settings={settings} />
-    </main>
+    </PublicShell>
   );
 }

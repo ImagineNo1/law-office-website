@@ -1,6 +1,5 @@
-import { PageShell } from "@/components/platform/layout/PageShell";
-import { PublicHeader } from "@/components/platform/layout/PublicHeader";
-import { PublicFooter } from "@/components/platform/layout/PublicFooter";
+import { Container } from "@/components/platform/layout/PageShell";
+import { PublicPageHero, PublicShell } from "@/components/platform/layout/PublicShell";
 import { fa, fallbackLegalForms, type PlatformLegalForm } from "@/lib/platform-db";
 
 export function LegalFormsExperience({
@@ -11,18 +10,13 @@ export function LegalFormsExperience({
   forms?: PlatformLegalForm[];
 }) {
   const content = (
-    <section className="py-8">
-      <div className="mx-auto w-[min(1440px,calc(100%-32px))]">
-        <div className="rounded-2xl bg-[#0B172A] p-7 text-white">
-          <h1 className="text-3xl font-black">{admin ? "مدیریت فرم های حقوقی" : "فرم های حقوقی آماده"}</h1>
-          <p className="mt-3 text-sm font-bold text-slate-300">
-            فرم های CMS-backed برای تکمیل، امضا، آرشیو و مدیریت در سامانه.
-          </p>
-        </div>
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {forms.map((form) => (
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_18px_45px_rgba(11,23,42,.06)]" key={form.id}>
-              <span className="grid size-11 place-items-center rounded-2xl bg-[#FFF8EA] text-sm font-black text-[#C9973F]">F</span>
+    <section className="py-10">
+      <Container>
+        {forms.length ? (
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {forms.map((form) => (
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_18px_45px_rgba(11,23,42,.06)] transition hover:-translate-y-1 hover:border-accent" key={form.id}>
+              <span className="grid size-11 place-items-center rounded-2xl bg-[#FFF8EA] text-sm font-black text-[#C9973F]">فرم</span>
               <h2 className="mt-5 font-black">{form.title}</h2>
               <p className="mt-2 min-h-14 text-sm font-bold leading-7 text-[#66758A]">{form.description}</p>
               <div className="mt-4 flex justify-between text-xs font-black">
@@ -30,19 +24,28 @@ export function LegalFormsExperience({
                 <span>{fa(form.usage)} استفاده</span>
               </div>
             </div>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-[0_18px_45px_rgba(11,23,42,.04)]">
+            <h2 className="text-2xl font-black text-[#0B172A]">فرم حقوقی منتشرشده‌ای وجود ندارد</h2>
+            <p className="mx-auto mt-3 max-w-md text-sm font-bold leading-7 text-slate-500">پس از انتشار فرم‌ها در پنل مدیریت، این بخش به‌صورت خودکار با داده‌های واقعی تکمیل می‌شود.</p>
+          </div>
+        )}
+      </Container>
     </section>
   );
 
   if (admin) return content;
 
   return (
-    <PageShell>
-      <PublicHeader />
+    <PublicShell>
+      <PublicPageHero
+        description="فرم‌های حقوقی منتشرشده را مشاهده کنید و برای تکمیل یا تنظیم اختصاصی مسیر درخواست را ادامه دهید."
+        eyebrow="فرم‌های حقوقی"
+        title="فرم‌های حقوقی آماده"
+      />
       {content}
-      <PublicFooter />
-    </PageShell>
+    </PublicShell>
   );
 }

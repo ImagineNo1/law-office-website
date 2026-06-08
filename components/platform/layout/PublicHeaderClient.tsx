@@ -2,12 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const links = [
-  { label: "خدمات حقوقی", href: "#services", dropdown: true },
-  { label: "بانک قراردادها", href: "#contracts" },
-  { label: "مرکز دانش", href: "#knowledge" },
-  { label: "تماس با ما", href: "#footer" },
+  { label: "صفحه اصلی", href: "/" },
+  { label: "خدمات حقوقی", href: "/services" },
+  { label: "بانک قراردادها", href: "/contracts" },
+  { label: "فرم‌های حقوقی", href: "/legal-forms" },
+  { label: "مرکز دانش", href: "/blog" },
+  { label: "درباره ما", href: "/about" },
+  { label: "تماس با ما", href: "/contact" },
 ];
 
 function ScaleIcon({ className = "size-5" }: { className?: string }) {
@@ -35,16 +39,9 @@ function RequestIcon() {
   );
 }
 
-function ChevronDown() {
-  return (
-    <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none">
-      <path d="m6 9 6 6 6-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-    </svg>
-  );
-}
-
 export function PublicHeaderClient({ dashboardHref, isLoggedIn }: { dashboardHref: string; isLoggedIn: boolean }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <nav className="sticky inset-x-0 top-0 z-50 border-b border-border bg-white font-body" dir="rtl">
@@ -57,13 +54,19 @@ export function PublicHeaderClient({ dashboardHref, isLoggedIn }: { dashboardHre
           </span>
         </Link>
 
-        <div className="hidden flex-1 items-center justify-center gap-10 lg:flex">
-          {links.map((link) => (
-            <a className="inline-flex items-center gap-2 text-base font-extrabold text-foreground transition-colors hover:text-accent" href={link.href} key={link.label}>
-              {link.label}
-              {link.dropdown ? <ChevronDown /> : null}
-            </a>
-          ))}
+        <div className="hidden flex-1 items-center justify-center gap-2 xl:flex">
+          {links.map((link) => {
+            const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+            return (
+              <Link
+                className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-extrabold transition-colors ${active ? "bg-accent/10 text-accent" : "text-foreground hover:bg-slate-50 hover:text-accent"}`}
+                href={link.href}
+                key={link.label}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </div>
 
         <div className="hidden min-w-72 items-center justify-end gap-3 font-body md:flex">
@@ -77,13 +80,13 @@ export function PublicHeaderClient({ dashboardHref, isLoggedIn }: { dashboardHre
           </Link>
         </div>
 
-        <button className="rounded-lg border border-border p-3 lg:hidden" onClick={() => setMobileOpen((value) => !value)} type="button"><MenuIcon open={mobileOpen} /></button>
+        <button className="rounded-lg border border-border p-3 xl:hidden" onClick={() => setMobileOpen((value) => !value)} type="button"><MenuIcon open={mobileOpen} /></button>
       </div>
 
       {mobileOpen ? (
-        <div className="border-b border-border bg-white lg:hidden">
+        <div className="border-b border-border bg-white xl:hidden">
           <div className="space-y-3 px-5 py-4 sm:px-8">
-            {links.map((link) => <a className="block py-2 text-sm font-bold text-foreground" href={link.href} key={link.label} onClick={() => setMobileOpen(false)}>{link.label}</a>)}
+            {links.map((link) => <Link className="block py-2 text-sm font-bold text-foreground" href={link.href} key={link.label} onClick={() => setMobileOpen(false)}>{link.label}</Link>)}
             <div className="grid gap-3 pt-2 sm:grid-cols-2">
               <Link className="flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[#0B172A] px-4 text-sm font-extrabold text-white" href={dashboardHref}>{isLoggedIn ? "داشبورد" : "ورود"}</Link>
               <Link className="flex min-h-12 items-center justify-center gap-2 rounded-lg border border-accent px-4 text-sm font-extrabold text-[#0B172A]" href="/requests/new">ثبت درخواست جدید</Link>

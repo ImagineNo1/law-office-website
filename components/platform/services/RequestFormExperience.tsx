@@ -1,19 +1,22 @@
 import { createServiceRequestAction } from "@/app/requests/actions";
-import { PageShell } from "@/components/platform/layout/PageShell";
-import { PublicHeader } from "@/components/platform/layout/PublicHeader";
-import { PublicFooter } from "@/components/platform/layout/PublicFooter";
+import { Container } from "@/components/platform/layout/PageShell";
+import { PublicPageHero, PublicShell } from "@/components/platform/layout/PublicShell";
 import { fa, fallbackServices, type PlatformService } from "@/lib/platform-db";
 
 export function RequestFormExperience({ services = fallbackServices }: { services?: PlatformService[] }) {
   return (
-    <PageShell>
-      <PublicHeader />
-      <section className="py-8">
-        <div className="mx-auto grid w-[min(1440px,calc(100%-32px))] gap-6 lg:grid-cols-[360px_1fr]">
+    <PublicShell>
+      <PublicPageHero
+        description="موضوع حقوقی، نوع خدمت و فوریت را ثبت کنید تا درخواست وارد مسیر بررسی و پیگیری شود."
+        eyebrow="شروع همکاری"
+        title="ثبت درخواست حقوقی"
+      />
+      <section className="py-10">
+        <Container className="grid gap-6 lg:grid-cols-[360px_1fr]">
           <aside className="rounded-2xl bg-[#0B172A] p-6 text-white">
-            <h1 className="text-3xl font-black">ثبت درخواست حقوقی</h1>
+            <h2 className="text-2xl font-black">مسیر پیگیری درخواست</h2>
             <p className="mt-4 text-sm font-bold leading-8 text-slate-300">
-              اطلاعات اولیه، خدمت، مدارک و فوریت را وارد کنید تا پرونده وارد CRM شود.
+              پس از ثبت، درخواست شما در داشبورد قابل پیگیری است و پیام‌های بعدی همان‌جا ثبت می‌شود.
             </p>
             <div className="mt-6 grid gap-3">
               {["بررسی اولیه", "تخصیص وکیل", "پیگیری در داشبورد", "تحویل سند"].map((step, i) => (
@@ -68,9 +71,8 @@ export function RequestFormExperience({ services = fallbackServices }: { service
               ارسال درخواست
             </button>
           </form>
-        </div>
+        </Container>
       </section>
-      <PublicFooter />
-    </PageShell>
+    </PublicShell>
   );
 }

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/site/ArticleCard";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
+import { Container } from "@/components/platform/layout/PageShell";
+import { PublicShell } from "@/components/platform/layout/PublicShell";
 import { Badge } from "@/components/ui/Badge";
-import { getLatestPosts, getPostBySlug, getSiteSettings } from "@/lib/cms";
+import { getLatestPosts, getPostBySlug } from "@/lib/cms";
 import { buildMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -28,8 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogDetailPage({ params }: Props) {
   const { slug } = await params;
-  const [settings, post, posts] = await Promise.all([
-    getSiteSettings(),
+  const [post, posts] = await Promise.all([
     getPostBySlug(slug),
     getLatestPosts(4),
   ]);
@@ -41,8 +40,7 @@ export default async function BlogDetailPage({ params }: Props) {
   const related = posts.filter((item) => item.slug !== post.slug).slice(0, 3);
 
   return (
-    <main>
-      <SiteHeader settings={settings} />
+    <PublicShell>
       <article className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
         <Badge>{post.category}</Badge>
         <h1 className="mt-5 text-4xl font-black leading-[1.35] text-foreground">
@@ -58,7 +56,8 @@ export default async function BlogDetailPage({ params }: Props) {
           <p>{post.content || post.excerpt}</p>
         </div>
       </article>
-      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
+      <section className="pb-16">
+        <Container>
         <h2 className="mb-6 text-2xl font-black text-foreground">
           مقالات مرتبط
         </h2>
@@ -67,8 +66,8 @@ export default async function BlogDetailPage({ params }: Props) {
             <ArticleCard href={`/blog/${item.slug}`} item={item} key={item.slug} />
           ))}
         </div>
+        </Container>
       </section>
-      <SiteFooter settings={settings} />
-    </main>
+    </PublicShell>
   );
 }

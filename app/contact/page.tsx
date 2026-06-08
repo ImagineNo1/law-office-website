@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
+import Link from "next/link";
+import { Container } from "@/components/platform/layout/PageShell";
+import { PublicPageHero, PublicShell } from "@/components/platform/layout/PublicShell";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
@@ -36,30 +37,29 @@ export default async function ContactPage({
     ["نشانی", settings.address],
     ["ساعات کاری", settings.workingHours],
   ];
+  const hasCleanContent = page?.content && !/تست|test|lorem|placeholder/i.test(page.content);
 
   return (
-    <main>
-      <SiteHeader settings={settings} />
-      <section className="container-shell grid gap-6 py-16 lg:grid-cols-[0.9fr_1.1fr]">
+    <PublicShell>
+      <PublicPageHero
+        actions={<Link className="inline-flex h-12 items-center rounded-xl bg-[#0B172A] px-6 text-sm font-black text-white" href="/requests/new">ثبت درخواست حقوقی</Link>}
+        description={hasCleanContent ? page.content ?? "" : "برای دریافت راهنمایی، ثبت پیام یا شروع درخواست حقوقی، از فرم تماس یا اطلاعات ارتباطی موسسه استفاده کنید."}
+        eyebrow="ارتباط"
+        title={page?.title && !/تست|test|lorem|placeholder/i.test(page.title) ? page.title : "تماس با ما"}
+      />
+      <section className="py-12">
+        <Container className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
-          <p className="text-sm font-bold text-gold">ارتباط با ما</p>
-          <h1 className="mt-3 text-4xl font-black text-foreground">
-            {page?.title ?? "ثبت درخواست مشاوره"}
-          </h1>
-          {page?.content ? (
-            <p className="mt-5 whitespace-pre-line leading-8 text-muted">
-              {page.content}
-            </p>
-          ) : null}
-          <div className="mt-8 grid gap-4">
+          <h2 className="text-2xl font-black text-[#0B172A]">راه‌های ارتباطی</h2>
+          <div className="mt-5 grid gap-4">
             {contactRows.map(([label, value]) => (
               <Card className="p-5" key={label}>
                 <p className="text-sm text-gold">{label}</p>
-                <p className="mt-2 text-foreground">{value}</p>
+                <p className="mt-2 font-bold text-foreground">{value || "ثبت نشده"}</p>
               </Card>
             ))}
-            <div className="min-h-56 rounded-2xl border border-border bg-[linear-gradient(135deg,rgba(200,155,60,0.12),rgba(247,248,250,0.9))] p-5 text-muted dark:bg-[linear-gradient(135deg,rgba(200,155,60,0.12),rgba(17,24,39,0.9))]">
-              محدوده نقشه دفتر موسسه
+            <div className="rounded-2xl border border-accent/20 bg-accent/10 p-5 text-sm font-bold leading-8 text-slate-700">
+              برای شروع سریع‌تر، می‌توانید درخواست حقوقی خود را مستقیم ثبت کنید تا مسیر بررسی و پیگیری آن در داشبورد شما قابل مشاهده باشد.
             </div>
           </div>
         </div>
@@ -83,8 +83,8 @@ export default async function ContactPage({
             <Button type="submit">ارسال پیام</Button>
           </form>
         </Card>
+        </Container>
       </section>
-      <SiteFooter settings={settings} />
-    </main>
+    </PublicShell>
   );
 }
