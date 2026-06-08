@@ -28,6 +28,7 @@ export default async function DashboardPage() {
           </div>
           <div className="grid gap-6">
             <PortalCard className="p-5">
+              <div className="rounded-2xl border border-gold/25 bg-gold/5 p-4 text-sm font-bold leading-8 text-muted" data-tour="client-help">برای شروع، اولین درخواست حقوقی خود را ثبت کنید.</div>
               <h2 className="text-lg font-black text-navy">دسترسی سریع</h2>
               <div className="mt-4 grid gap-3">
                 {[
@@ -37,7 +38,7 @@ export default async function DashboardPage() {
                   ["قراردادهای من", "/dashboard/contracts"],
                   ["پیام‌ها", "/dashboard/messages"],
                 ].map(([label, href]) => (
-                  <Link className="rounded-xl border border-border px-4 py-3 text-sm font-black text-navy transition hover:border-gold hover:text-gold" href={href} key={href}>
+                  <Link className="rounded-xl border border-border px-4 py-3 text-sm font-black text-navy transition hover:border-gold hover:text-gold" data-tour={label === "ثبت درخواست جدید" ? "client-new-request" : undefined} href={href} key={href}>
                     {label}
                   </Link>
                 ))}

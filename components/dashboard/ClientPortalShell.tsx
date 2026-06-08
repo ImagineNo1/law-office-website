@@ -1,14 +1,18 @@
 import { ClientSidebar } from "@/components/dashboard/ClientSidebar";
+import { TourProvider } from "@/components/onboarding/TourProvider";
 import { getCurrentClient } from "@/lib/client-auth";
+import { getClientTourState, markClientTourCompleted } from "@/lib/onboarding/actions";
 import { Clock } from "lucide-react";
 
 export async function ClientPortalShell({ children, title = "پیشخوان" }: { children: React.ReactNode; title?: string }) {
   const client = await getCurrentClient();
   const displayName = client?.fullName || "کاربر";
   const initials = displayName.split(" ").filter(Boolean).slice(0, 2).map((part) => part[0]).join("") || "ک";
+  const tourState = await getClientTourState();
 
   return (
-    <div className="dashboard-surface min-h-screen font-body text-foreground lg:flex lg:flex-row-reverse">
+    <TourProvider initialState={tourState} kind="client" markCompletedAction={markClientTourCompleted}>
+      <div className="dashboard-surface min-h-screen font-body text-foreground lg:flex lg:flex-row-reverse">
       <ClientSidebar />
       <div className="min-w-0 flex-1 lg:order-1">
         <header className="border-b border-border bg-white px-4 py-5 shadow-sm sm:px-6 lg:px-8">
@@ -29,8 +33,9 @@ export async function ClientPortalShell({ children, title = "پیشخوان" }: 
             </div>
           </div>
         </header>
-        <main className="p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="p-4 sm:p-6 lg:p-8" data-tour="client-dashboard">{children}</main>
       </div>
-    </div>
+      </div>
+    </TourProvider>
   );
 }

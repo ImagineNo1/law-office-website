@@ -66,8 +66,8 @@ export const paymentStatusLabels: Record<ClientPaymentRecord["status"], string> 
   cancelled: "لغو شده",
 };
 
-export function PortalCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <section className={`panel-card rounded-lg ${className}`}>{children}</section>;
+export function PortalCard({ children, className = "", ...props }: React.HTMLAttributes<HTMLElement> & { children: React.ReactNode; className?: string }) {
+  return <section className={`panel-card rounded-lg ${className}`} {...props}>{children}</section>;
 }
 
 export function EmptyState({
@@ -86,7 +86,7 @@ export function EmptyState({
   const Icon = emptyStateIcons[icon] ?? Plus;
 
   return (
-    <div className="grid place-items-center rounded-lg border border-dashed border-border bg-white px-6 py-12 text-center">
+    <div className="grid place-items-center rounded-lg border border-dashed border-border bg-white px-6 py-12 text-center" data-tour="client-empty-state">
       <span className="grid size-14 place-items-center rounded-lg bg-card text-accent shadow-sm">
         <Icon aria-hidden="true" className="size-6" />
       </span>
@@ -142,7 +142,7 @@ export function ClientKpiCards({ kpis }: { kpis: { label: string; value: number;
   const colors = ["bg-blue-500/10 text-blue-700", "bg-amber-500/10 text-amber-700", "bg-emerald-500/10 text-emerald-700", "bg-purple-500/10 text-purple-700", "bg-pink-500/10 text-pink-700"];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5" data-tour="client-stats">
       {kpis.map((kpi, index) => {
         const Icon = iconMap[kpi.icon] ?? FileText;
         return (
@@ -237,9 +237,9 @@ export function RequestsTable({
   action?: React.ReactNode;
 }) {
   return (
-    <PortalCard className="overflow-hidden">
+    <PortalCard className="overflow-hidden" data-tour="client-recent-requests">
       <div className="flex flex-col gap-3 border-b border-border p-5 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-wrap items-center gap-3"><h2 className="text-xl font-black text-navy">درخواست‌های اخیر</h2>{action}</div>
+        <div className="flex flex-wrap items-center gap-3" data-tour="client-requests"><h2 className="text-xl font-black text-navy">درخواست‌های اخیر</h2>{action}</div>
         <form className="flex flex-col gap-2 sm:flex-row">
           <input className="service-input" defaultValue={search} name="q" placeholder="جستجو..." />
           <select className="service-input" defaultValue={status} name="status">
