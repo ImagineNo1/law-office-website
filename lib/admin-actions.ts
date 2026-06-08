@@ -525,13 +525,17 @@ export async function saveSettingsAction(formData: FormData) {
   await requireAdmin();
   await connectDb();
 
+  const siteIcon = await imageValue(formData, "siteIcon", "siteIconFile");
+
   await SiteSettings.findOneAndUpdate(
     { key: "site" },
     {
       key: "site",
       siteTitle: text(formData, "siteTitle"),
       siteDescription: text(formData, "siteDescription"),
+      detailedDescription: text(formData, "detailedDescription"),
       logoText: text(formData, "logoText"),
+      siteIcon,
       phone: text(formData, "phone"),
       email: text(formData, "email"),
       address: text(formData, "address"),
@@ -543,6 +547,24 @@ export async function saveSettingsAction(formData: FormData) {
       },
       seoTitle: text(formData, "seoTitle"),
       seoDescription: text(formData, "seoDescription"),
+      footerDescription: text(formData, "footerDescription"),
+      footerCopyright: text(formData, "footerCopyright"),
+    },
+    { upsert: true, runValidators: true },
+  );
+
+  await SEOSettings.findOneAndUpdate(
+    { key: "seo" },
+    {
+      key: "seo",
+      siteName: text(formData, "logoText") || text(formData, "siteTitle"),
+      defaultMetaTitle: text(formData, "seoTitle") || text(formData, "siteTitle"),
+      defaultMetaDescription:
+        text(formData, "seoDescription") || text(formData, "detailedDescription"),
+      organizationName: text(formData, "logoText") || text(formData, "siteTitle"),
+      logo: siteIcon,
+      phone: text(formData, "phone"),
+      address: text(formData, "address"),
     },
     { upsert: true, runValidators: true },
   );
@@ -699,6 +721,18 @@ export async function saveHomeContentAction(formData: FormData) {
       },
       trustFeatures: parseFeatures(text(formData, "trustFeatures")),
       stats: parseStats(text(formData, "stats")),
+      processSteps: parseFeatures(text(formData, "processSteps")).slice(0, 5),
+      legalSupport: {
+        eyebrow: text(formData, "legalSupportEyebrow"),
+        title: text(formData, "legalSupportTitle"),
+        description: text(formData, "legalSupportDescription"),
+      },
+      legalSupportCards: parseFeatures(text(formData, "legalSupportCards")).slice(0, 4),
+      finalCta: {
+        eyebrow: text(formData, "finalCtaEyebrow"),
+        title: text(formData, "finalCtaTitle"),
+        description: text(formData, "finalCtaDescription"),
+      },
       contactCta: {
         eyebrow: text(formData, "contactEyebrow"),
         title: text(formData, "contactTitle"),

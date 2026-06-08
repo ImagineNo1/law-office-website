@@ -8,6 +8,7 @@ import { PageContent } from "@/models/PageContent";
 import { Post } from "@/models/Post";
 import { SEORedirect } from "@/models/SEORedirect";
 import { SEOSettings } from "@/models/SEOSettings";
+import { SiteSettings } from "@/models/SiteSettings";
 import { Service } from "@/models/Service";
 
 export type SeoData = {
@@ -312,27 +313,35 @@ export async function getSeoSettings() {
     };
   }
   await connectDb();
-  const settings = await SEOSettings.findOne({ key: "seo" }).lean<
-    Record<string, unknown>
-  >();
+  const [settings, site] = await Promise.all([
+    SEOSettings.findOne({ key: "seo" }).lean<Record<string, unknown>>(),
+    SiteSettings.findOne({ key: "site" }).lean<Record<string, unknown>>(),
+  ]);
+  const brandName = String(site?.logoText || site?.siteTitle || "وکیل‌یار");
+  const siteTitle = String(
+    site?.siteTitle || "وکیل‌یار | خدمات حقوقی، قرارداد و پیگیری پرونده",
+  );
+  const siteDescription = String(
+    site?.detailedDescription ||
+      "پلتفرم فارسی خدمات حقوقی، بانک قرارداد، ثبت درخواست و پیگیری پرونده برای موکلان.",
+  );
+  const siteIcon = String(site?.siteIcon || "");
+
   return {
-    siteName: String(settings?.siteName ?? "وکیل‌یار"),
-    defaultMetaTitle: String(
-      settings?.defaultMetaTitle ?? "وکیل‌یار | خدمات حقوقی، قرارداد و امضا",
-    ),
+    siteName: String(settings?.siteName || brandName),
+    defaultMetaTitle: String(settings?.defaultMetaTitle || siteTitle),
     defaultMetaDescription: String(
-      settings?.defaultMetaDescription ??
-        "پلتفرم فارسی خدمات حقوقی، بانک قرارداد، ثبت درخواست و پیگیری پرونده برای موکلان.",
+      settings?.defaultMetaDescription || siteDescription,
     ),
-    defaultOgImage: String(settings?.defaultOgImage ?? ""),
+    defaultOgImage: String(settings?.defaultOgImage || siteIcon),
     canonicalBaseUrl: String(
       settings?.canonicalBaseUrl ?? "https://vakilyar.vercel.app",
     ).replace(/\/$/, ""),
     robotsTxt: String(settings?.robotsTxt ?? ""),
-    organizationName: String(settings?.organizationName ?? "وکیل‌یار"),
-    phone: String(settings?.phone ?? ""),
-    address: String(settings?.address ?? ""),
-    logo: String(settings?.logo ?? ""),
+    organizationName: String(settings?.organizationName || brandName),
+    phone: String(settings?.phone || site?.phone || ""),
+    address: String(settings?.address || site?.address || ""),
+    logo: String(settings?.logo || siteIcon),
     socialProfiles: Array.isArray(settings?.socialProfiles)
       ? (settings.socialProfiles as string[])
       : [],

@@ -82,9 +82,24 @@ export async function createDashboardRequestAction(formData: FormData) {
 export async function sendClientMessageAction(formData: FormData) {
   const message = text(formData, "message");
   if (!message) return;
-  const threadTitle = text(formData, "threadTitle") || "گفتگوی پشتیبانی";
-  const threadId = text(formData, "threadId");
-  await createClientMessage(message, threadTitle, threadId);
+  const recipientId = text(formData, "recipientId");
+  const recipientType = text(formData, "recipientType");
+  const recipientName = text(formData, "recipientName");
+  const threadTitle =
+    text(formData, "threadTitle") || recipientName || "گفتگوی پشتیبانی";
+  const threadId =
+    text(formData, "threadId") ||
+    (recipientId && recipientType ? `${recipientType}-${recipientId}` : "");
+  await createClientMessage(message, threadTitle, threadId, {
+    id: recipientId,
+    type:
+      recipientType === "lawyer"
+        ? "lawyer"
+        : recipientType === "admin"
+          ? "admin"
+          : "",
+    name: recipientName,
+  });
   revalidatePath("/dashboard/messages");
 }
 

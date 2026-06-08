@@ -28,16 +28,24 @@ import type {
 } from "@/types";
 
 const defaultSettings: SiteSettingsData = {
-  siteTitle: "موسسه حقوقی عدالت گستر",
-  siteDescription: "ارائه خدمات حقوقی تخصصی و مشاوره محرمانه",
-  logoText: "موسسه حقوقی عدالت گستر",
+  siteTitle: "وکیل‌یار | خدمات حقوقی، قرارداد و پیگیری پرونده",
+  siteDescription:
+    "پلتفرم هوشمند\nخدمات حقوقی\nاز مشاوره تا قرارداد\nو پیگیری پرونده",
+  detailedDescription:
+    "در وکیل‌یار می‌توانید درخواست حقوقی ثبت کنید، مدارک خود را ارسال کنید، با تیم حقوقی گفتگو کنید و روند پرونده را در داشبورد اختصاصی پیگیری کنید.",
+  logoText: "وکیل‌یار",
+  siteIcon: "",
   phone: "",
   email: "",
   address: "",
   workingHours: "",
   socialLinks: {},
-  seoTitle: "موسسه حقوقی عدالت گستر",
-  seoDescription: "خدمات حقوقی تخصصی",
+  seoTitle: "وکیل‌یار | خدمات حقوقی، قرارداد و پیگیری پرونده",
+  seoDescription:
+    "در وکیل‌یار می‌توانید درخواست حقوقی ثبت کنید، مدارک خود را ارسال کنید، با تیم حقوقی گفتگو کنید و روند پرونده را در داشبورد اختصاصی پیگیری کنید.",
+  footerDescription:
+    "پلتفرم فارسی خدمات حقوقی، بانک قرارداد، CRM، پورتال موکل و امضای دیجیتال.",
+  footerCopyright: "© ۱۴۰۳ وکیل‌یار — تمامی حقوق محفوظ است.",
 };
 
 const defaultHomeContent: HomeContentData = {
@@ -56,6 +64,51 @@ const defaultHomeContent: HomeContentData = {
   },
   trustFeatures: [],
   stats: [],
+  processSteps: [
+    { title: "ثبت درخواست", excerpt: "ثبت اطلاعات و شرح موضوع", icon: "file", order: 0 },
+    { title: "بررسی اولیه", excerpt: "بررسی مدارک و ریسک‌ها", icon: "search", order: 1 },
+    { title: "تخصیص وکیل", excerpt: "ارجاع به تیم متخصص", icon: "users", order: 2 },
+    { title: "گفتگو و مدارک", excerpt: "پیام، فایل و هماهنگی", icon: "chat", order: 3 },
+    { title: "دریافت خروجی", excerpt: "تحویل سند یا برنامه اقدام", icon: "check", order: 4 },
+  ],
+  legalSupport: {
+    eyebrow: "تیم حقوقی وکیل‌یار",
+    title: "همراهی تیم حقوقی در مسیر پرونده شما",
+    description:
+      "بدون نمایش چهره‌های ساختگی؛ تمرکز وکیل‌یار روی فرایند شفاف، محرمانگی و خروجی قابل اتکا برای هر درخواست حقوقی است.",
+  },
+  legalSupportCards: [
+    {
+      title: "بررسی محرمانه مدارک",
+      excerpt: "پرونده و فایل‌های شما با دسترسی کنترل‌شده بررسی می‌شود.",
+      icon: "lock",
+      order: 0,
+    },
+    {
+      title: "پیشنهاد مسیر اقدام",
+      excerpt: "پس از ارزیابی اولیه، مسیر حقوقی و ریسک‌ها شفاف اعلام می‌شود.",
+      icon: "route",
+      order: 1,
+    },
+    {
+      title: "تنظیم و بازبینی اسناد",
+      excerpt: "قرارداد، دادخواست یا نامه حقوقی با ساختار قابل پیگیری آماده می‌شود.",
+      icon: "edit",
+      order: 2,
+    },
+    {
+      title: "پیگیری در داشبورد اختصاصی",
+      excerpt: "وضعیت درخواست، پیام‌ها و خروجی‌ها در کارتابل شما ثبت می‌شود.",
+      icon: "dashboard",
+      order: 3,
+    },
+  ],
+  finalCta: {
+    eyebrow: "شروع شفاف و قابل پیگیری",
+    title: "پرونده حقوقی خود را شفاف شروع کنید",
+    description:
+      "درخواست، مدارک، پیام‌ها، قراردادها و خروجی نهایی را در یک مسیر امن و مرحله‌به‌مرحله مدیریت کنید.",
+  },
   contactCta: {
     eyebrow: "مشاوره تخصصی همین حالا",
     title: "برای دریافت مشاوره حقوقی، مسیر پرونده خود را شفاف شروع کنید",
@@ -242,9 +295,12 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
 
   return {
     siteTitle: settings.siteTitle ?? defaultSettings.siteTitle,
-    siteDescription: settings.siteDescription ?? "",
+    siteDescription: settings.siteDescription ?? defaultSettings.siteDescription,
+    detailedDescription:
+      settings.detailedDescription ?? defaultSettings.detailedDescription,
     logoText:
-      settings.logoText ?? settings.siteTitle ?? defaultSettings.logoText,
+      settings.logoText ?? defaultSettings.logoText,
+    siteIcon: settings.siteIcon ?? "",
     phone: settings.phone ?? "",
     email: settings.email ?? "",
     address: settings.address ?? "",
@@ -255,11 +311,21 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
       telegram: settings.socialLinks?.telegram ?? "",
     },
     seoTitle: settings.seoTitle ?? settings.siteTitle ?? "",
-    seoDescription: settings.seoDescription ?? settings.siteDescription ?? "",
+    seoDescription:
+      settings.seoDescription ??
+      settings.detailedDescription ??
+      defaultSettings.seoDescription,
+    footerDescription:
+      settings.footerDescription ?? defaultSettings.footerDescription,
+    footerCopyright: settings.footerCopyright ?? defaultSettings.footerCopyright,
   };
 }
 
 export async function getHomeContent(): Promise<HomeContentData> {
+  if (!hasDatabase()) {
+    return defaultHomeContent;
+  }
+
   await connectDb();
   const content = await HomeContent.findOne({ key: "home" }).lean();
 
@@ -271,6 +337,21 @@ export async function getHomeContent(): Promise<HomeContentData> {
     hero: { ...defaultHomeContent.hero, ...content.hero },
     trustFeatures: sortByOrder(content.trustFeatures ?? []),
     stats: sortByOrder(content.stats ?? []),
+    processSteps: sortByOrder(
+      content.processSteps?.length
+        ? content.processSteps
+        : defaultHomeContent.processSteps,
+    ),
+    legalSupport: {
+      ...defaultHomeContent.legalSupport,
+      ...content.legalSupport,
+    },
+    legalSupportCards: sortByOrder(
+      content.legalSupportCards?.length
+        ? content.legalSupportCards
+        : defaultHomeContent.legalSupportCards,
+    ),
+    finalCta: { ...defaultHomeContent.finalCta, ...content.finalCta },
     contactCta: { ...defaultHomeContent.contactCta, ...content.contactCta },
   };
 }

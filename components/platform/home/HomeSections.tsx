@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { PlatformArticle, PlatformFaq } from "@/lib/platform-db";
+import type { HomeContentData } from "@/types";
 
 function Icon({
   name,
@@ -67,14 +68,14 @@ const departments = [
   ["جرایم رایانه‌ای", "کلاهبرداری و ادله دیجیتال", "monitor"],
 ];
 
-const process = [
-  "ثبت درخواست",
-  "بررسی اولیه",
-  "تخصیص وکیل",
-  "گفتگو و مدارک",
-  "دریافت خروجی",
+const fallbackProcessSteps = [
+  ["ثبت درخواست", "ثبت اطلاعات و شرح موضوع", "file"],
+  ["بررسی اولیه", "بررسی مدارک و ریسک‌ها", "search"],
+  ["تخصیص وکیل", "ارجاع به تیم متخصص", "users"],
+  ["گفتگو و مدارک", "پیام، فایل و هماهنگی", "chat"],
+  ["دریافت خروجی", "تحویل سند یا برنامه اقدام", "check"],
 ];
-const support = [
+const fallbackSupport = [
   [
     "بررسی محرمانه مدارک",
     "پرونده و فایل‌های شما با دسترسی کنترل‌شده بررسی می‌شود.",
@@ -159,7 +160,21 @@ export function DepartmentsSection() {
   );
 }
 
-export function ProcessTimeline() {
+export function ProcessTimeline({
+  steps = [],
+}: {
+  steps?: HomeContentData["processSteps"];
+}) {
+  const visibleSteps = (
+    steps.length
+      ? steps
+      : fallbackProcessSteps.map(([title, excerpt, icon], order) => ({
+          title,
+          excerpt,
+          icon,
+          order,
+        }))
+  ).slice(0, 5);
   return (
     <section className="bg-white py-16" dir="rtl">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -168,37 +183,16 @@ export function ProcessTimeline() {
         </h2>
         <div className="relative mt-12 grid gap-6 md:grid-cols-5">
           <div className="absolute left-10 right-10 top-9 hidden h-px bg-gradient-to-l from-[#0F766E] via-[#99F6E4] to-[#0F766E] md:block" />
-          {process.map((step, index) => (
-            <div className="relative text-center" key={step}>
+          {visibleSteps.map((step, index) => (
+            <div className="relative text-center" key={`${step.title}-${index}`}>
               <span className="mx-auto grid size-18 place-items-center rounded-full border border-[#0F766E]/25 bg-[#ECFDF5] text-[#0F766E] shadow-[0_12px_30px_rgba(15,118,110,0.10)]">
-                <Icon
-                  name={
-                    index === 0
-                      ? "file"
-                      : index === 1
-                        ? "search"
-                        : index === 2
-                          ? "users"
-                          : index === 3
-                            ? "chat"
-                            : "check"
-                  }
-                  className="size-7"
-                />
+                <Icon name={step.icon || "check"} className="size-7" />
               </span>
               <h3 className="mt-4 text-sm font-black text-[#10233B]">
-                {index + 1}. {step}
+                {index + 1}. {step.title}
               </h3>
               <p className="mx-auto mt-2 max-w-40 text-xs font-bold leading-6 text-[#64748B]">
-                {index === 0
-                  ? "ثبت اطلاعات و شرح موضوع"
-                  : index === 1
-                    ? "بررسی مدارک و ریسک‌ها"
-                    : index === 2
-                      ? "ارجاع به تیم متخصص"
-                      : index === 3
-                        ? "پیام، فایل و هماهنگی"
-                        : "تحویل سند یا برنامه اقدام"}
+                {step.excerpt}
               </p>
             </div>
           ))}
@@ -208,37 +202,51 @@ export function ProcessTimeline() {
   );
 }
 
-export function LegalSupportSection() {
+export function LegalSupportSection({
+  section,
+  cards = [],
+}: {
+  section?: HomeContentData["legalSupport"];
+  cards?: HomeContentData["legalSupportCards"];
+}) {
+  const visibleCards = cards.length
+    ? cards
+    : fallbackSupport.map(([title, excerpt, icon], order) => ({
+        title,
+        excerpt,
+        icon,
+        order,
+      }));
   return (
     <section className="bg-white py-16" dir="rtl">
       <div className="mx-auto max-w-7xl rounded-[2rem] border border-[#E2E8F0] bg-[linear-gradient(90deg,#ffffff_0%,#F8FAFC_100%)] px-4 py-10 shadow-[0_24px_70px_rgba(7,21,39,0.06)] sm:px-8 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
             <span className="inline-flex rounded-full bg-[#ECFDF5] px-4 py-2 text-xs font-black text-[#0F766E]">
-              تیم حقوقی وکیل‌یار
+              {section?.eyebrow || "تیم حقوقی وکیل‌یار"}
             </span>
             <h2 className="mt-4 text-3xl font-black leading-[1.5] text-[#071527]">
-              همراهی تیم حقوقی در مسیر پرونده شما
+              {section?.title || "همراهی تیم حقوقی در مسیر پرونده شما"}
             </h2>
             <p className="mt-4 text-sm font-bold leading-8 text-[#64748B]">
-              بدون نمایش چهره‌های ساختگی؛ تمرکز وکیل‌یار روی فرایند شفاف،
-              محرمانگی و خروجی قابل اتکا برای هر درخواست حقوقی است.
+              {section?.description ||
+                "بدون نمایش چهره‌های ساختگی؛ تمرکز وکیل‌یار روی فرایند شفاف، محرمانگی و خروجی قابل اتکا برای هر درخواست حقوقی است."}
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            {support.map(([title, desc, icon]) => (
+            {visibleCards.slice(0, 4).map(({ title, excerpt, icon }) => (
               <article
                 className="rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-[0_16px_40px_rgba(7,21,39,0.04)]"
                 key={title}
               >
                 <span className="grid size-14 place-items-center rounded-2xl bg-[#ECFDF5] text-[#0F766E]">
-                  <Icon name={icon} />
+                  <Icon name={icon || "shield"} />
                 </span>
                 <h3 className="mt-4 text-base font-black text-[#10233B]">
                   {title}
                 </h3>
                 <p className="mt-2 text-sm font-bold leading-7 text-[#64748B]">
-                  {desc}
+                  {excerpt}
                 </p>
               </article>
             ))}
