@@ -1,16 +1,5 @@
 import Link from "next/link";
 
-const iconColors = [
-  "bg-blue-500/10 text-blue-600",
-  "bg-emerald-500/10 text-emerald-600",
-  "bg-purple-500/10 text-purple-600",
-  "bg-red-500/10 text-red-600",
-  "bg-amber-500/10 text-amber-600",
-  "bg-cyan-500/10 text-cyan-600",
-  "bg-indigo-500/10 text-indigo-600",
-  "bg-orange-500/10 text-orange-600",
-];
-
 function FileIcon() {
   return (
     <svg aria-hidden="true" className="size-6" viewBox="0 0 24 24" fill="none">
@@ -25,7 +14,6 @@ export function ServiceCard({
   desc,
   tag,
   sla,
-  index = 0,
 }: {
   title: string;
   slug: string;
@@ -36,18 +24,19 @@ export function ServiceCard({
 }) {
   return (
     <Link
-      className="group relative cursor-pointer rounded-2xl border border-border/50 bg-card p-6 transition-all duration-300 hover:border-accent/30 hover:shadow-xl hover:shadow-primary/5"
+      className="group relative cursor-pointer rounded-3xl border border-[#E2E8F0] bg-white p-6 shadow-[0_16px_40px_rgba(7,21,39,0.04)] transition duration-300 hover:-translate-y-1 hover:border-[#0F766E]/25 hover:shadow-[0_24px_60px_rgba(15,118,110,0.12)]"
       href={`/services/${slug}`}
     >
-      <div className={`mb-4 flex size-12 items-center justify-center rounded-xl ${iconColors[index % iconColors.length]} transition-transform group-hover:scale-110`}>
+      <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-[#ECFDF5] text-[#0F766E] transition group-hover:scale-110 group-hover:bg-[#0F766E] group-hover:text-white">
         <FileIcon />
       </div>
-      <h3 className="mb-2 text-base font-bold">{title}</h3>
-      <p className="mb-4 text-sm leading-relaxed text-muted-foreground">{desc}</p>
-      <div className="flex items-center justify-between">
-        <span className="rounded-full bg-secondary px-2.5 py-1 text-[10px] font-medium text-secondary-foreground">{sla || tag}</span>
-        <span className="text-xs font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">جزئیات ←</span>
+      <div className="mb-3 flex items-center gap-2">
+        <span className="rounded-full bg-[#F8FAFC] px-3 py-1 text-[11px] font-black text-[#64748B]">{tag || "خدمات"}</span>
+        <span className="rounded-full bg-[#ECFDF5] px-3 py-1 text-[11px] font-black text-[#0F766E]">{sla || "بررسی سریع"}</span>
       </div>
+      <h3 className="mb-2 text-base font-black text-[#10233B]">{title}</h3>
+      <p className="mb-4 line-clamp-3 min-h-20 text-sm font-bold leading-7 text-[#64748B]">{desc}</p>
+      <span className="text-xs font-black text-[#0F766E] opacity-0 transition-opacity group-hover:opacity-100">مشاهده خدمت ←</span>
     </Link>
   );
 }

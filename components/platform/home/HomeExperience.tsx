@@ -4,37 +4,53 @@ import { PublicFooter } from "@/components/platform/layout/PublicFooter";
 import { HeroSection } from "@/components/platform/home/HeroSection";
 import { ServicesShowcase } from "@/components/platform/home/ServicesShowcase";
 import { ContractPreview } from "@/components/platform/home/ContractPreview";
-import { KnowledgePreview } from "@/components/platform/home/KnowledgePreview";
 import { FinalCta } from "@/components/platform/home/FinalCta";
-import { fallbackContracts, fallbackServices, type PlatformContract, type PlatformService } from "@/lib/platform-db";
+import {
+  DepartmentsSection,
+  FaqSection,
+  HelpIntentSection,
+  KnowledgeCenterSection,
+  LegalSupportSection,
+  ProcessTimeline,
+} from "@/components/platform/home/HomeSections";
+import { fallbackContracts, fallbackServices, type PlatformArticle, type PlatformContract, type PlatformFaq, type PlatformService } from "@/lib/platform-db";
 
 export function HomeExperience({
+  articles = [],
   contracts = fallbackContracts,
+  faqs = [],
   services = fallbackServices,
 }: {
+  articles?: PlatformArticle[];
   contracts?: PlatformContract[];
+  faqs?: PlatformFaq[];
   services?: PlatformService[];
 }) {
   return (
     <PageShell>
       <PublicHeader />
       <HeroSection />
-      <section id="services" className="bg-background py-24" dir="rtl">
+      <HelpIntentSection />
+      <DepartmentsSection />
+      <ProcessTimeline />
+      <section id="services" className="bg-[#F8FAFC] py-16" dir="rtl">
         <Container>
-          <div className="mb-16 text-center">
-            <span className="mb-4 inline-flex rounded-full border border-accent/20 bg-accent/10 px-4 py-1.5 text-sm font-medium text-accent">
+          <div className="mb-10 text-center">
+            <span className="mb-4 inline-flex rounded-full bg-[#ECFDF5] px-4 py-2 text-xs font-black text-[#0F766E]">
               خدمات تخصصی
             </span>
-            <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">مسیرهای اصلی</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-              از مشاوره تا تنظیم سند و امضای دیجیتال، تمام نیازهای حقوقی شما در یکجا
+            <h2 className="text-3xl font-black text-[#071527]">مسیرهای اصلی خدمات حقوقی</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm font-bold leading-8 text-[#64748B]">
+              از مشاوره تا تنظیم سند، پیگیری پرونده و آماده‌سازی خروجی قابل امضا در یک تجربه یکپارچه.
             </p>
           </div>
           <ServicesShowcase services={services} />
         </Container>
       </section>
       <ContractPreview contracts={contracts} />
-      <KnowledgePreview />
+      <LegalSupportSection />
+      <KnowledgeCenterSection articles={articles} />
+      <FaqSection faqs={faqs} />
       <FinalCta />
       <PublicFooter />
     </PageShell>
