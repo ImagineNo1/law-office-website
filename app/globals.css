@@ -45,7 +45,7 @@
   --sidebar-background: var(--sidebar-background-hsl);
   --sidebar-foreground: var(--foreground-hsl);
   --sidebar-primary: var(--accent-hsl);
-  --sidebar-primary-foreground: var(--primary-hsl);
+  --sidebar-primary-foreground: 0 0% 100%;
   --sidebar-accent: var(--sidebar-accent-hsl);
   --sidebar-accent-foreground: var(--foreground-hsl);
   --sidebar-border: var(--sidebar-border-hsl);
@@ -56,11 +56,11 @@
   --surface-strong: hsl(var(--card-hsl));
   --soft-gray: hsl(var(--background-hsl));
   --navy: #071527;
-  --navy-2: #10233B;
-  --muted: #64748B;
+  --navy-2: #10233b;
+  --muted: #64748b;
   --text-main: hsl(var(--foreground-hsl));
   --text-muted: hsl(var(--muted-foreground-hsl));
-  --gold: #D6A23A;
+  --gold: #d6a23a;
   --gold-light: hsl(40 65% 78%);
   --gold-soft: hsl(40 55% 92%);
   --cream-accent: hsl(var(--muted-hsl));
@@ -71,7 +71,9 @@
   --font-heading: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
 }
 
 .dark {
@@ -134,7 +136,9 @@
   --font-heading: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
   --shadow-soft: 0 28px 80px rgba(var(--shadow-card-rgb), 0.14);
   --shadow-card: 0 18px 45px rgba(var(--shadow-card-rgb), 0.08);
 }
@@ -229,7 +233,13 @@ select {
     linear-gradient(rgba(212, 166, 74, 0.08) 1px, transparent 1px),
     linear-gradient(90deg, rgba(212, 166, 74, 0.08) 1px, transparent 1px);
   background-size: 42px 42px;
-  mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 18%,
+    black 82%,
+    transparent
+  );
 }
 
 .mega-menu-panel {
@@ -262,7 +272,13 @@ select {
 }
 
 .dashboard-surface {
-  background: #ffffff;
+  background:
+    radial-gradient(
+      circle at 18% 8%,
+      rgba(16, 185, 129, 0.16),
+      transparent 26%
+    ),
+    linear-gradient(180deg, #ecfdf5 0%, #f8fafc 42%, #ffffff 100%);
 }
 
 .panel-card {
@@ -283,7 +299,7 @@ select {
 }
 
 .service-input:focus {
-  border-color: var(--gold);
+  border-color: hsl(var(--accent-hsl));
   box-shadow: 0 0 0 4px var(--ring);
 }
 
@@ -585,7 +601,6 @@ pre {
   }
 }
 
-
 h1,
 h2,
 h3,
@@ -606,9 +621,9 @@ a {
   letter-spacing: normal;
 }
 
-
 @keyframes hero-float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {

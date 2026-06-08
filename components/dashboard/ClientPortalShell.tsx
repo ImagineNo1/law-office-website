@@ -1,40 +1,67 @@
 import { ClientSidebar } from "@/components/dashboard/ClientSidebar";
 import { TourProvider } from "@/components/onboarding/TourProvider";
 import { getCurrentClient } from "@/lib/client-auth";
-import { getClientTourState, markClientTourCompleted } from "@/lib/onboarding/actions";
+import {
+  getClientTourState,
+  markClientTourCompleted,
+} from "@/lib/onboarding/actions";
 import { Clock } from "lucide-react";
 
-export async function ClientPortalShell({ children, title = "پیشخوان" }: { children: React.ReactNode; title?: string }) {
+export async function ClientPortalShell({
+  children,
+  title = "پیشخوان",
+}: {
+  children: React.ReactNode;
+  title?: string;
+}) {
   const client = await getCurrentClient();
   const displayName = client?.fullName || "کاربر";
-  const initials = displayName.split(" ").filter(Boolean).slice(0, 2).map((part) => part[0]).join("") || "ک";
+  const initials =
+    displayName
+      .split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0])
+      .join("") || "ک";
   const tourState = await getClientTourState();
 
   return (
-    <TourProvider initialState={tourState} kind="client" markCompletedAction={markClientTourCompleted}>
+    <TourProvider
+      initialState={tourState}
+      kind="client"
+      markCompletedAction={markClientTourCompleted}
+    >
       <div className="dashboard-surface min-h-screen font-body text-foreground lg:flex lg:flex-row-reverse">
-      <ClientSidebar />
-      <div className="min-w-0 flex-1 lg:order-1">
-        <header className="border-b border-border bg-white px-4 py-5 shadow-sm sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <h1 className="font-heading text-3xl font-extrabold text-primary">{title}</h1>
-              <p className="mt-2 text-sm font-medium leading-8 text-muted-foreground">خوش آمدید، {displayName}</p>
+        <ClientSidebar />
+        <div className="min-w-0 flex-1 lg:order-1">
+          <header className="border-b border-emerald-100 bg-white/90 px-4 py-5 shadow-sm backdrop-blur sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <h1 className="font-heading text-3xl font-extrabold text-emerald-950">
+                  {title}
+                </h1>
+                <p className="mt-2 text-sm font-medium leading-8 text-muted-foreground">
+                  خوش آمدید، {displayName}
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 text-primary">
+                <span className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-bold text-muted-foreground">
+                  <Clock aria-hidden="true" className="size-4" />
+                  پشتیبانی ۲۴/۷
+                </span>
+                <span className="flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-extrabold">
+                  <span className="grid size-8 place-items-center rounded-lg bg-emerald-700 text-xs text-white">
+                    {initials}
+                  </span>
+                  {displayName}
+                </span>
+              </div>
             </div>
-            <div className="flex flex-wrap items-center gap-3 text-primary">
-              <span className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-bold text-muted-foreground">
-                <Clock aria-hidden="true" className="size-4" />
-                پشتیبانی ۲۴/۷
-              </span>
-              <span className="flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-extrabold">
-                <span className="grid size-8 place-items-center rounded-lg bg-primary text-xs text-primary-foreground">{initials}</span>
-                {displayName}
-              </span>
-            </div>
-          </div>
-        </header>
-        <main className="p-4 sm:p-6 lg:p-8" data-tour="client-dashboard">{children}</main>
-      </div>
+          </header>
+          <main className="p-4 sm:p-6 lg:p-8" data-tour="client-dashboard">
+            {children}
+          </main>
+        </div>
       </div>
     </TourProvider>
   );

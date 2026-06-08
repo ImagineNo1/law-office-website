@@ -8,14 +8,29 @@ export function FinalCta() {
           <div className="absolute -left-20 top-8 size-64 rounded-full bg-[#0F766E]/30 blur-3xl" />
           <div className="absolute bottom-0 right-0 h-40 w-72 rounded-tl-full bg-[#D6A23A]/10" />
           <div className="relative mx-auto max-w-3xl">
-            <span className="inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-black text-[#99F6E4]">شروع شفاف و قابل پیگیری</span>
-            <h2 className="mt-5 text-3xl font-black leading-[1.5] text-white sm:text-4xl">پرونده حقوقی خود را شفاف شروع کنید</h2>
+            <span className="inline-flex rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-black text-[#99F6E4]">
+              شروع شفاف و قابل پیگیری
+            </span>
+            <h2 className="mt-5 text-3xl font-black leading-[1.5] text-white sm:text-4xl">
+              پرونده حقوقی خود را شفاف شروع کنید
+            </h2>
             <p className="mx-auto mt-4 max-w-2xl text-sm font-bold leading-8 text-white/70">
-              درخواست، مدارک، پیام‌ها، قراردادها و خروجی نهایی را در یک مسیر امن و مرحله‌به‌مرحله مدیریت کنید.
+              درخواست، مدارک، پیام‌ها، قراردادها و خروجی نهایی را در یک مسیر امن
+              و مرحله‌به‌مرحله مدیریت کنید.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Link className="inline-flex min-h-13 items-center rounded-2xl bg-[#0F766E] px-8 text-sm font-black text-white shadow-[0_18px_40px_rgba(15,118,110,0.30)] transition hover:bg-[#0b625c]" href="/requests/new">ثبت درخواست</Link>
-              <Link className="inline-flex min-h-13 items-center rounded-2xl border border-white/20 bg-white/10 px-8 text-sm font-black text-white transition hover:bg-white/15" href="/contact">تماس با ما</Link>
+              <Link
+                className="inline-flex min-h-13 items-center rounded-2xl bg-[#0F766E] px-8 text-sm font-black text-white shadow-[0_18px_40px_rgba(15,118,110,0.30)] transition hover:bg-[#0b625c]"
+                href="/dashboard/requests?new=1"
+              >
+                ثبت درخواست
+              </Link>
+              <Link
+                className="inline-flex min-h-13 items-center rounded-2xl border border-white/20 bg-white/10 px-8 text-sm font-black text-white transition hover:bg-white/15"
+                href="/contact"
+              >
+                تماس با ما
+              </Link>
             </div>
           </div>
         </div>

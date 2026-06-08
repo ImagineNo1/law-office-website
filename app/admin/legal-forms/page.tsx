@@ -1,21 +1,173 @@
 import type { Metadata } from "next";
-import { archiveLegalFormAction, deleteLegalFormAction, saveLegalFormAction } from "@/app/admin/legal-forms/actions";
 import { AdminConfirmDialog } from "@/components/admin/AdminConfirmDialog";
+import {
+  AdminSubmitButton,
+  CategoryField,
+  SlugField,
+} from "@/components/admin/AdminFormFields";
 import { AdminModal } from "@/components/admin/AdminModal";
-import { AdminDataTable, AdminEmptyState, AdminPageHeader, AdminStatusBadge } from "@/components/admin/AdminUi";
+import {
+  AdminDataTable,
+  AdminEmptyState,
+  AdminPageHeader,
+  AdminStatusBadge,
+} from "@/components/admin/AdminUi";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { SeoFields } from "@/components/admin/SeoFields";
+import {
+  archiveLegalFormAction,
+  deleteLegalFormAction,
+  saveLegalFormAction,
+} from "@/app/admin/legal-forms/actions";
 import { getAdminLegalForms } from "@/lib/admin-db";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "مدیریت فرم‌های حقوقی" };
-type FormRow = Awaited<ReturnType<typeof getAdminLegalForms>>[number];
 
-function FormFields({ form }: { form?: FormRow }) {
-  return <form action={saveLegalFormAction} className="grid gap-4"><input name="id" type="hidden" value={form?.id ?? ""} /><div className="grid gap-4 md:grid-cols-3"><label className="grid gap-2 text-sm font-black text-navy"><span>عنوان</span><input className="service-input" defaultValue={form?.title} name="title" required /></label><label className="grid gap-2 text-sm font-black text-navy"><span>اسلاگ</span><input className="service-input" defaultValue={form?.slug} name="slug" required /></label><label className="grid gap-2 text-sm font-black text-navy"><span>دسته‌بندی</span><input className="service-input" defaultValue={form?.category} name="category" required /></label></div><label className="grid gap-2 text-sm font-black text-navy"><span>توضیحات</span><textarea className="service-input min-h-24 py-3" defaultValue={form?.description} name="description" /></label><label className="grid gap-2 text-sm font-black text-navy"><span>فیلدها؛ هر خط یک مورد</span><textarea className="service-input min-h-24 py-3" defaultValue={form?.fieldsText} name="fields" /></label><div className="grid gap-4 md:grid-cols-2"><label className="grid gap-2 text-sm font-black text-navy"><span>تعداد استفاده</span><input className="service-input" defaultValue={form?.usageCount ?? 0} name="usageCount" type="number" /></label><label className="grid gap-2 text-sm font-black text-navy"><span>وضعیت</span><select className="service-input" defaultValue={form?.status ?? "published"} name="status"><option value="published">منتشر شده</option><option value="draft">پیش‌نویس</option><option value="archived">آرشیو شده</option></select></label></div><SeoFields seo={form?.seo} title={String(form?.title ?? "")} /><button className="rounded-xl bg-gold px-5 py-3 text-sm font-black text-white" type="submit">ذخیره</button></form>;
+type LegalFormRow = Awaited<ReturnType<typeof getAdminLegalForms>>[number];
+
+function FormFields({
+  categories,
+  form,
+}: {
+  categories: string[];
+  form?: LegalFormRow;
+}) {
+  return (
+    <form action={saveLegalFormAction} className="grid gap-4">
+      <input name="id" type="hidden" value={form?.id ?? ""} />
+      <label className="grid gap-2 text-sm font-black text-navy">
+        <span>عنوان فرم</span>
+        <input
+          className="service-input"
+          defaultValue={form?.title}
+          name="title"
+          required
+        />
+      </label>
+      <div className="grid gap-4 md:grid-cols-2">
+        <SlugField defaultValue={form?.slug} />
+        <CategoryField categories={categories} defaultValue={form?.category} />
+      </div>
+      <label className="grid gap-2 text-sm font-black text-navy">
+        <span>توضیحات</span>
+        <textarea
+          className="service-input min-h-24 py-3"
+          defaultValue={form?.description}
+          name="description"
+        />
+      </label>
+      <label className="grid gap-2 text-sm font-black text-navy">
+        <span>فیلدها؛ هر خط یک مورد</span>
+        <textarea
+          className="service-input min-h-24 py-3"
+          defaultValue={form?.fieldsText}
+          name="fields"
+        />
+      </label>
+      <div className="grid gap-4 md:grid-cols-2">
+        <label className="grid gap-2 text-sm font-black text-navy">
+          <span>تعداد استفاده</span>
+          <input
+            className="service-input"
+            defaultValue={form?.usageCount ?? 0}
+            name="usageCount"
+            type="number"
+          />
+        </label>
+        <label className="grid gap-2 text-sm font-black text-navy">
+          <span>وضعیت</span>
+          <select
+            className="service-input"
+            defaultValue={form?.status ?? "published"}
+            name="status"
+          >
+            <option value="published">منتشر شده</option>
+            <option value="draft">پیش‌نویس</option>
+            <option value="archived">آرشیو شده</option>
+          </select>
+        </label>
+      </div>
+      <SeoFields seo={form?.seo} title={String(form?.title ?? "")} />
+      <AdminSubmitButton />
+    </form>
+  );
 }
 
 export default async function AdminLegalFormsPage() {
   const forms = await getAdminLegalForms();
-  return <AdminShell title="فرم‌های حقوقی" description="مدیریت قالب‌های فرم حقوقی"><div className="grid gap-6"><AdminPageHeader title="فرم‌های حقوقی" action={<AdminModal buttonLabel="افزودن فرم" title="افزودن فرم"><FormFields /></AdminModal>} />{forms.length ? <AdminDataTable headers={["عنوان", "دسته", "وضعیت", "فیلدها", "استفاده", "عملیات"]}>{forms.map((form) => <tr className="border-t border-border" key={form.id}><td className="px-5 py-4 font-black text-navy">{form.title}</td><td className="px-5 py-4 font-bold text-muted">{form.category}</td><td className="px-5 py-4"><AdminStatusBadge status={form.status} /></td><td className="px-5 py-4 font-bold text-muted">{form.fields?.length ?? 0}</td><td className="px-5 py-4 font-bold text-muted">{form.usageCount}</td><td className="px-5 py-4"><div className="flex flex-wrap gap-2"><AdminModal buttonLabel="ویرایش" title={`ویرایش ${form.title}`}><FormFields form={form} /></AdminModal><AdminConfirmDialog buttonLabel="آرشیو" action={<form action={archiveLegalFormAction}><input name="id" type="hidden" value={form.id} /><button className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-black text-white">آرشیو</button></form>} /><AdminConfirmDialog action={<form action={deleteLegalFormAction}><input name="id" type="hidden" value={form.id} /><button className="rounded-xl bg-red-600 px-5 py-2.5 text-sm font-black text-white">حذف</button></form>} /></div></td></tr>)}</AdminDataTable> : <AdminEmptyState title="هنوز فرم حقوقی ثبت نشده است" description="اولین قالب فرم را از دکمه افزودن فرم ایجاد کنید." />}</div></AdminShell>;
+  const categories = forms.map((form) => form.category ?? "عمومی");
+  return (
+    <AdminShell title="فرم‌های حقوقی" description="مدیریت قالب‌های فرم حقوقی">
+      <div className="grid gap-6">
+        <AdminPageHeader
+          title="فرم‌های حقوقی"
+          action={
+            <AdminModal buttonLabel="افزودن فرم" title="افزودن فرم">
+              <FormFields categories={categories} />
+            </AdminModal>
+          }
+        />
+        {forms.length ? (
+          <AdminDataTable
+            headers={["عنوان", "دسته", "وضعیت", "فیلدها", "استفاده", "عملیات"]}
+          >
+            {forms.map((form) => (
+              <tr className="border-t border-border" key={form.id}>
+                <td className="px-5 py-4 font-black text-navy">{form.title}</td>
+                <td className="px-5 py-4 font-bold text-muted">
+                  {form.category}
+                </td>
+                <td className="px-5 py-4">
+                  <AdminStatusBadge status={form.status} />
+                </td>
+                <td className="px-5 py-4 font-bold text-muted">
+                  {form.fields?.length ?? 0}
+                </td>
+                <td className="px-5 py-4 font-bold text-muted">
+                  {form.usageCount}
+                </td>
+                <td className="px-5 py-4">
+                  <div className="flex flex-wrap gap-2">
+                    <AdminModal
+                      buttonLabel="ویرایش"
+                      title={`ویرایش ${form.title}`}
+                    >
+                      <FormFields categories={categories} form={form} />
+                    </AdminModal>
+                    <AdminConfirmDialog
+                      buttonLabel="آرشیو"
+                      action={
+                        <form action={archiveLegalFormAction}>
+                          <input name="id" type="hidden" value={form.id} />
+                          <button className="rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-black text-white">
+                            آرشیو
+                          </button>
+                        </form>
+                      }
+                    />
+                    <AdminConfirmDialog
+                      action={
+                        <form action={deleteLegalFormAction}>
+                          <input name="id" type="hidden" value={form.id} />
+                          <button className="rounded-xl bg-red-600 px-5 py-2.5 text-sm font-black text-white">
+                            حذف
+                          </button>
+                        </form>
+                      }
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </AdminDataTable>
+        ) : (
+          <AdminEmptyState
+            title="هنوز فرم حقوقی ثبت نشده است"
+            description="اولین قالب فرم را از دکمه افزودن فرم ایجاد کنید."
+          />
+        )}
+      </div>
+    </AdminShell>
+  );
 }
